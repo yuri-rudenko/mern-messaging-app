@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
 const ChatSchema = new mongoose.Schema({
     name: {type: String},
     displayPicture: {type: String},
-    isGroup: {type: Boolean},
+    isGroup: {type: Boolean, default: false},
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
     images: [{type: String}],
@@ -28,13 +28,14 @@ const ChatSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const MessageSchema = new mongoose.Schema({
-    author: {type: String},
+    author: {type: String, required: [true, 'Message must have an author']},
+    type: {type: String, enum: ['Text', 'Image', 'File']},
     file: {type: String},
-    type: {type: String},
     status: {type: String, default: 'sending'},
     chatId: {type: mongoose.Schema.Types.ObjectId, ref: 'Chat'},
     text: {type: String},
     readBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    responseTo: {type: mongoose.Schema.Types.ObjectId, ref: 'Message'},
 }, { timestamps: true })
 
 const User = mongoose.model('User', UserSchema);
