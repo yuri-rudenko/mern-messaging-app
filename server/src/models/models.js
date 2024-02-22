@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     password: {type: String, required: true, min: [6, 'Password is too short'], max: [16, 'Password is too long']},
     friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     chats: [{type: mongoose.Schema.Types.ObjectId, ref: 'Chat'}],
-    image: {type: String},
+    image: {type: String, default: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'},
     status: {type: String},
     isOnline: {type: Boolean, default: false},
     lastSeenOnline: {type: Date, default: Date.now()},
@@ -17,14 +17,16 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const ChatSchema = new mongoose.Schema({
-    name: {type: String},
+    name: {type: String, trim: true},
     displayPicture: {type: String},
     isGroup: {type: Boolean, default: false},
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
+    latestMessage: {type: mongoose.Schema.Types.ObjectId, ref: 'Message'},
     images: [{type: String}],
     documents: [{type: String}],
     links: [{type: String}],
+    groupAdmin: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, { timestamps: true })
 
 const MessageSchema = new mongoose.Schema({
