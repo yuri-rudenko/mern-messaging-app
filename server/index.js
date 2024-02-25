@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import router from './src/router/router.js';
 import dotenv from 'dotenv'
+import mongoose from 'mongoose';
 
 dotenv.config()
 
@@ -17,7 +18,7 @@ const start = async () => {
     try {
         
         app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
-        // await mongoose.connect(process.env.MONGODB_URI);
+        await mongoose.connect(process.env.MONGODB_URI);
 
     } 
 
