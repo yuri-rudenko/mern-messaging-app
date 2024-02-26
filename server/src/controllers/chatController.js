@@ -72,6 +72,41 @@ class chatController {
             res.status(400).json(error.message);
         }
     }
+
+    async removeUser(req, res, next) {
+
+        try {
+            const { tag } = req.body;
+            const id = req.params.chatId;
+    
+            if (!id || !tag) {
+                throw new Error("Params error: Missing ID or tag");
+            }
+
+            const userId = await tagsToIds([tag])
+
+            const checkedChat = await Chat.findById(id);
+            if (!checkedChat) {
+                throw new Error("Chat not found");
+            }
+        
+            if (!checkedChat.users.includes(...userId)) {
+                return res.status(400).json({ error: `User ${tag} is already not in the chat` });
+            }
+        
+            
+            const chat = await Chat.findByIdAndUpdate(id, {
+                $pullAll: { users: userId }
+            }, { new: true });
+    
+            res.status(200).json({ message: `User ${tag} has been removed from chat ${id}`});
+
+        }
+
+        catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
 }
 
 export default new chatController()

@@ -9,7 +9,7 @@ router.get('/');
 router.get('/:chatId');
 router.post('/', authMiddleware, chatController.create);
 router.put('/users/add/:chatId', chatAdminMiddleware, chatController.addUser);
-router.put('/users/remove/:chatId', chatAdminMiddleware);
+router.put('/users/remove/:chatId', chatAdminMiddleware, chatController.removeUser);
 router.delete('/:chatId');
 
 export default router
