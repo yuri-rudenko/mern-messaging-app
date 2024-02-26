@@ -14,6 +14,51 @@ const generateJWT = (id, tag) => {
 
 class UserController {
 
+    async getOne(req, res, next) {
+
+        try {
+
+            const {tag} = req.params;
+
+            const user = await User.findOne({tag});
+
+            if(!user) throw new Error("User doesn't exist");
+
+            return res.status(200).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                tag: user.tag,
+                phone: user.phone,
+            })
+            
+        } 
+
+        catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
+    async getAll(req, res, next) {
+        try {
+            const { name, tag } = req.query;
+    
+            const query = {};
+            if (name) {
+                query.name = { $regex: name, $options: "i" };
+            }
+            if (tag) {
+                query.tag = { $regex: tag, $options: "i" };
+            }
+    
+            const users = await User.find(query).find({tag: {$ne: req.user.tag}});
+    
+            res.status(200).json(users);
+        } catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
     async registration(req, res, next) {
 
         try {
@@ -55,7 +100,7 @@ class UserController {
 
         catch (error) {
 
-            res.status(400).json(error.message)
+            res.status(400).json(error.message);
             
         }
 
