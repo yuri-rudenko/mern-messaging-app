@@ -17,8 +17,8 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const ChatSchema = new mongoose.Schema({
-    name: {type: String, trim: true},
-    displayPicture: {type: String},
+    name: {type: String, trim: true, required: true},
+    displayPicture: {type: String, default: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-group-512.png'},
     isGroup: {type: Boolean, default: false},
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
@@ -26,7 +26,7 @@ const ChatSchema = new mongoose.Schema({
     images: [{type: String}],
     documents: [{type: String}],
     links: [{type: String}],
-    groupAdmin: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    groupAdmin: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
 }, { timestamps: true })
 
 const MessageSchema = new mongoose.Schema({
