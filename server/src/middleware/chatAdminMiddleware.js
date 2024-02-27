@@ -20,7 +20,7 @@ export default async function(req, res, next) {
         const chat = await Chat.findById(chatId);
 
         if(chat.groupAdmin != decoded.id) {
-            return res.status(401).json({message: "Not admins cannot add users"});
+            return res.status(401).json({message: "You are not chat admin"});
         }
 
         req.user = decoded;

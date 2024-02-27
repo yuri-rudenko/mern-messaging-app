@@ -12,6 +12,43 @@ async function tagsToIds(tags) {
 }
 class chatController {
 
+    async getOne(req, res, next) {
+
+        try {
+
+            const {chatId} = req.params;
+
+            const chat = await Chat.findById(chatId);
+
+            if(!chat) throw new Error("Chat doesn't exist");
+
+            return res.status(200).json({chat});
+            
+        } 
+
+        catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
+    async getAll(req, res, next) {
+        try {
+            const { name } = req.query;
+    
+            const query = {};
+            if (name) {
+                query.name = { $regex: name, $options: "i" };
+            }
+    
+            const chats = await Chat.find(query);
+    
+            res.status(200).json(chats);
+            
+        } catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
     async create(req, res, next) {
 
         try {
@@ -107,6 +144,56 @@ class chatController {
             res.status(400).json(error.message);
         }
     }
+
+    async changeName(req, res, next) {
+
+        try {
+            const { name } = req.body;
+            const id = req.params.chatId;
+    
+            if (!id || !name) {
+                throw new Error("Params error");
+            }
+        
+            const chat = await Chat.findByIdAndUpdate(id, {
+                $set: { name: name }
+            }, { new: true });
+
+            if (!checkedChat) {
+                throw new Error("Chat not found");
+            }
+    
+            res.status(200).json({chat});
+
+        }
+
+        catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
+    async delete(req, res, next) {
+
+        try {
+            
+            const {chatId} = req.params;
+
+            const chat = await Chat.findByIdAndDelete(chatId);
+
+            if(!chat) {
+                return res.status(400).json("Chat doesn't exist");
+            }
+
+            return res.status(201).json(chat)
+        } 
+
+        catch (error) {
+
+            res.status(400).json(error.message)
+            
+        }
+    }
+
 }
 
 export default new chatController()

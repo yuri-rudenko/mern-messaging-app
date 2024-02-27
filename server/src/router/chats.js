@@ -5,11 +5,12 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router();
 
-router.get('/');
-router.get('/:chatId');
+router.get('/', chatController.getAll);
+router.get('/:chatId', chatController.getOne);
 router.post('/', authMiddleware, chatController.create);
+router.put('/name', chatAdminMiddleware, chatController.changeName);
 router.put('/users/add/:chatId', chatAdminMiddleware, chatController.addUser);
 router.put('/users/remove/:chatId', chatAdminMiddleware, chatController.removeUser);
-router.delete('/:chatId');
+router.delete('/:chatId', chatAdminMiddleware, chatController.delete);
 
 export default router
