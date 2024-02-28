@@ -5,7 +5,8 @@ import authMiddleware from "../middleware/authMiddleware.js";
 const router = new Router();
 
 router.get('/', authMiddleware, userController.getAll);
-router.get('/:tag', userController.getOne);
+router.get('/getone/:tag', userController.getOne);
+router.get('/chats/:id', authMiddleware, userController.getChats);
 router.post('/registration', userController.registration);
 router.post('/login', userController.login);
 router.put('/update/:tag', authMiddleware, userController.update);

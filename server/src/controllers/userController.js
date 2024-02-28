@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User } from '../models/models.js';
+import { Chat, User } from '../models/models.js';
 import jwt from 'jsonwebtoken';
 
 const generateJWT = (id, tag) => {
@@ -256,6 +256,40 @@ class UserController {
 
             res.status(400).json(error.message);
             
+        }
+    }
+
+    async getChats(req, res, next) {
+        try {
+
+            const {id} = req.params;
+
+            if (id !== req.user.id || !id) {
+                return res.status(400).json("Authorization error");
+            }
+
+            const chats = await Chat.find({ users: id })
+            .populate({
+                path: 'users',
+                select: '-password'
+            })
+            .populate({
+                path: 'latestMessage',
+                populate: {
+                    path: 'author',
+                    select: '-password'
+                }
+            })
+            .populate('messages');
+
+            res.status(200).json({chats})
+
+        } 
+        
+        catch (error) {
+
+            res.status(400).json(error.message);
+
         }
     }
 

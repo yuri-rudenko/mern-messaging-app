@@ -53,7 +53,7 @@ class chatController {
 
         try {
 
-            const {name, users, isGroup} = req.body;
+            const {name, users} = req.body;
             console.log(users);
             users.push(req.user.tag);
             console.log(users);
@@ -63,8 +63,8 @@ class chatController {
             const ids = await tagsToIds(users);
             
             const chat = await Chat.create({
-                name, users: ids, groupAdmin: req.user.id, isGroup
-            })
+                name, users: ids, groupAdmin: req.user.id, isGroup: (users.length > 1)
+            }).populate('users');
 
             res.status(200).json({chat});
             
