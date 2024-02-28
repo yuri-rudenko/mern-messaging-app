@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './Header';
-import ChatsMenu from './ChatsMenu';
-import Chat from './Chat';
+import Header from '../Components/Header';
+import ChatsMenu from '../Components/ChatsMenu';
+import Chat from '../Components/Chat';
 
 const Main = () => {
     return (

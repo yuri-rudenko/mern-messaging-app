@@ -1,5 +1,5 @@
-import Login from "./Components/Login"
-import Main from "./Components/Main"
+import Login from "./Pages/Login"
+import Main from "./Pages/Main"
 import Profile from "./Components/Profile"
 
 export const authRoutes = [
