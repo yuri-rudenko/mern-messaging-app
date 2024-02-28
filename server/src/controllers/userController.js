@@ -279,8 +279,7 @@ class UserController {
                     path: 'author',
                     select: '-password'
                 }
-            })
-            .populate('messages');
+            });
 
             res.status(200).json({chats})
 

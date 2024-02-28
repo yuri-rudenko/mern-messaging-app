@@ -30,10 +30,9 @@ const ChatSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const MessageSchema = new mongoose.Schema({
-    author: {type: String, required: [true, 'Message must have an author']},
+    author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Message must have an author']},
     type: {type: String, enum: ['Text', 'Image', 'File']},
     file: {type: String},
-    status: {type: String, default: 'sending'},
     chatId: {type: mongoose.Schema.Types.ObjectId, ref: 'Chat'},
     text: {type: String},
     readBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

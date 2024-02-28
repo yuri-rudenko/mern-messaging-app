@@ -18,8 +18,18 @@ class chatController {
 
             const {chatId} = req.params;
 
-            const chat = await Chat.findById(chatId);
-
+            const chat = await Chat.findById(chatId).populate({
+                path: 'users',
+                select: '-password'
+            })
+            .populate({
+                path: 'messages',
+                populate: {
+                    path: 'author',
+                    select: '-password'
+                }
+            })
+            
             if(!chat) throw new Error("Chat doesn't exist");
 
             return res.status(200).json({chat});
@@ -159,7 +169,7 @@ class chatController {
                 $set: { name: name }
             }, { new: true });
 
-            if (!checkedChat) {
+            if (!chat) {
                 throw new Error("Chat not found");
             }
     
