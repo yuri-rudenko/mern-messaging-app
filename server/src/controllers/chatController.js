@@ -103,13 +103,19 @@ class chatController {
             }
         
             if (checkedChat.users.includes(...userId)) {
-                return res.status(400).json({ error: `User ${tag} is already in the chat` });
+                return res.status(400).json(`User ${tag} is already in the chat`);
             }
         
             
             const chat = await Chat.findByIdAndUpdate(id, {
                 $push: { users: userId }
             });
+
+            const user = User.findByIdAndUpdate(userId, {
+                $push: { chats: chat._id }
+            });
+
+            if(!chat || !user) return res.status(400).json({ error: `Chat or user didn't add` });
     
             res.status(200).json({ message: `User ${tag} added to chat ${id}` });
 
