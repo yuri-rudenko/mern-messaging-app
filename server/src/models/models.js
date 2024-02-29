@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     name: {type: String, required: true},
     tag: {type: String, required: true, unique: true, min: [3, 'Tag is too short'], max: [16, 'Tag is too long']},
     email: {type: String, required: true, unique: true, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'], trim: true, lowercase: true},
-    phone: { type: String, unique: true, match: /^[0-9]{10}$/ },
+    phone: { type: String, match: /^[0-9]{10}$/ },
     password: {type: String, required: true, min: [6, 'Password is too short'], max: [16, 'Password is too long']},
     friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     chats: [{type: mongoose.Schema.Types.ObjectId, ref: 'Chat'}],

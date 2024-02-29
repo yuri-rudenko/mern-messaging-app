@@ -74,9 +74,17 @@ class chatController {
             
             const chat = await Chat.create({
                 name, users: ids, groupAdmin: req.user.id, isGroup: (users.length > 1)
-            }).populate('users');
+            })
 
-            res.status(200).json({chat});
+            ids.forEach(async (id) => {
+                const user = await User.findByIdAndUpdate(id, {
+                    $push: { chats: chat._id }
+                })
+            })
+
+            const populatedChat = await Chat.findById(chat._id).populate('users');
+
+            res.status(200).json({populatedChat});
             
         } 
 
