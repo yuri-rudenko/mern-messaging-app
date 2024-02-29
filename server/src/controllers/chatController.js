@@ -64,9 +64,8 @@ class chatController {
         try {
 
             const {name, users} = req.body;
-            console.log(users);
+
             users.push(req.user.tag);
-            console.log(users);
 
             if(!name || !users) throw new Error("Params error");
 
@@ -119,7 +118,7 @@ class chatController {
                 $push: { users: userId }
             });
 
-            const user = User.findByIdAndUpdate(userId, {
+            const user = await User.findByIdAndUpdate(userId[0], {
                 $push: { chats: chat._id }
             });
 
@@ -159,6 +158,10 @@ class chatController {
             const chat = await Chat.findByIdAndUpdate(id, {
                 $pullAll: { users: userId }
             }, { new: true });
+
+            const user = await User.findByIdAndUpdate(userId[0], {
+                $pull: { chats: chat._id }
+            });
     
             res.status(200).json({ message: `User ${tag} has been removed from chat ${id}`});
 
