@@ -4,6 +4,9 @@ import ChatsMenu from '../Components/ChatsMenu';
 import Chat from '../Components/Chat';
 
 const Main = () => {
+
+    
+
     return (
         <div>
             <Header/>

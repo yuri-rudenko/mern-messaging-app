@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import './styles/login.css'
 import { check, login, registration } from '../http/userAPI.js';
 import {useNavigate} from 'react-router-dom';
+import { Context } from '..';
+import { observer } from 'mobx-react-lite';
 
-const Login = () => {
+const Login =() => {
+
+    const {user} = useContext(Context)
+
     const {register, formState: {errors, isValid}, handleSubmit} = useForm();
 
     const isLogin = window.location.pathname === '/login';
@@ -17,21 +22,27 @@ const Login = () => {
         
         const fetchData = async () => {
             const token = await check();
-            if(token) navigate('/');
+            // if(token) navigate('/');
         };
     
         fetchData();
     }, []);
 
     const onSubmit = async values => {
-
+        let newData;
         if(isLogin) {
-            setData(await login(values));
+            newData = await login(values);
+        } else {
+            newData = await registration(values);
         }
-        else {
-            setData(await registration(values));
+    
+        setData(newData);
+
+        if(newData){
+            user.setUser(newData);
+            user.setIsAuth(true);
+            console.log(newData);
         }
-        
     };
 
     const onChange = () => {
@@ -75,7 +86,7 @@ const Login = () => {
                         
                     </>
                 )}
-                    {data.status === 400 ? <p className='login-error' style={{fontSize: '18px', fontWeight: "bold"}}>{data.data}</p> : <></>}
+                    {data?.status === 400 ? <p className='login-error' style={{fontSize: '18px', fontWeight: "bold"}}>{data.data}</p> : <></>}
                     <div className="submit-container">
                         <input className='submit' type="submit" value={isLogin ? 'Login' : 'Register'}/>
                     </div>

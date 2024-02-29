@@ -5,7 +5,7 @@ export const registration = async (values) => {
     try {
         const {data} = await $host.post('/api/user/registration', values);
         localStorage.setItem('token', data.token);
-        return jwtDecode(data.token);
+        return data;
     } catch (error) {
         return(error.response);
     }
@@ -16,7 +16,7 @@ export const login = async (values) => {
     try {
         const {data} = await $host.post('/api/user/login', values);
         localStorage.setItem('token', data.token);
-        return jwtDecode(data.token);
+        return data;
     } catch (error) {
         return(error.response);
     }
