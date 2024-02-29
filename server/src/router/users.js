@@ -7,6 +7,7 @@ const router = new Router();
 router.get('/', authMiddleware, userController.getAll);
 router.get('/getone/:tag', userController.getOne);
 router.get('/chats/:id', authMiddleware, userController.getChats);
+router.get('/auth', authMiddleware, userController.check)
 router.post('/registration', userController.registration);
 router.post('/login', userController.login);
 router.put('/update/:tag', authMiddleware, userController.update);

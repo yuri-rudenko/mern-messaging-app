@@ -14,6 +14,10 @@ export default function(req, res, next) {
 
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
+        if (Date.now() >= decoded.exp * 1000) {
+            return res.status(401).json({ message: "Token expired" });
+        }
+
         req.user = decoded;
 
         next();

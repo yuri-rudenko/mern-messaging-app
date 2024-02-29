@@ -23,6 +23,10 @@ export default async function(req, res, next) {
             return res.status(401).json({message: "You are not chat admin"});
         }
 
+        if (Date.now() >= decoded.exp * 1000) {
+            return res.status(401).json({ message: "Token expired" });
+        }
+
         req.user = decoded;
 
         next();

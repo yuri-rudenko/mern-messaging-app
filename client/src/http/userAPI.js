@@ -7,7 +7,7 @@ export const registration = async (values) => {
         localStorage.setItem('token', data.token);
         return jwtDecode(data.token);
     } catch (error) {
-        alert(error.response.data);
+        return(error.response);
     }
 
 }
@@ -18,9 +18,8 @@ export const login = async (values) => {
         localStorage.setItem('token', data.token);
         return jwtDecode(data.token);
     } catch (error) {
-        alert(error.response.data);
+        return(error.response);
     }
-    
 }
 
 export const check = async () => {
@@ -29,7 +28,7 @@ export const check = async () => {
         localStorage.setItem('token', data.token);
         return jwtDecode(data.token);
     } catch (error) {
-        console.log(error);
+        return(error.response);
     }
     
 }

@@ -292,6 +292,20 @@ class UserController {
         }
     }
 
+    async check(req, res, next) {
+        
+
+        try {
+
+            const token = generateJWT(req.user.id, req.user.email, req.user.role);
+            return res.json({token});
+            
+        } catch (error) {
+            res.status(400).json(error.message);
+        }
+
+    }
+
 };
 
 export default new UserController()

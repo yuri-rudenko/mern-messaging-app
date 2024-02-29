@@ -1,30 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import './styles/login.css'
-import { login, registration } from '../http/userAPI.js';
+import { check, login, registration } from '../http/userAPI.js';
+import {useNavigate} from 'react-router-dom';
 
 const Login = () => {
     const {register, formState: {errors, isValid}, handleSubmit} = useForm();
 
     const isLogin = window.location.pathname === '/login';
 
-    const onSubmit = values => {
+    let [data, setData] = useState({})
 
-        let data;
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        
+        const fetchData = async () => {
+            const token = await check();
+            if(token) navigate('/');
+        };
+    
+        fetchData();
+    }, []);
+
+    const onSubmit = async values => {
+
         if(isLogin) {
-            data = login(values);
+            setData(await login(values));
         }
         else {
-            data = registration(values);
+            setData(await registration(values));
         }
         
     };
+
+    const onChange = () => {
+        setData({})
+    }
 
     return (
         <div className='login'>
             <div className="container">
                 <h2>{isLogin ? 'Login' : 'Registration'}</h2>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onChange={onChange} onSubmit={handleSubmit(onSubmit)}>
                 {isLogin ? (
                     <>
                         <input placeholder='Enter tag or email' type="text" style={errors?.login && {borderColor: "rgb(182, 44, 44)"}} {...register("login", { required: { value: true, message: 'Enter tag or email' }, minLength: { value: 3, message: 'Login must be at least 3 characters' }, maxLength: { value: 16, message: 'Login must not exceed 16 characters' } })} name="login" />
@@ -57,6 +75,7 @@ const Login = () => {
                         
                     </>
                 )}
+                    {data.status === 400 ? <p className='login-error' style={{fontSize: '18px', fontWeight: "bold"}}>{data.data}</p> : <></>}
                     <div className="submit-container">
                         <input className='submit' type="submit" value={isLogin ? 'Login' : 'Register'}/>
                     </div>
