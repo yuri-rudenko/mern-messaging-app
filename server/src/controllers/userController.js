@@ -84,17 +84,10 @@ class UserController {
                 phone
             });
 
-            if(user) {
-                res.status(201).json({
-                    _id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    tag: user.tag,
-                    password: user.password,
-                    phone: user.phone,
-                    token: generateJWT(user._id, user.tag),
-                })
-            }
+            const userData = { ...user._doc };
+            delete userData.password;
+
+            res.status(201).json({...userData, token: generateJWT(user._id, user.tag)})
 
         } 
 
@@ -114,8 +107,8 @@ class UserController {
 
             let user;
 
-            user = await User.findOne({tag: login});
-            if(!user) user = await User.findOne({email: login});
+            user = await User.findOne({tag: login}).populate("chats");
+            if(!user) user = await User.findOne({email: login}).populate("chats");
             if(!user) {
                 throw new Error("Incorect login");
             }
@@ -126,14 +119,10 @@ class UserController {
                 throw new Error("Incorect password");
             }
 
-            res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                tag: user.tag,
-                phone: user.phone,
-                token: generateJWT(user._id, user.tag),
-            })
+            const userData = { ...user._doc };
+            delete userData.password;
+
+            res.status(201).json({...userData, token: generateJWT(user._id, user.tag)})
 
         } 
 

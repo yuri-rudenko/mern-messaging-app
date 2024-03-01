@@ -21,8 +21,10 @@ const Login =() => {
     useEffect(() => {
         
         const fetchData = async () => {
+
             const token = await check();
             // if(token) navigate('/');
+
         };
     
         fetchData();
@@ -63,7 +65,7 @@ const Login =() => {
                     </>
                 ) : (
                     <>
-                        <input placeholder='Enter your name' type="text" style={errors?.name && {borderColor: "rgb(182, 44, 44)"}} {...register("name", { required: { value: true, message: 'Enter name' }, minLength: { value: 3, message: 'Name must be at least 3 characters' }, maxLength: { value: 20, message: 'Name must not exceed 20 characters' } })} name="name" />
+                        <input placeholder='Enter your name' type="text" style={errors?.name && {borderColor: "rgb(182, 44, 44)"}} {...register("name", { required: { value: true, message: 'Enter name' }, minLength: { value: 3, message: 'Name must be at least 3 characters' }, maxLength: { value: 30, message: 'Name must not exceed 30 characters' } })} name="name" />
                         {errors?.name && <p className='login-error'>{errors?.name?.message}</p>}
 
                         <input placeholder='Enter your email' type="email" style={errors?.email && {borderColor: "rgb(182, 44, 44)"}} {...register("email", { required: { value: true, message: 'Enter email' }, minLength: { value: 4, message: 'Email must be at least 4 characters' }, maxLength: { value: 40, message: 'Email must not exceed 40 characters' } })} name="email" />
@@ -73,7 +75,7 @@ const Login =() => {
                         {errors?.tag && <p className='login-error'>{errors?.tag?.message}</p>}
 
                         <input placeholder='Enter your phone' type="text" style={errors?.phone && {borderColor: "rgb(182, 44, 44)"}} {...register("phone", { 
-                            required: { value: true, message: 'Enter phone number' },
+                            required: false,
                             pattern: { 
                                 value: /^[0-9]{10}$/, 
                                 message: 'Enter a valid phone number (10 digits)' 
