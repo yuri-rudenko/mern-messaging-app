@@ -1,11 +1,39 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from '..';
+import { observer } from 'mobx-react-lite';
+import { Dropdown } from 'rsuite';
+import 'rsuite/Dropdown/styles/index.css';
 
-const Header = () => {
+const Header = observer(() => {
+    const { user } = useContext(Context);
+    const [userApp, setUser] = useState([]);
+
+    const renderButton = (props, ref) => {
+        return (
+            <div {...props} ref={ref} className="user-menu">
+                <p className='user-menu-name'>{userApp.name}</p>
+                <img className='user-menu-image' src={userApp.image} alt="" />
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        if (user.user) {
+            setUser(user.user);
+        }
+    }, [user.user]);
+
     return (
-        <div>
-            Header
+        <div className='header'>
+            <h1>Message</h1>
+            <Dropdown trigger="click" renderToggle={renderButton}>
+                <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>
+                <Dropdown.Item style={{fontSize: "18px", minWidth: "150px"}}>Friends</Dropdown.Item>
+                <Dropdown.Separator/>
+                <Dropdown.Item style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
+            </Dropdown>
         </div>
     );
-}
+})
 
 export default Header;

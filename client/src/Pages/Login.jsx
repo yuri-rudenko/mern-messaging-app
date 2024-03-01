@@ -6,11 +6,11 @@ import {useNavigate} from 'react-router-dom';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 
-const Login =() => {
+const Login = () => {
 
-    const {user} = useContext(Context)
+    const {user} = useContext(Context);
 
-    const {register, formState: {errors, isValid}, handleSubmit} = useForm();
+    const {register, formState: {errors}, handleSubmit} = useForm();
 
     const isLogin = window.location.pathname === '/login';
 

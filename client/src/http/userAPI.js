@@ -32,3 +32,14 @@ export const check = async () => {
     }
     
 }
+
+export const getUser = async (tag) => {
+    try {
+        const {data} = await $authHost.get(`/api/user/getOne/${tag}`);
+
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
+    
+}

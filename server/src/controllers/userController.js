@@ -20,17 +20,15 @@ class UserController {
 
             const {tag} = req.params;
 
-            const user = await User.findOne({tag});
+            const user = await User.findOne({tag}).populate("chats friends blockedUsers");
 
             if(!user) throw new Error("User doesn't exist");
 
-            return res.status(200).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                tag: user.tag,
-                phone: user.phone,
-            })
+            const userData = { ...user._doc };
+            delete userData.password;
+            delete userData.token;
+
+            return res.status(200).json(userData);
             
         } 
 
@@ -68,8 +66,9 @@ class UserController {
             if(!tag || !email || !password || !name) throw new Error("Something is missing");
 
             const userExists = await User.findOne({tag});
+            const userExistsEmail = await User.findOne({email});
 
-            if(userExists) {
+            if(userExists || userExistsEmail) {
                 throw new Error("User already exists");
             }
 
@@ -286,7 +285,7 @@ class UserController {
 
         try {
 
-            const token = generateJWT(req.user.id, req.user.email, req.user.role);
+            const token = generateJWT(req.user.id, req.user.tag);
             return res.json({token});
             
         } catch (error) {

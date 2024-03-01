@@ -1,0 +1,20 @@
+.header {
+    padding: 10px 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+} 
+.header .user-menu {
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+}
+.header .user-menu .user-menu-name {
+    font-size: 18px;
+    margin-right: 10px;
+} 
+.header .user-menu img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+} 
