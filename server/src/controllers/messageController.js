@@ -12,7 +12,7 @@ class messageController {
             const chat = await Chat.findById(chatId);
             const user = await User.findOne({tag});
 
-            console.log(chat.users, user.tag)
+            ////////// add check if user is in the chat
 
             if(!content || !chat || !user) throw new Error("Data error");
 

@@ -21,6 +21,8 @@ class UserController {
             const {tag} = req.params;
 
             const user = await User.findOne({tag}).populate("chats friends blockedUsers");
+            await user.populate("chats.latestMessage");
+            await user.populate("chats.latestMessage.author");
 
             if(!user) throw new Error("User doesn't exist");
 

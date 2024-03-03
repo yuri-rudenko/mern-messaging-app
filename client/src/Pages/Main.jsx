@@ -30,7 +30,7 @@ const Main = observer(() => {
     }, [user, navigate]);
 
     return (
-        <div>
+        <div className='main'>
             <Header/>
             <ChatsMenu/>
             <Chat/>
