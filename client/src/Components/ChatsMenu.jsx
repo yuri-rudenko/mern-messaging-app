@@ -16,19 +16,21 @@ const ChatsMenu = observer(() => {
     return (
         <div className='chats-menu'>
             {chats && chats.map(chat => (
+                
                 <div className="left-chat" key={chat._id}>
-
                     <div className="left">
                         <img className='chat-picture' src={chat.displayPicture} alt="" />
                     </div>
 
                     <div className="right">
-                        <p className='chat-name'>{chat.name}</p>
-                        <div className="latest-message">
-                            <p className='author'>{chat.latestMessage.author.name}: </p> 
+                        <div className="top">
+                            <p className='chat-name'>{chat.name}</p>
+                            <p className='time'>{new Date(chat.latestMessage.createdAt).getHours()}:{new Date(chat.latestMessage.createdAt).getMinutes()}</p> 
+                        </div>
+                        <div className="bottom">
+                            <p className='author'>{chat.latestMessage.author.name.split(" ")[0]}: </p> 
                             <p className='text'>{chat.latestMessage.text}</p>
-                            <p className='time'>({new Date(chat.latestMessage.createdAt).getHours()}:{new Date(chat.latestMessage.createdAt).getMinutes()})</p>   
-                        </div>  
+                        </div>
                     </div>
 
                 </div>

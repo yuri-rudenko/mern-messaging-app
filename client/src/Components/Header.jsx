@@ -3,6 +3,7 @@ import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 import { Dropdown } from 'rsuite';
 import 'rsuite/Dropdown/styles/index.css';
+import menuIcon from '../images/menu.svg';
 
 const Header = observer(() => {
     const { user } = useContext(Context);
@@ -25,13 +26,18 @@ const Header = observer(() => {
 
     return (
         <div className='header'>
-            <h1>Message</h1>
+            <div className="left">
+                <img src={menuIcon} alt="MENU" className='menu-icon'/>
+                <h1>Message</h1>
+            </div>
             <Dropdown trigger="click" renderToggle={renderButton}>
                 <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>
                 <Dropdown.Item style={{fontSize: "18px", minWidth: "150px"}}>Friends</Dropdown.Item>
                 <Dropdown.Separator/>
                 <Dropdown.Item style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
             </Dropdown>
+                
+
         </div>
     );
 })

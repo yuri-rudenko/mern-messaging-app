@@ -1,12 +1,10 @@
-.main {
-    margin: 0px 20px;
-}
 
 .header {
-    padding: 10px 30px;
+    padding: 10px 50px;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    background-color: rgb(226, 226, 226);
 } 
 .header .user-menu {
     align-items: center;
@@ -21,7 +19,21 @@
     height: 40px;
     width: 40px;
     border-radius: 50%;
+    border: 2px solid black;
+    box-sizing: content-box;
 } 
+.header .left {
+    display: flex;
+    align-items: center;
+}
+.header .left .menu-icon {
+    margin-right: 20px;
+    height: 40px;
+}
+.body {
+    margin-top: 20px;
+    padding: 10px 50px;
+}
 .chats-menu {
     width: 350px;
 }
@@ -39,27 +51,37 @@
     border: 2px solid lightgrey;
 }
 .chats-menu .left-chat .right {
+    width: 100%;
     margin-left: 20px;
 }
-.chats-menu .left-chat .right .chat-name {
+.chats-menu .left-chat .right .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chats-menu .left-chat .right .top .chat-name {
     font-weight: bold;
     margin-bottom: 8px;
     font-size: 22px;
     text-align: start;
 }
-.chats-menu .left-chat .right .latest-message {
+.chats-menu .left-chat .right .top .time {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+.chats-menu .left-chat .right .bottom {
+    display: flex;
+    align-items: end;
+}
+.chats-menu .left-chat .right .bottom {
     display: flex;
     align-items: end;
     font-size: 14px;
 }
-.chats-menu .left-chat .right .latest-message .text {
+.chats-menu .left-chat .right .bottom .text {
     margin-left: 4px;
     max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-.chats-menu .left-chat .right .latest-message .time {
-    margin-left: 4px;
-    font-size: 12px;
 }

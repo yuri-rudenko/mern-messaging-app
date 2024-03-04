@@ -32,8 +32,10 @@ const Main = observer(() => {
     return (
         <div className='main'>
             <Header/>
-            <ChatsMenu/>
-            <Chat/>
+            <div className="body">
+                <ChatsMenu/>
+                <Chat/>
+            </div>
         </div>
     );
 })
