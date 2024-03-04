@@ -28,7 +28,7 @@ const Header = observer(() => {
         <div className='header'>
             <div className="left">
                 <img src={menuIcon} alt="MENU" className='menu-icon'/>
-                <h1>Message</h1>
+                <h1>Message.app</h1>
             </div>
             <Dropdown trigger="click" renderToggle={renderButton}>
                 <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>

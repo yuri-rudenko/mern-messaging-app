@@ -65,6 +65,10 @@ class chatController {
 
             const {name, users} = req.body;
 
+            users.forEach(tag => {
+                if(tag === req.user.tag) throw new Error("One of users you are adding is you");
+            })
+
             users.push(req.user.tag);
 
             if(!name || !users) throw new Error("Params error");
