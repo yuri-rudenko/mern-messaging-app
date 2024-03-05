@@ -4,10 +4,20 @@ import { observer } from 'mobx-react-lite';
 import { Dropdown } from 'rsuite';
 import 'rsuite/Dropdown/styles/index.css';
 import menuIcon from '../images/menu.svg';
+import { useNavigate } from 'react-router-dom';
 
 const Header = observer(() => {
     const { user } = useContext(Context);
     const [userApp, setUser] = useState([]);
+
+    const navigate = useNavigate();
+
+    const logout = () => {
+        user.setUser({});
+        user.setIsAuth(false);
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
 
     const renderButton = (props, ref) => {
         return (
@@ -34,7 +44,7 @@ const Header = observer(() => {
                 <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>
                 <Dropdown.Item style={{fontSize: "18px", minWidth: "150px"}}>Friends</Dropdown.Item>
                 <Dropdown.Separator/>
-                <Dropdown.Item style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
+                <Dropdown.Item onClick={logout} style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
             </Dropdown>
                 
 

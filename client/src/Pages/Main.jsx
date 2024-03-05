@@ -15,6 +15,7 @@ const Main = observer(() => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        
         const checkUser = async() => {
             // loading
             const token = await check();
@@ -27,7 +28,6 @@ const Main = observer(() => {
     
             user.setUser(foundUser);
 
-            console.log(user.isAuth);
         }
     
         checkUser();

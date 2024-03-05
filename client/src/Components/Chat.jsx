@@ -14,7 +14,7 @@ const Chat = observer(() => {
         useEffect(() => {
             if (chatContext.activeChat.users) {
                 setActiveChat(chatContext.activeChat);
-                console.log(chatContext.activeChat);
+
             }
         }, [chatContext.activeChat]);
 

@@ -11,7 +11,7 @@ const ChatsMenu = observer(() => {
     useEffect(() => {
         if (user.user.chats) {
             setChats(user.user.chats);
-            console.log(user.user.chats[0], 123);
+
         }
     }, [user.user]);
 
@@ -28,6 +28,7 @@ const ChatsMenu = observer(() => {
                     <div className="left">
                         <img className='chat-picture' src={chat.displayPicture} alt="" />
                     </div>
+
 
                     <div className="right">
                         <div className="top">

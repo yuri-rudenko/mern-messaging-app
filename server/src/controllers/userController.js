@@ -63,7 +63,9 @@ class UserController {
 
         try {
             
-            const {email, password, name, tag, phone} = req.body;
+            let {email, password, name, tag, phone} = req.body;
+
+            tag = tag.toLowerCase();
 
             if(!tag || !email || !password || !name) throw new Error("Something is missing");
 
@@ -104,11 +106,14 @@ class UserController {
 
         try {
             
-            const {login, password} = req.body;
+            let {login, password} = req.body;
+
+            login = login.toLowerCase();
+            
 
             let user;
 
-            user = await User.findOne({tag: login}).populate("chats");
+            user = await User.findOne({tag: login}).populate("chats friends blockedUsers");
             if(!user) user = await User.findOne({email: login}).populate("chats");
             if(!user) {
                 throw new Error("Incorect login");
@@ -119,6 +124,9 @@ class UserController {
             if(!checkPassword) {
                 throw new Error("Incorect password");
             }
+
+            await user.populate("chats.latestMessage");
+            await user.populate("chats.latestMessage.author");
 
             const userData = { ...user._doc };
             delete userData.password;
