@@ -43,7 +43,7 @@ const Login = () => {
         if(newData){
             user.setUser(newData);
             user.setIsAuth(true);
-            console.log(newData);
+            navigate('/');
         }
     };
 

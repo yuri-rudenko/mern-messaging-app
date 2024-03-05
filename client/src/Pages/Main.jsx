@@ -22,8 +22,12 @@ const Main = observer(() => {
             if(!token) navigate('/login');
     
             const foundUser = await getUser(token.tag);
+
+            if(foundUser.status == 400) navigate('/login');
     
             user.setUser(foundUser);
+
+            console.log(user.isAuth);
         }
     
         checkUser();

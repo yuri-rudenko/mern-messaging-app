@@ -24,6 +24,7 @@ export const login = async (values) => {
 
 export const check = async () => {
     try {
+        if(!localStorage.getItem('token')) return {message: "Not Authorised"};
         const {data} = await $authHost.get('/api/user/auth');
         localStorage.setItem('token', data.token);
         return jwtDecode(data.token);
@@ -35,6 +36,7 @@ export const check = async () => {
 
 export const getUser = async (tag) => {
     try {
+        if(!tag) return {message: "Not Authorised", status: 400};
         const {data} = await $authHost.get(`/api/user/getOne/${tag}`);
 
         return data;

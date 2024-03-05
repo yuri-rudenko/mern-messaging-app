@@ -2,14 +2,11 @@ import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { authRoutes, publicRoutes } from '../routes';
 import { observer } from 'mobx-react-lite';
+import { Context } from '..';
 
 const AppRouter = observer(() => {
 
-    // const {user} = useContext(Context)
-
-    const user = {
-        isAuth: true,
-    }
+    const {user} = useContext(Context);
 
     return (
         <Routes>
