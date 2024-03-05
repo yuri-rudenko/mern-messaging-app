@@ -4,6 +4,9 @@
     width: 75%;
     min-width: 250px;
 }
+.chat .main-chat {
+    height: 100%;
+}
 .message-container {
     display: flex;
     margin-bottom: 10px;
@@ -11,26 +14,46 @@
 .flex-end {
     justify-content: end;
 }
-.message {
+.messages {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.messages .messages-container {
+    max-height: 100%;
+    overflow-y: auto;
+    flex: 1;
+}
+.messages .write-message {
+    text-align: left;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+.messages .message {
     display: flex;
     padding: 5px 10px;
     border-radius: 20px;
 }
-.other-user .message {
+.messages .other-user .message {
     background-color: rgb(252, 252, 166);
 }
-.you-user .message {
+.messages .you-user .message {
     background-color: rgb(166, 252, 173);
 }
-.message .author-image img {
+.messages .message .author-image img {
     margin-right: 10px;
     height: 40px;
     border-radius: 50%;
 }
-.message .content * {
+.messages .message .content * {
     text-align: left;
 }
-.message .content .message-author {
+.messages .message .content .message-author {
     margin-bottom: 2px;
     font-size: 13px;
     font-weight: bold;

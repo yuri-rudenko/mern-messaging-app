@@ -4,19 +4,29 @@ import '../Pages/styles/chat.css'
 import { observer } from 'mobx-react-lite';
 import Message from './Message';
 
+function scrollToBottom() {
+    let messagesContainer = document.querySelector('.messages-container');
+    if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    else {
+        setTimeout(scrollToBottom, 10);
+    }
+}
+
 const Chat = observer(() => {
 
-        const { user } = useContext(Context);
-        const chatContext = useContext(Context).chat;
+    const { user } = useContext(Context);
+    const chatContext = useContext(Context).chat;
 
-        const [activeChat, setActiveChat] = useState({});
+    const [activeChat, setActiveChat] = useState({});
 
-        useEffect(() => {
-            if (chatContext.activeChat.users) {
-                setActiveChat(chatContext.activeChat);
-
-            }
-        }, [chatContext.activeChat]);
+    useEffect(() => {
+        if (chatContext.activeChat.users) {
+            setActiveChat(chatContext.activeChat);
+            scrollToBottom();
+        }
+    }, [chatContext.activeChat]);
 
     return (
         <div className='chat'>
@@ -26,9 +36,12 @@ const Chat = observer(() => {
             {activeChat.messages[0] 
             ? (
                 <div className="messages">
-                    {activeChat.messages.map(message =>
-                        <Message user={user.user} message={message} key={message._id}></Message>
-                    )}
+                    <div className='messages-container'>
+                        {activeChat.messages.map(message =>
+                            <Message user={user.user} message={message} key={message._id}></Message>
+                        )}
+                    </div>
+                    <input className='write-message' placeholder='Write a message...'></input>
                 </div>
             ) 
             : (
