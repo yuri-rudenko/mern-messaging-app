@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '..';
 import '../Pages/styles/chat.css'
 import { observer } from 'mobx-react-lite';
+import Message from './Message';
 
 const Chat = observer(() => {
 
@@ -13,18 +14,26 @@ const Chat = observer(() => {
         useEffect(() => {
             if (chatContext.activeChat.users) {
                 setActiveChat(chatContext.activeChat);
+                console.log(chatContext.activeChat);
             }
         }, [chatContext.activeChat]);
 
     return (
         <div className='chat'>
             {activeChat.users ? 
-            
+
             <div className="main-chat">
-                {activeChat.messages[0] ? activeChat.messages.map(message => 
-                <p key={message._id} className='message'>{message.text}</p>)
-                : <p>Write your first message!</p>
-                }
+            {activeChat.messages[0] 
+            ? (
+                <div className="messages">
+                    {activeChat.messages.map(message =>
+                        <Message user={user.user} message={message} key={message._id}></Message>
+                    )}
+                </div>
+            ) 
+            : (
+                <p>Write your first message!</p>
+            )}
             </div>
             
             : <p>Choose your chat</p>}

@@ -42,7 +42,8 @@
 
 
 .chats-menu {
-    width: 350px;
+    width: 25%;
+    min-width: 350px;
 }
 .chats-menu .left-chat {
     border: 2px solid grey;

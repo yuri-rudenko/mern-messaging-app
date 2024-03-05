@@ -1,4 +1,37 @@
 .chat {
     margin-left: 20px;
     margin-top: 10px;
+    width: 75%;
+    min-width: 250px;
+}
+.message-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+.flex-end {
+    justify-content: end;
+}
+.message {
+    display: flex;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+.other-user .message {
+    background-color: rgb(252, 252, 166);
+}
+.you-user .message {
+    background-color: rgb(166, 252, 173);
+}
+.message .author-image img {
+    margin-right: 10px;
+    height: 40px;
+    border-radius: 50%;
+}
+.message .content * {
+    text-align: left;
+}
+.message .content .message-author {
+    margin-bottom: 2px;
+    font-size: 13px;
+    font-weight: bold;
 }
