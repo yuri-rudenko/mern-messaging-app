@@ -7,17 +7,21 @@ const ChatsMenu = observer(() => {
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
     const [chats, setChats] = useState([]);
+    const [clickable, setClickable] = useState(true);
 
     useEffect(() => {
         if (user.user.chats) {
             setChats(user.user.chats);
-
         }
     }, [user.user]);
 
     const setActiveChat = async (chatID) => {
-        const result = await getChat(chatID);
-        if(result.chat) chatContext.setActiveChat(result.chat);
+        if(clickable && chatContext.activeChat._id !== chatID) {
+            setClickable(false);
+            const result = await getChat(chatID);
+            if(result.chat) chatContext.setActiveChat(result.chat);
+            setClickable(true);
+        }
     }
 
     return (

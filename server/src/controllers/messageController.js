@@ -7,16 +7,16 @@ class messageController {
 
         try {
 
-            const {content, tag, chatId} = req.body;
+            const {content, id, chatId} = req.body;
 
             const chat = await Chat.findById(chatId);
-            const user = await User.findOne({tag});
+            const user = await User.findById(id);
 
             ////////// add check if user is in the chat
 
             if(!content || !chat || !user) throw new Error("Data error");
 
-            if(tag !== req.user.tag) throw new Error("Authorization error");
+            if(id !== req.user.id) throw new Error("Authorization error");
 
             const message = await Message.create({
                 author: user._id,
@@ -24,6 +24,8 @@ class messageController {
                 chatId: chatId,
                 text: content.text
             });
+
+            await message.populate("author");
 
             if(message) await Chat.findByIdAndUpdate(chatId, {
                 $push: { messages: message._id },
