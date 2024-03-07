@@ -58,3 +58,8 @@
     font-size: 13px;
     font-weight: bold;
 }
+
+
+.chat .hidden {
+    display: hidden;
+}

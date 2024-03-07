@@ -4,14 +4,21 @@ import '../Pages/styles/chat.css'
 import { observer } from 'mobx-react-lite';
 import Message from './Message';
 import { sendMessage } from '../http/messageAPI';
+import Loader from './small/Loader';
+
+let scrollIterations = 0;
 
 function scrollToBottom() {
+    console.log(1);
     let messagesContainer = document.querySelector('.messages-container');
     if (messagesContainer) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-    else {
-        setTimeout(scrollToBottom, 10);
+        console.log(messagesContainer.scrollTop, messagesContainer.scrollHeight)
+    } else {
+        if (scrollIterations < 10) {
+            setTimeout(scrollToBottom, 10);
+            scrollIterations++;
+        }
     }
 }
 
@@ -24,6 +31,7 @@ const Chat = observer(() => {
 
     const [activeChat, setActiveChat] = useState({});
     const [inputValue, setInputValue] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -33,12 +41,14 @@ const Chat = observer(() => {
     };
 
     useEffect(() => {
+        setLoading(true);
         resetInputValue();
         if (chatContext.activeChat.users) {
             setActiveChat(chatContext.activeChat);
             setTimeout(() => {
 
                 scrollToBottom();
+                setLoading(false);
 
             }, 10)
         }
@@ -78,29 +88,33 @@ const Chat = observer(() => {
 
     return (
         <div className='chat'>
+
+            {loading && activeChat.users && <Loader/>}
+
             {activeChat.users ? 
 
-            <div className="main-chat">
-            {activeChat.messages[0] 
-            ? (
-                <div className="messages">
-                    <div className='messages-container'>
-                        {activeChat.messages.map(message =>
-                            <Message user={user.user} message={message} key={message._id}></Message>
-                        )}
+            <div className={loading? "main-chat hidden": "main-chat"}>
+                {activeChat.messages[0] 
+                ? (
+                    <div className="messages">
+                        <div className='messages-container'>
+                            {activeChat.messages.map(message =>
+                                <Message user={user.user} message={message} key={message._id}></Message>
+                            )}
+                        </div>
+                        <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
                     </div>
+                ) 
+                : (
+                    <div className="messages">
+                    <p>Write your first message!</p>
                     <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
+                    </div>
+                )}
                 </div>
-            ) 
-            : (
-                <div className="messages">
-                <p>Write your first message!</p>
-                <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
-                </div>
-            )}
-            </div>
             
             : <p>Choose your chat</p>}
+            
         </div>
     );
 })
