@@ -17,7 +17,7 @@ const Main = observer(() => {
     useEffect(() => {
         
         const checkUser = async() => {
-            // loading
+
             const token = await check();
     
             if(!token) navigate('/login');
@@ -28,10 +28,13 @@ const Main = observer(() => {
     
             user.setUser(foundUser);
 
+            
         }
+
+        if(!user.isAuth || !user) navigate('/login');
     
-        checkUser();
-    }, [user, navigate]);
+        // checkUser();
+    }, []);
 
     return (
         <div className='main'>

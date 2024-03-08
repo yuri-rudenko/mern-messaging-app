@@ -1,10 +1,10 @@
 import React from 'react';
 import './loader.css';
 
-const Loader = () => {
+const Loader = ({absolute}) => {
     return (
         <div>
-            <div className="lds-facebook"><div></div><div></div><div></div></div>
+            <div className={absolute ? "lds-facebook absolute" : "lds-facebook relative"}><div></div><div></div><div></div></div>
         </div>
     );
 }

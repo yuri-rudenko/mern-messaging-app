@@ -9,11 +9,9 @@ import Loader from './small/Loader';
 let scrollIterations = 0;
 
 function scrollToBottom() {
-    console.log(1);
     let messagesContainer = document.querySelector('.messages-container');
     if (messagesContainer) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        console.log(messagesContainer.scrollTop, messagesContainer.scrollHeight)
     } else {
         if (scrollIterations < 10) {
             setTimeout(scrollToBottom, 10);
@@ -46,12 +44,12 @@ const Chat = observer(() => {
         if (chatContext.activeChat.users) {
             setActiveChat(chatContext.activeChat);
             setTimeout(() => {
-
                 scrollToBottom();
                 setLoading(false);
-
+                
             }, 10)
         }
+        console.log(loading);
     }, [chatContext.activeChat]);
 
     useEffect(() => {
@@ -75,7 +73,7 @@ const Chat = observer(() => {
                     }, 10)
                 }
             }
-            inputRef.current.focus();
+            if(inputRef.current) inputRef.current.focus();
         };
 
         document.addEventListener('keydown', handleKeyDown);
@@ -89,7 +87,7 @@ const Chat = observer(() => {
     return (
         <div className='chat'>
 
-            {loading && activeChat.users && <Loader/>}
+            {loading && activeChat.users && <div/>}
 
             {activeChat.users ? 
 

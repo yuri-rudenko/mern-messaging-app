@@ -3,35 +3,40 @@ import AppRouter from "./Components/AppRouter";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import { Context } from ".";
-import { check } from "./http/userAPI";
+import { check, getUser } from "./http/userAPI";
+import Loader from "./Components/small/Loader";
 
 const App = observer(() => {
 
   const {user} = useContext(Context);
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
 
-    check().then(data => {
+    user.setLoading(true)
+
+    check().then(async data => {
       if(data) {
-        user.setUser(true)
-        user.setIsAuth(true)
+        let foundUser;
+        if(data.id) foundUser = await getUser(data.tag);
+        if(foundUser) {
+          user.setUser(foundUser);
+          user.setIsAuth(true);
+        }
       }
     })
-    .finally(() => setLoading(false))
+    .finally(() => user.setLoading(false))
 
   }, [])
 
-  if(loading) return <p>loading...</p>
 
-  return (
+  return (user.loading ?
+      <Loader absolute={true}/>
+    :
       <div className="App">
           <BrowserRouter>
               <AppRouter/>
           </BrowserRouter>
-      </div>
-  );
-})
+      </div>)
+});
 
 export default App;

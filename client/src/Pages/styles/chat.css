@@ -61,5 +61,5 @@
 
 
 .chat .hidden {
-    display: hidden;
+    visibility: hidden;
 }

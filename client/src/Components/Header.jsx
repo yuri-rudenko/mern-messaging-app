@@ -7,7 +7,7 @@ import menuIcon from '../images/menu.svg';
 import { useNavigate } from 'react-router-dom';
 
 const Header = observer(() => {
-    const { user } = useContext(Context);
+    const { user, chat } = useContext(Context);
     const [userApp, setUser] = useState([]);
 
     const navigate = useNavigate();
@@ -15,6 +15,8 @@ const Header = observer(() => {
     const logout = () => {
         user.setUser({});
         user.setIsAuth(false);
+        chat.setActiveChat({});
+        chat.setChats([]);
         localStorage.removeItem('token');
         navigate('/login');
     }
