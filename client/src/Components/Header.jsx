@@ -72,7 +72,7 @@ const Header = observer(() => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="modal-choose-container">
-                            <Uploader listType="picture" action="">
+                            <Uploader listType="picture" action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
                                 <button>
                                     <CameraRetroIcon />
                                 </button>
