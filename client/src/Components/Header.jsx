@@ -14,6 +14,9 @@ const Header = observer(() => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);  
+    
+    const [notUpload, setNotUpload] = useState([]);
+    const [groupPfp, setGroupPfp] = useState({});
 
     const navigate = useNavigate();
 
@@ -72,9 +75,12 @@ const Header = observer(() => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="modal-choose-container">
-                            <Uploader listType="picture" action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
+                            <Uploader onSuccess={setGroupPfp} onChange={() => setNotUpload([])} fileList={notUpload} listType="picture" action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
                                 <button>
-                                    <CameraRetroIcon />
+                                    {
+                                        groupPfp.img ? <img src={process.env.REACT_APP_API_URL + '/uploads/' + groupPfp.img}></img> 
+                                        :  <CameraRetroIcon />
+                                    }
                                 </button>
                             </Uploader>
                             <div className="right">
