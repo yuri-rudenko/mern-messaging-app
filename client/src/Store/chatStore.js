@@ -4,6 +4,7 @@ export default class ChatStore {
     constructor() {
         this._chats = [];
         this._activeChat = {};
+        this._messageAutoFocus = true;
         makeAutoObservable(this);
     }
 
@@ -14,12 +15,21 @@ export default class ChatStore {
     setActiveChat(chat) {
         this._activeChat = chat;
     }
+
     appendMessage(message) {
         this._activeChat.messages.push(message);
     }
 
+    setMessageAutoFocus(bool) {
+        this._messageAutoFocus = bool;
+    }
+
     get chats() {
         return this._chats;
+    }
+
+    get messageAutoFocus() {
+        return this._messageAutoFocus;
     }
 
     get activeChat() {

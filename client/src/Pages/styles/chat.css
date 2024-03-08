@@ -1,7 +1,7 @@
 .chat {
     margin-left: 20px;
     margin-top: 10px;
-    width: 75%;
+    width: 80%;
     min-width: 250px;
 }
 .chat .main-chat {
@@ -10,6 +10,7 @@
 .message-container {
     display: flex;
     margin-bottom: 10px;
+    max-width: 100%;
 }
 .flex-end {
     justify-content: end;
@@ -22,11 +23,11 @@
 }
 .messages .messages-container {
     max-height: 100%;
+    max-width: 100%;
     overflow-y: auto;
     flex: 1;
 }
 .messages .write-message {
-    text-align: left;
     width: 100%;
     font-size: 20px;
     padding: 10px;
@@ -38,6 +39,7 @@
     display: flex;
     padding: 5px 10px;
     border-radius: 20px;
+    max-width: 80%;
 }
 .messages .other-user .message {
     background-color: rgb(252, 252, 166);
@@ -58,6 +60,13 @@
     font-size: 13px;
     font-weight: bold;
 }
+.messages .message .content .message-text {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
 
 
 .chat .hidden {

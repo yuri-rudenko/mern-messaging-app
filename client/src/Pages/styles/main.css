@@ -34,16 +34,24 @@
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .body {
-    margin-top: 20px;
+    margin-top: 6px;
     padding: 10px 50px;
     display: flex;
     flex: 1;
-    max-height: calc(100% - 84px);
+    max-height: calc(100% - 70px);
 }
 
 .chats-menu {
-    width: 25%;
-    min-width: 350px;
+    width: 20%;
+    min-width: 300px;
+}
+.chats-menu .search-chats {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px 10px ;
+    border-radius: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    margin-top: 10px;
 }
 .chats-menu .left-chat {
     border: 2px solid grey;

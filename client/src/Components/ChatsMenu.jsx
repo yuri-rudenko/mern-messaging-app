@@ -24,15 +24,23 @@ const ChatsMenu = observer(() => {
         }
     }
 
+    const filterChats = (value) => {
+        if(!value) {
+            setChats(user.user.chats);
+            return;
+        }
+        setChats(chats.filter(chat => chat.name.toLowerCase().includes(value.toLowerCase())));
+    }
+
     return (
         <div className='chats-menu'>
+            <input className='search-chats' placeholder='Search' onChange={(e) => filterChats(e.target.value)} onFocus={() => chatContext.setMessageAutoFocus(false)} onBlur={() => chatContext.setMessageAutoFocus(true)}></input>
             {chats && chats.map(chat => (
                 
                 <div onClick={() => setActiveChat(chat._id)} className={chatContext.activeChat._id === chat._id ? "left-chat active-chat" : "left-chat"} key={chat._id}>
                     <div className="left">
-                        <img className='chat-picture' src={chat.displayPicture} alt="" />
+                        <img className='chat-picture' src={chat.displayPicture} alt="CHAT"/>
                     </div>
-
 
                     <div className="right">
                         <div className="top">

@@ -73,7 +73,9 @@ const Chat = observer(() => {
                     }, 10)
                 }
             }
-            if(inputRef.current) inputRef.current.focus();
+            if(inputRef.current && chatContext.messageAutoFocus) {
+                inputRef.current.focus();
+            }
         };
 
         document.addEventListener('keydown', handleKeyDown);
