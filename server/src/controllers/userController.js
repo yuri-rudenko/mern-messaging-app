@@ -40,21 +40,23 @@ class UserController {
     }
 
     async getAll(req, res, next) {
+
         try {
-            const { name, tag } = req.query;
-    
+            const { queryParam } = req.params; 
             const query = {};
-            if (name) {
-                query.name = { $regex: name, $options: "i" };
-            }
-            if (tag) {
-                query.tag = { $regex: tag, $options: "i" };
+            if (queryParam) {
+                query.$or = [
+                    { name: { $regex: queryParam, $options: "i" } },
+                    { tag: { $regex: queryParam, $options: "i" } }
+                ];
             }
     
-            const users = await User.find(query).find({tag: {$ne: req.user.tag}});
+            const users = await User.find(query).find({ tag: { $ne: req.user.tag } });
     
             res.status(200).json(users);
+            
         } catch (error) {
+
             res.status(400).json(error.message);
         }
     }
@@ -90,7 +92,7 @@ class UserController {
             const userData = { ...user._doc };
             delete userData.password;
 
-            res.status(201).json({...userData, token: generateJWT(user._id, user.tag)})
+            res.status(200).json({...userData, token: generateJWT(user._id, user.tag)})
 
         } 
 

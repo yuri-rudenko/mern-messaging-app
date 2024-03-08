@@ -11,6 +11,7 @@ router.post('/', authMiddleware, chatController.create);
 router.put('/name', chatAdminMiddleware, chatController.changeName);
 router.put('/users/add/:chatId', chatAdminMiddleware, chatController.addUser);
 router.put('/users/remove/:chatId', chatAdminMiddleware, chatController.removeUser);
+router.put('/leave', authMiddleware, chatController.leaveChat);
 router.delete('/:chatId', chatAdminMiddleware, chatController.delete);
 
 export default router

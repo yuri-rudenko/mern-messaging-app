@@ -128,7 +128,7 @@ class chatController {
 
             if(!chat || !user) return res.status(400).json({ error: `Chat or user didn't add` });
     
-            res.status(200).json({ message: `User ${tag} added to chat ${id}` });
+            res.status(200).json({ message: `User ${tag} added to chat ${chat.name}` });
 
         }
 
@@ -155,7 +155,7 @@ class chatController {
             }
         
             if (!checkedChat.users.includes(...userId)) {
-                return res.status(400).json({ error: `User ${tag} is already not in the chat` });
+                throw new Error(`User ${tag} is already not in the chat`);
             }
         
             
@@ -167,7 +167,44 @@ class chatController {
                 $pull: { chats: chat._id }
             });
     
-            res.status(200).json({ message: `User ${tag} has been removed from chat ${id}`});
+            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}`});
+
+        }
+
+        catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
+
+    async leaveChat(req, res, next) {
+
+        try {
+            const { id, chatId } = req.body;
+    
+            if (!id || !chatId) {
+                throw new Error("Params error: Missing ID or Chat");
+            }
+
+            const userId = await User.findById(id);
+
+            const checkedChat = await Chat.findById(chatId);
+            if (!checkedChat) {
+                throw new Error("Chat not found");
+            }
+        
+            if (!checkedChat.users.includes(...id)) {
+                throw new Error(`You are already not in the chat`);
+            }
+        
+            const chat = await Chat.findByIdAndUpdate(id, {
+                $pullAll: { users: userId }
+            }, { new: true });
+
+            const user = await User.findByIdAndUpdate(userId[0], {
+                $pull: { chats: chat._id }
+            });
+    
+            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}`});
 
         }
 
