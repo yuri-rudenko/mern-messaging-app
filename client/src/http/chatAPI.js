@@ -10,3 +10,13 @@ export const getChat = async (chatId) => {
     }
 
 }
+
+export const deleteImage = async (image) => {
+    try {
+        console.log(image)
+        const {data} = await $authHost.delete('/api/deleteImage', {data: { image }});
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
+}

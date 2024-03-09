@@ -28,7 +28,6 @@ export default () => {
     const storage = multer.diskStorage({
         destination: function(req, file, cb) {
             const destinationPath = path.join(__dirname, `../static/uploads`);
-            console.log(__dirname)
             cb(null, destinationPath);
         },
         filename: function(req, file, cb) {

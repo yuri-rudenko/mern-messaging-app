@@ -6,6 +6,8 @@ import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import menuIcon from '../images/menu.svg';
 import { useNavigate } from 'react-router-dom';
+import { deleteImage } from '../http/chatAPI.js';
+
 
 const Header = observer(() => {
     const { user, chat } = useContext(Context);
@@ -13,10 +15,35 @@ const Header = observer(() => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);  
+
+    const handleClose = () => {
+        setOpen(false);
+        if(groupPfp.img) deleteImage(groupPfp.img);
+    }
+    const handleCloseNext = () => {
+        setOpen(false); 
+    } 
     
     const [notUpload, setNotUpload] = useState([]);
     const [groupPfp, setGroupPfp] = useState({});
+    const [error, setError] = useState(false);
+
+    const onUploadError = () => {
+        setGroupPfp({});
+        setError(true);
+    }
+
+    const handleExit = () => {
+        setGroupPfp({});
+        setError(false);
+    }
+
+    const onUploadSuccess = (image) => {
+        setGroupPfp(image);
+        setError(false);
+    }
+
+    
 
     const navigate = useNavigate();
 
@@ -69,16 +96,23 @@ const Header = observer(() => {
                 <Dropdown.Item onClick={logout} style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
             </Dropdown>
                 
-            <Modal open={open} onClose={handleClose}>
+            <Modal open={open} onExited={handleExit} onClose={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Create new chat</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+
                         <div className="modal-choose-container">
-                            <Uploader onSuccess={setGroupPfp} onChange={() => setNotUpload([])} fileList={notUpload} listType="picture" action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
-                                <button>
+                            <Uploader 
+                            onError={onUploadError} 
+                            onSuccess={onUploadSuccess} 
+                            onChange={() => setNotUpload([])} 
+                            fileList={notUpload} 
+                            listType="picture" 
+                            action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
+                                <button style={error ? {border: "4px solid red"} : {border: "1px solid black"}}>
                                     {
-                                        groupPfp.img ? <img src={process.env.REACT_APP_API_URL + '/uploads/' + groupPfp.img}></img> 
+                                        groupPfp.img ? <img style={{height: "100%", width: "100%"}} src={process.env.REACT_APP_API_URL + '/' + groupPfp.img}></img> 
                                         :  <CameraRetroIcon />
                                     }
                                 </button>
@@ -90,7 +124,7 @@ const Header = observer(() => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={handleClose} size="lg" appearance="primary">
+                        <Button onClick={handleCloseNext} size="lg" appearance="primary">
                             Next
                         </Button>
                         <Button onClick={handleClose} size="lg" appearance="ghost">
