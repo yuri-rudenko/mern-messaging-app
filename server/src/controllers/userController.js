@@ -42,6 +42,7 @@ class UserController {
     async getAll(req, res, next) {
 
         try {
+
             const { queryParam } = req.params; 
             const query = {};
             if (queryParam) {
@@ -59,6 +60,39 @@ class UserController {
 
             res.status(400).json(error.message);
         }
+    }
+
+    async getUsersInChats(req, res, next) {
+
+        try {
+
+            let users = []
+            
+            let {id} = req.params;
+
+            if(!id) throw new Error("Id is missing");
+
+            const user = await User.findById(id).populate("chats");
+            await user.populate("chats.users");
+
+            if(user.chats) user.chats.forEach(chat => {
+                if(chat.users) chat.users.forEach(user => {
+                    if(!users.find(found => found._id === user._id) && user._id != id) {
+                        users.push(user);
+                    }
+                })
+            })
+
+            res.status(200).json({users});
+
+        } 
+
+        catch (error) {
+
+            res.status(400).json(error.message);
+            
+        }
+
     }
 
     async registration(req, res, next) {
