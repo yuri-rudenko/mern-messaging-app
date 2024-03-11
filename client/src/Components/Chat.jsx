@@ -4,7 +4,6 @@ import '../Pages/styles/chat.css'
 import { observer } from 'mobx-react-lite';
 import Message from './Message';
 import { sendMessage } from '../http/messageAPI';
-import Loader from './small/Loader';
 
 let scrollIterations = 0;
 

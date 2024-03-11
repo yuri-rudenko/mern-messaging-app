@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import { Context } from ".";
 import { check, getUser } from "./http/userAPI";
-import Loader from "./Components/small/Loader";
+import Loader from "./Components/small/Loader/Loader";
 
 const App = observer(() => {
 

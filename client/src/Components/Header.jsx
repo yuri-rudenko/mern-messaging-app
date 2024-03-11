@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
-import { Modal, Button, Uploader, Dropdown } from 'rsuite';
-import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
+import { Dropdown } from 'rsuite';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import menuIcon from '../images/menu.svg';
 import { useNavigate } from 'react-router-dom';
-import { deleteImage } from '../http/chatAPI.js';
+import ChatCreationFirst from './small/ChatCreation/ChatCreationFirst';
 
 
 const Header = observer(() => {
@@ -15,34 +14,6 @@ const Header = observer(() => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-
-    const handleClose = () => {
-        setOpen(false);
-        if(groupPfp.img) deleteImage(groupPfp.img);
-    }
-    const handleCloseNext = () => {
-        setOpen(false); 
-    } 
-    
-    const [notUpload, setNotUpload] = useState([]);
-    const [groupPfp, setGroupPfp] = useState({});
-    const [error, setError] = useState(false);
-
-    const onUploadError = () => {
-        setGroupPfp({});
-        setError(true);
-    }
-
-    const handleExit = () => {
-        setGroupPfp({});
-        setError(false);
-    }
-
-    const onUploadSuccess = (image) => {
-        setGroupPfp(image);
-        setError(false);
-    }
-
     
 
     const navigate = useNavigate();
@@ -80,59 +51,26 @@ const Header = observer(() => {
     }, [user.user]);
 
     return (
-        <div className='header'>
-            <div className="left">
-                <Dropdown trigger="click" renderToggle={menuButton}>
-                    <Dropdown.Item style={{fontSize: "20px", color: "#00d2ff"}}>Profile</Dropdown.Item>
-                    <Dropdown.Item onClick={handleOpen} style={{fontSize: "20px"}}>Create chat</Dropdown.Item>
-                    <Dropdown.Item style={{fontSize: "20px", minWidth: "200px"}}>Find chat/user</Dropdown.Item>
-                </Dropdown>
-            <h1>Message.app</h1>
-            </div>
-            <Dropdown trigger="click" renderToggle={renderButton}>
-                <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>
-                <Dropdown.Item style={{fontSize: "18px", minWidth: "150px"}}>Friends</Dropdown.Item>
-                <Dropdown.Separator/>
-                <Dropdown.Item onClick={logout} style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
-            </Dropdown>
-                
-            <Modal open={open} onExited={handleExit} onClose={handleClose}>
-                <Modal.Header>
-                    <Modal.Title>Create new chat</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+        <>
+            <div className='header'>
+                <div className="left">
+                    <Dropdown trigger="click" renderToggle={menuButton}>
+                        <Dropdown.Item style={{fontSize: "20px", color: "#00d2ff"}}>Profile</Dropdown.Item>
+                        <Dropdown.Item onClick={handleOpen} style={{fontSize: "20px"}}>Create chat</Dropdown.Item>
+                        <Dropdown.Item style={{fontSize: "20px", minWidth: "200px"}}>Find chat/user</Dropdown.Item>
+                    </Dropdown>
+                <h1>Message.app</h1>
+                </div>
+                <Dropdown trigger="click" renderToggle={renderButton}>
+                    <Dropdown.Item style={{fontSize: "18px"}}>Profile</Dropdown.Item>
+                    <Dropdown.Item style={{fontSize: "18px", minWidth: "150px"}}>Friends</Dropdown.Item>
+                    <Dropdown.Separator/>
+                    <Dropdown.Item onClick={logout} style={{fontSize: "18px", color: "Red"}}>Log off</Dropdown.Item>
+                </Dropdown> 
 
-                        <div className="modal-choose-container">
-                            <Uploader 
-                            onError={onUploadError} 
-                            onSuccess={onUploadSuccess} 
-                            onChange={() => setNotUpload([])} 
-                            fileList={notUpload} 
-                            listType="picture" 
-                            action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
-                                <button style={error ? {border: "4px solid red"} : {border: "1px solid black"}}>
-                                    {
-                                        groupPfp.img ? <img style={{height: "100%", width: "100%"}} src={process.env.REACT_APP_API_URL + '/' + groupPfp.img}></img> 
-                                        :  <CameraRetroIcon />
-                                    }
-                                </button>
-                            </Uploader>
-                            <div className="right">
-                                <p>Enter name of the chat</p>
-                                <input type="text" className='input-chat-name'/>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={handleCloseNext} size="lg" appearance="primary">
-                            Next
-                        </Button>
-                        <Button onClick={handleClose} size="lg" appearance="ghost">
-                            Cancel
-                        </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
+            </div>
+            <ChatCreationFirst open={open} setOpen={setOpen}/>
+        </>
     );
 })
 
