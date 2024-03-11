@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal, Button, Uploader } from 'rsuite';
 import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
 import { deleteImage } from '../../../http/chatAPI';
+import { Context } from '../../..';
+import './modalStyles.css'
 
 const ChatCreationFirst = ({open, setOpen}) => {
+
+    const {app} = useContext(Context);
 
     const handleClose = () => {
         setOpen(false);
@@ -11,12 +15,18 @@ const ChatCreationFirst = ({open, setOpen}) => {
     }
 
     const handleCloseNext = () => {
-        console.log(groupPfp)
-        setOpen(false); 
+        setOpen(false);
+        if(!groupName) return;
+        app.setCreatingChatName(groupName);
+        app.setCreatingChatPicture(groupPfp);
+        app.setSecondChatCreationOpened(true);
     } 
     
     const [notUpload, setNotUpload] = useState([]);
+
     const [groupPfp, setGroupPfp] = useState({});
+    const [groupName, setGroupName] = useState('');
+
     const [error, setError] = useState(false);
 
     const onUploadError = () => {
@@ -26,6 +36,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
 
     const handleExit = () => {
         setGroupPfp({});
+        setGroupName("");
         setError(false);
     }
 
@@ -59,7 +70,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
                             </Uploader>
                             <div className="right">
                                 <p>Enter name of the chat</p>
-                                <input type="text" className='input-chat-name'/>
+                                <input value={groupName} onChange={e => setGroupName(e.target.value)} type="text" className='input-chat-name'/>
                             </div>
                         </div>
                     </Modal.Body>

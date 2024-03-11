@@ -6,6 +6,7 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 import menuIcon from '../images/menu.svg';
 import { useNavigate } from 'react-router-dom';
 import ChatCreationFirst from './small/ChatCreation/ChatCreationFirst';
+import ChatCreationSecond from './small/ChatCreation/ChatCreationSecond';
 
 
 const Header = observer(() => {
@@ -70,6 +71,7 @@ const Header = observer(() => {
 
             </div>
             <ChatCreationFirst open={open} setOpen={setOpen}/>
+            <ChatCreationSecond/>
         </>
     );
 })

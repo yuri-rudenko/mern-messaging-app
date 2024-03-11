@@ -34,30 +34,6 @@
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-
-.modal-choose-container {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-.modal-choose-container .right {
-    margin-left: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.modal-choose-container .right p {
-    font-size: 20px;
-}
-.modal-choose-container .right .input-chat-name {
-    width: 100%;
-    font-size: 20px;
-    padding: 3px;
-    border-radius: 10px;
-    border: 1px solid rgb(204, 204, 204);
-    margin-top: 10px;
-}
-
 .body {
     margin-top: 6px;
     padding: 10px 50px;
