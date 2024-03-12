@@ -8,7 +8,7 @@ import Loader from "./Components/small/Loader/Loader";
 
 const App = observer(() => {
 
-  const {user} = useContext(Context);
+  const {user, chat} = useContext(Context);
 
   useEffect(() => {
 
@@ -21,6 +21,7 @@ const App = observer(() => {
         if(foundUser) {
           user.setUser(foundUser);
           user.setIsAuth(true);
+          chat.setChats(foundUser.chats);
         }
       }
     })

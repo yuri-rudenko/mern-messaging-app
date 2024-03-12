@@ -48,7 +48,6 @@ const Chat = observer(() => {
                 
             }, 10)
         }
-        console.log(loading);
     }, [chatContext.activeChat]);
 
     useEffect(() => {

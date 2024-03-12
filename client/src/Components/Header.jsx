@@ -31,7 +31,7 @@ const Header = observer(() => {
         return (
             <div {...props} ref={ref} className="user-menu">
                 <p className='user-menu-name'>{userApp.name}</p>
-                <img className='user-menu-image' src={userApp.image} alt="" />
+                <img className='user-menu-image' src={process.env.REACT_APP_API_URL + '/' + userApp.image} alt="" />
             </div>
         );
     };

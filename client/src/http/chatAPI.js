@@ -20,3 +20,12 @@ export const deleteImage = async (image) => {
         return(error.response);
     }
 }
+
+export const createChat = async (name, image, users, isGroup) => {
+    try {
+        const {data} = await $authHost.post('/api/chat', { name, users, image, isGroup });
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
+}

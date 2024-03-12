@@ -19,8 +19,8 @@ const ChatCreationFirst = ({open, setOpen}) => {
     }
 
     const handleCloseNext = () => {
-        setOpen(false);
         if(!groupName) return;
+        setOpen(false);
         app.setCreatingChatName(groupName);
         app.setCreatingChatPicture(groupPfp);
         app.setSecondChatCreationOpened(true);

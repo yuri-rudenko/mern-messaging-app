@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Button, Uploader } from 'rsuite';
 import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
-import { deleteImage } from '../../../http/chatAPI';
+import { createChat, deleteImage } from '../../../http/chatAPI';
 import { Context } from '../../..';
 import { observer } from 'mobx-react-lite';
 import { getUsersInChats } from '../../../http/userAPI';
@@ -19,6 +19,7 @@ const ChatCreationSecond = observer(() => {
     const [users, setUsers] = useState([]);
     const [constUsers, setConstUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [activeSubmit, setActiveSubmit] = useState(true);
 
     useEffect(() => {
 
@@ -40,6 +41,18 @@ const ChatCreationSecond = observer(() => {
         app.setSecondChatCreationOpened(false);
     }
 
+    const toggleChatCreation = async () => {
+        if(selectedUsers.length <= 0) return;
+        setActiveSubmit(false);
+        const {data} = await createChat(app.creatingChatName, app.creatingChatPicture.img, selectedUsers, true);
+        setActiveSubmit(true);
+        if(data) {
+            console.log(data);
+            chat.appendChat(data);
+            app.setSecondChatCreationOpened(false);
+        }
+    }
+
     const filterUsers = (value) => {
         if(!value) {
             setUsers(constUsers);
@@ -54,7 +67,7 @@ const ChatCreationSecond = observer(() => {
                 <Modal.Title>Choose users</Modal.Title>
                 </Modal.Header>
                 <div className="search-users">
-                        <input type="text" onChange={(e) => filterUsers(e.target.value)}/>
+                        <input placeholder='Find users' type="text" onChange={(e) => filterUsers(e.target.value)}/>
                 </div>
                 <Modal.Body style={{maxHeight: "500px"}}>
                     { users[0] ? users.map(user => {
@@ -69,7 +82,7 @@ const ChatCreationSecond = observer(() => {
 
                         return (
                             <div onClick={changeSelection} key={user._id} className={found ? "add-user-container selected-user" : "add-user-container"}>
-                                <img src={user.image} alt=""/>
+                                <img src={process.env.REACT_APP_API_URL + '/' + user.image} alt=""/>
                                 <div className="right">
                                     <p className='name'>{user.name}</p>
                                     <p className='tag'>@{user.tag}</p>
@@ -80,7 +93,7 @@ const ChatCreationSecond = observer(() => {
                     }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button size="lg" appearance="primary">
+                    <Button loading={!activeSubmit} onClick={toggleChatCreation} size="lg" appearance="primary">
                         Submit
                     </Button>
                     <Button onClick={handleClose} size="lg" appearance="ghost">

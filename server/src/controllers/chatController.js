@@ -51,6 +51,8 @@ class chatController {
             }
     
             const chats = await Chat.find(query);
+            await chats.populate("latestMessage");
+            await chats.populate("latestMessage.author");
     
             res.status(200).json(chats);
             
@@ -63,7 +65,9 @@ class chatController {
 
         try {
 
-            const {name, users} = req.body;
+            const {name, users, image, isGroup} = req.body;
+
+            console.log(name, users, image, isGroup);
 
             users.forEach(tag => {
                 if(tag === req.user.tag) throw new Error("One of users you are adding is you");
@@ -72,11 +76,11 @@ class chatController {
             users.push(req.user.tag);
 
             if(!name || !users) throw new Error("Params error");
-
+ 
             const ids = await tagsToIds(users);
             
             const chat = await Chat.create({
-                name, users: ids, groupAdmin: req.user.id, isGroup: (users.length > 1)
+                name, users: ids, groupAdmin: req.user.id, isGroup, displayPicture: image 
             })
 
             ids.forEach(async (id) => {
@@ -87,7 +91,7 @@ class chatController {
 
             const populatedChat = await Chat.findById(chat._id).populate('users');
 
-            res.status(200).json({populatedChat});
+            res.status(200).json({data: populatedChat});
             
         } 
 

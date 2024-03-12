@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     password: {type: String, required: true, min: [6, 'Password is too short'], max: [16, 'Password is too long']},
     friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     chats: [{type: mongoose.Schema.Types.ObjectId, ref: 'Chat'}],
-    image: {type: String, default: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'},
+    image: {type: String, default: 'default/defaultUserPicture.jpg'},
     status: {type: String},
     isOnline: {type: Boolean, default: false},
     lastSeenOnline: {type: Date, default: Date.now()},
@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
 
 const ChatSchema = new mongoose.Schema({
     name: {type: String, trim: true, required: true},
-    displayPicture: {type: String, default: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-group-512.png'},
+    displayPicture: {type: String, default: 'default/defaultGroupPicture.svg'},
     isGroup: {type: Boolean, default: false},
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],

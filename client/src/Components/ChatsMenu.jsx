@@ -12,10 +12,10 @@ const ChatsMenu = observer(() => {
 
     useEffect(() => {
         if (user.user.chats) {
-            setConstChats(user.user.chats);
-            setChats(user.user.chats);
+            setConstChats(chatContext.chats);
+            setChats(chatContext.chats);
         }
-    }, [user.user]);
+    }, [chatContext.chats, user.user]);
 
     const setActiveChat = async (chatID) => {
         if(clickable && chatContext.activeChat._id !== chatID) {
@@ -41,7 +41,7 @@ const ChatsMenu = observer(() => {
                 
                 <div onClick={() => setActiveChat(chat._id)} className={chatContext.activeChat._id === chat._id ? "left-chat active-chat" : "left-chat"} key={chat._id}>
                     <div className="left">
-                        <img className='chat-picture' src={chat.displayPicture} alt="CHAT"/>
+                        <img className='chat-picture' src={process.env.REACT_APP_API_URL + '/' + chat.displayPicture} alt="CHAT"/>
                     </div>
 
                     <div className="right">

@@ -12,6 +12,10 @@ export default class ChatStore {
         this._chats = chats;
     }
 
+    appendChat(chat) {
+        this._chats.push(chat);
+    }
+
     setActiveChat(chat) {
         this._activeChat = chat;
     }

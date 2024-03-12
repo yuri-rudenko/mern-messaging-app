@@ -8,7 +8,7 @@ const Message = ({message, user}) => {
 
             <div className='message'>
                 <div className="author-image">
-                    <img src={author.image} alt="pfp"/>
+                    <img src={process.env.REACT_APP_API_URL + '/' + author.image} alt="pfp"/>
                 </div>
                 <div className="content">
                     <p className='message-author'>{author.name}</p>
