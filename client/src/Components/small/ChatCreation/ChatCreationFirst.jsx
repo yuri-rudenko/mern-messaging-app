@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Button, Uploader } from 'rsuite';
 import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
 import { deleteImage } from '../../../http/chatAPI';
@@ -7,7 +7,11 @@ import './modalStyles.css'
 
 const ChatCreationFirst = ({open, setOpen}) => {
 
-    const {app} = useContext(Context);
+    const {app, chat} = useContext(Context);
+
+    useEffect(() => {
+        chat.setMessageAutoFocus(!open);
+    }, [open])
 
     const handleClose = () => {
         setOpen(false);
@@ -47,7 +51,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
 
     return (
         <div>
-            <Modal open={open} onExited={handleExit} onClose={handleClose}>
+            <Modal size="xs" open={open} onExited={handleExit} onClose={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Create new chat</Modal.Title>
                     </Modal.Header>

@@ -20,3 +20,37 @@
     border: 1px solid rgb(204, 204, 204);
     margin-top: 10px;
 }
+
+.second-modal .search-users input {
+    font-size: 20px;
+    padding: 5px 10px ;
+    border-radius: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    margin: 10px 0px;
+}
+.second-modal .add-user-container {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+.second-modal .selected-user {
+    background-color: lightblue;
+}
+.second-modal .add-user-container img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.second-modal .add-user-container .right {
+   margin-left: 20px;
+}
+.second-modal .add-user-container .right p {
+    text-align: left;
+}
+.second-modal .add-user-container .right .name {
+    margin-bottom: 5px;
+    font-size: 20px;
+}

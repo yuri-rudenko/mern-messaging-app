@@ -15,7 +15,6 @@ const Header = observer(() => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-    
 
     const navigate = useNavigate();
 

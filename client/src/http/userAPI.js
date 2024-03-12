@@ -48,7 +48,7 @@ export const getUser = async (tag) => {
 
 export const getUsersInChats = async (userId) => {
     try {
-        const {data} = await $authHost.get('/api/user/getUsersInChats/' + userId);
+        const {data} = await $authHost.get('/api/user/usersInChats/' + userId);
         return data;
     } catch (error) {
         return(error.response);
