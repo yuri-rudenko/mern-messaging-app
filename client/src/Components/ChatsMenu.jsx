@@ -6,11 +6,13 @@ import { getChat } from '../http/chatAPI.js';
 const ChatsMenu = observer(() => {
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
+    const [constChats, setConstChats] = useState([]);
     const [chats, setChats] = useState([]);
     const [clickable, setClickable] = useState(true);
 
     useEffect(() => {
         if (user.user.chats) {
+            setConstChats(user.user.chats);
             setChats(user.user.chats);
         }
     }, [user.user]);
@@ -29,7 +31,7 @@ const ChatsMenu = observer(() => {
             setChats(user.user.chats);
             return;
         }
-        setChats(chats.filter(chat => chat.name.toLowerCase().includes(value.toLowerCase())));
+        setChats(constChats.filter(chat => chat.name.toLowerCase().includes(value.toLowerCase())));
     }
 
     return (
