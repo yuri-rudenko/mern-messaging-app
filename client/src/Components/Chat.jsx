@@ -21,9 +21,10 @@ function scrollToBottom() {
     }
 }
 
-const Chat = observer(() => {
+let socket, selectedChatCompare;
+socket = io(process.env.REACT_APP_API_URL);
 
-    let socket, selectedChatCompare;
+const Chat = observer(() => {
 
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
@@ -43,7 +44,6 @@ const Chat = observer(() => {
     };
 
     useEffect(() => {
-        socket = io(process.env.REACT_APP_API_URL);
         socket.emit("setup", user.user);
         socket.on('connection', () => {
             setSocketConnected(true);
@@ -51,8 +51,8 @@ const Chat = observer(() => {
     }, []);
 
     useEffect(() => {
+        console.log(11111111111111)
         setLoading(true);
-        socket = io(process.env.REACT_APP_API_URL);
         resetInputValue();
         if (chatContext.activeChat.users) {
             setActiveChat(chatContext.activeChat);
@@ -67,6 +67,22 @@ const Chat = observer(() => {
 
     useEffect(() => {
 
+        socket.on("message recieved", (newMessageRecieved) => {
+            console.log(activeChat._id, newMessageRecieved.chat._id)
+            if(!activeChat._id || activeChat._id !== newMessageRecieved.chat._id) {
+                
+            }
+            else {
+                setActiveChat({...activeChat, messages: [...activeChat.messages, newMessageRecieved.message]})
+            }
+        });
+
+        scrollToBottom();
+        
+    });
+
+    useEffect(() => {
+
         const handleKeyDown = async (key) => {
 
             if(inputValue.trim() !== "" && key.key ==="Enter") {
@@ -78,6 +94,7 @@ const Chat = observer(() => {
                     id: user.user._id,
                     chatId: activeChat._id
                 })
+                socket.emit("new message", {message, chat: activeChat, sender: user.user})
                 if(message) {
                     chatContext.appendMessage(message);
                     resetInputValue();
@@ -94,19 +111,16 @@ const Chat = observer(() => {
         document.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    });
 
     return (
         <div className='chat'>
 
             {loading && activeChat.users && <div/>}
 
-            {activeChat.users ? 
-
-            <div className={loading? "main-chat hidden": "main-chat"}>
+            {activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
                 {activeChat.messages[0] 
                 ? (
                     <div className="messages">

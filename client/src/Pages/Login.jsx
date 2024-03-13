@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 
 const Login = () => {
 
-    const {user} = useContext(Context);
+    const {user, chat} = useContext(Context);
 
     const {register, formState: {errors}, handleSubmit} = useForm();
 
@@ -23,7 +23,7 @@ const Login = () => {
         const fetchData = async () => {
 
             const token = await check();
-            // if(token) navigate('/');
+            if(token && token.message !== "Not Authorised") navigate('/');
 
         };
     
@@ -42,6 +42,7 @@ const Login = () => {
 
         if(newData){
             user.setUser(newData);
+            chat.setChats(newData.chats);
             user.setIsAuth(true);
             navigate('/');
         }

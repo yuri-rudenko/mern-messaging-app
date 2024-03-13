@@ -4,6 +4,7 @@ import router from './src/router/router.js';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
+import { Message } from './src/models/models.js';
 
 dotenv.config()
 
@@ -40,6 +41,17 @@ const start = async () => {
                 socket.join(room);
                 console.log('User Joined room ' + room.name);
             });
+            socket.on('new message', async (newMessageRecieved) => {
+                let chat = newMessageRecieved.chat;
+                if(!chat.users) return console.log("Chat doesn't have any users");
+                chat.users.forEach(user => {
+                    
+                    console.log(user);
+                    if(user._id === newMessageRecieved.sender._id) return;
+
+                    socket.in(user._id).emit("message recieved", newMessageRecieved);
+                })
+            })
         })
 
     } 

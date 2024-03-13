@@ -15,25 +15,10 @@ const Main = observer(() => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        
-        const checkUser = async() => {
-
-            const token = await check();
-    
-            if(!token) navigate('/login');
-    
-            const foundUser = await getUser(token.tag);
-
-            if(foundUser.status == 400) navigate('/login');
-    
-            user.setUser(foundUser);
-
-            
-        }
 
         if(!user.isAuth || !user) navigate('/login');
-    
-        // checkUser();
+
+        
     }, []);
 
     return (
