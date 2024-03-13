@@ -37,6 +37,8 @@ const ChatsMenu = observer(() => {
     return (
         <div className='chats-menu'>
             <input className='search-chats' placeholder='Search' onChange={(e) => filterChats(e.target.value)} onFocus={() => chatContext.setMessageAutoFocus(false)} onBlur={() => chatContext.setMessageAutoFocus(true)}></input>
+            <div className="chats-menu-container">
+
             {chats && chats.map(chat => (
                 
                 <div onClick={() => setActiveChat(chat._id)} className={chatContext.activeChat._id === chat._id ? "left-chat active-chat" : "left-chat"} key={chat._id}>
@@ -58,6 +60,8 @@ const ChatsMenu = observer(() => {
 
                 </div>
             ))}
+
+            </div>
         </div>
     );
 });
