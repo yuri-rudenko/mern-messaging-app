@@ -4,6 +4,8 @@ import '../Pages/styles/chat.css'
 import { observer } from 'mobx-react-lite';
 import Message from './Message';
 import { sendMessage } from '../http/messageAPI';
+import io from 'socket.io-client';
+import { useAsyncError } from 'react-router-dom';
 
 let scrollIterations = 0;
 
@@ -21,6 +23,8 @@ function scrollToBottom() {
 
 const Chat = observer(() => {
 
+    let socket, selectedChatCompare;
+
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
 
@@ -29,6 +33,7 @@ const Chat = observer(() => {
     const [activeChat, setActiveChat] = useState({});
     const [inputValue, setInputValue] = useState("");
     const [loading, setLoading] = useState(true);
+    const [socketConnected, setSocketConnected] = useState(false);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -38,7 +43,16 @@ const Chat = observer(() => {
     };
 
     useEffect(() => {
+        socket = io(process.env.REACT_APP_API_URL);
+        socket.emit("setup", user.user);
+        socket.on('connection', () => {
+            setSocketConnected(true);
+        })
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
+        socket = io(process.env.REACT_APP_API_URL);
         resetInputValue();
         if (chatContext.activeChat.users) {
             setActiveChat(chatContext.activeChat);
@@ -48,6 +62,7 @@ const Chat = observer(() => {
                 
             }, 10)
         }
+        socket.emit('join chat', chatContext.activeChat);
     }, [chatContext.activeChat]);
 
     useEffect(() => {
@@ -82,7 +97,7 @@ const Chat = observer(() => {
             
             document.removeEventListener('keydown', handleKeyDown);
         };
-    })
+    }, []);
 
     return (
         <div className='chat'>
