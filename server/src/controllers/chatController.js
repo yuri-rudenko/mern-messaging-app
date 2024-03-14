@@ -50,9 +50,10 @@ class chatController {
                 query.name = { $regex: name, $options: "i" };
             }
     
-            const chats = await Chat.find(query);
-            await chats.populate("latestMessage");
-            await chats.populate("latestMessage.author");
+            const chats = await Chat.find(query)
+            .populate("latestMessage")
+            .populate("latestMessage.author")
+            .sort({ "latestMessage.createdAt": -1 });
     
             res.status(200).json(chats);
             

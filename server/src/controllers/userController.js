@@ -20,11 +20,18 @@ class UserController {
 
             const {tag} = req.params;
 
-            const user = await User.findOne({tag}).populate("chats friends blockedUsers");
+            const user = await User.findOne({tag})
+            .populate("chats friends blockedUsers");
             await user.populate("chats.latestMessage");
             await user.populate("chats.latestMessage.author");
 
             if(!user) throw new Error("User doesn't exist");
+
+            user.chats.sort((a,b) => {
+                const createdAtA = a.latestMessage ? a.latestMessage.createdAt : new Date(0);
+                const createdAtB = b.latestMessage ? b.latestMessage.createdAt : new Date(0);
+                return createdAtB - createdAtA;
+            })
 
             const userData = { ...user._doc };
             delete userData.password;

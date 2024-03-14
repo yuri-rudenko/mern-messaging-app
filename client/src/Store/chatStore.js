@@ -23,6 +23,28 @@ export default class ChatStore {
     appendMessage(message) {
         this._activeChat.messages.push(message);
     }
+    
+    setLatestMessage(message) {
+        if(this._activeChat?._id === message.chatId) {
+            this._activeChat.latestMessage = message;
+        }
+
+        this._chats.forEach(chat => {
+            if(chat._id === message.chatId) {
+                chat.latestMessage = message;
+            }
+        })
+    }
+
+    sortChats() {
+        
+        this._chats.sort((a,b) => {
+            const createdAtA = a.latestMessage ? new Date(a.latestMessage.createdAt) : new Date(0);
+            const createdAtB = b.latestMessage ? new Date(b.latestMessage.createdAt) : new Date(0);
+            return createdAtB - createdAtA;
+        })
+        
+    }
 
     setMessageAutoFocus(bool) {
         this._messageAutoFocus = bool;

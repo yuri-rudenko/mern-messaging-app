@@ -43,6 +43,7 @@ const Chat = observer(() => {
         setInputValue("");
     };
 
+    // Socket connection
     useEffect(() => {
         socket.emit("setup", user.user);
         socket.on('connection', () => {
@@ -50,6 +51,8 @@ const Chat = observer(() => {
         })
     }, []);
 
+
+    // Loading of a chat
     useEffect(() => {
         setLoading(true);
         resetInputValue();
@@ -64,44 +67,49 @@ const Chat = observer(() => {
         socket.emit('join chat', chatContext.activeChat);
     }, [chatContext.activeChat]);
 
+
+    // Socket.io live message addition
     useEffect(() => {
 
         const handleMessageReceived = (newMessageRecieved) => {
 
-            console.log(chatContext.activeChat._id, newMessageRecieved.chat._id)
             if(!chatContext.activeChat._id || chatContext.activeChat._id !== newMessageRecieved.chat._id) {
-                
+                // Error
             }
             else {
                 chatContext.appendMessage(newMessageRecieved.message);
+
                 setTimeout(() => {
                     scrollToBottom();
                 }, 10)
             }
-        }
 
-        console.log("added effectt");
+            chatContext.setLatestMessage(newMessageRecieved.message);
+            chatContext.sortChats();
+        }
 
         socket.on("message recieved", handleMessageReceived);
 
-        scrollToBottom();
-
         return () => {
-            console.log("cleanup");
             socket.removeAllListeners("message recieved");
         };
         
     }, []);
 
+
+    // Sending message event
     useEffect(() => {
 
         const handleKeyDown = async (key) => {
 
+            const messageValue = inputValue;
+
             if(inputValue.trim() !== "" && key.key ==="Enter") {
+                resetInputValue();
                 const {message} = await sendMessage({
                     content: {
                         type: 'Text',
-                        text: inputValue,
+                        text: messageValue,
                     },
                     id: user.user._id,
                     chatId: chatContext.activeChat._id
@@ -109,7 +117,8 @@ const Chat = observer(() => {
                 socket.emit("new message", {message, chat: chatContext.activeChat, sender: user.user})
                 if(message) {
                     chatContext.appendMessage(message);
-                    resetInputValue();
+                    chatContext.setLatestMessage(message);
+                    chatContext.sortChats();
                     setTimeout(() => {
                         scrollToBottom();
                     }, 10)

@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 import { getChat } from '../http/chatAPI.js';
+import getTime from '../functions/getTime';
+
+
 
 const ChatsMenu = observer(() => {
     const { user } = useContext(Context);
@@ -12,6 +15,7 @@ const ChatsMenu = observer(() => {
 
     useEffect(() => {
         if (user.user.chats) {
+            console.log('updated');
             setConstChats(chatContext.chats);
             setChats(chatContext.chats);
         }
@@ -49,7 +53,7 @@ const ChatsMenu = observer(() => {
                     <div className="right">
                         <div className="top">
                             <p className='chat-name'>{chat.name}</p>
-                            {chat.latestMessage ? <p className='time'>{new Date(chat.latestMessage.createdAt).getHours()}:{new Date(chat.latestMessage.createdAt).getMinutes()}</p> : <></>}
+                            {chat.latestMessage ? <p className='time'>{getTime(chat.latestMessage.createdAt)}</p> : <></>}
                         </div>
                         {chat.latestMessage ? <div className="bottom">
                             <p className='author'>{chat.latestMessage.author.name.split(" ")[0]}: </p> 
