@@ -66,9 +66,8 @@ const Chat = observer(() => {
 
     useEffect(() => {
 
-        console.log("added effect");
+        const handleMessageReceived = (newMessageRecieved) => {
 
-        socket.on("message recieved", (newMessageRecieved) => {
             console.log(chatContext.activeChat._id, newMessageRecieved.chat._id)
             if(!chatContext.activeChat._id || chatContext.activeChat._id !== newMessageRecieved.chat._id) {
                 
@@ -79,9 +78,18 @@ const Chat = observer(() => {
                     scrollToBottom();
                 }, 10)
             }
-        });
+        }
+
+        console.log("added effectt");
+
+        socket.on("message recieved", handleMessageReceived);
 
         scrollToBottom();
+
+        return () => {
+            console.log("cleanup");
+            socket.removeAllListeners("message recieved");
+        };
         
     }, []);
 
