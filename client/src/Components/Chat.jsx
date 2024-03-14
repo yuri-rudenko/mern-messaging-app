@@ -51,11 +51,10 @@ const Chat = observer(() => {
     }, []);
 
     useEffect(() => {
-        console.log(11111111111111)
         setLoading(true);
         resetInputValue();
         if (chatContext.activeChat.users) {
-            setActiveChat(chatContext.activeChat);
+            setActiveChat();
             setTimeout(() => {
                 scrollToBottom();
                 setLoading(false);
@@ -67,19 +66,24 @@ const Chat = observer(() => {
 
     useEffect(() => {
 
+        console.log("added effect");
+
         socket.on("message recieved", (newMessageRecieved) => {
-            console.log(activeChat._id, newMessageRecieved.chat._id)
-            if(!activeChat._id || activeChat._id !== newMessageRecieved.chat._id) {
+            console.log(chatContext.activeChat._id, newMessageRecieved.chat._id)
+            if(!chatContext.activeChat._id || chatContext.activeChat._id !== newMessageRecieved.chat._id) {
                 
             }
             else {
-                setActiveChat({...activeChat, messages: [...activeChat.messages, newMessageRecieved.message]})
+                chatContext.appendMessage(newMessageRecieved.message);
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 10)
             }
         });
 
         scrollToBottom();
         
-    });
+    }, []);
 
     useEffect(() => {
 
@@ -92,9 +96,9 @@ const Chat = observer(() => {
                         text: inputValue,
                     },
                     id: user.user._id,
-                    chatId: activeChat._id
+                    chatId: chatContext.activeChat._id
                 })
-                socket.emit("new message", {message, chat: activeChat, sender: user.user})
+                socket.emit("new message", {message, chat: chatContext.activeChat, sender: user.user})
                 if(message) {
                     chatContext.appendMessage(message);
                     resetInputValue();
@@ -118,14 +122,14 @@ const Chat = observer(() => {
     return (
         <div className='chat'>
 
-            {loading && activeChat.users && <div/>}
+            {loading && chatContext.activeChat.users && <div/>}
 
-            {activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
-                {activeChat.messages[0] 
+            {chatContext.activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
+                {chatContext.activeChat.messages[0] 
                 ? (
                     <div className="messages">
                         <div className='messages-container'>
-                            {activeChat.messages.map(message =>
+                            {chatContext.activeChat.messages.map(message =>
                                 <Message user={user.user} message={message} key={message._id}></Message>
                             )}
                         </div>
