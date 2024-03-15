@@ -27,13 +27,21 @@
     overflow-y: auto;
     flex: 1;
 }
+.messages .chat-bottom {
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+.messages .rs-uploader-picture .rs-uploader-trigger-btn {
+    margin: 0;
+}
 .messages .write-message {
     width: 100%;
     font-size: 20px;
     padding: 10px;
-    border-radius: 10px;
-    border: 1px solid black;
-    margin-top: 10px;
+    border: none;
+    border-radius: 0px 10px 10px 0px;
 }
 .messages .message {
     display: flex;

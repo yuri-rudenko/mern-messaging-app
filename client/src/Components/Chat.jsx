@@ -152,17 +152,19 @@ const Chat = observer(() => {
                             )}
                         </div>
                         <div className="chat-bottom">
-                        <Uploader 
-                        multiple 
-                        listType="picture" 
-                        onChange={() => setNotUpload([])} 
-                        fileList={notUpload} 
-                        action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
-                        >
-                            <button>
-                                <AttachmentIcon />
-                            </button>
-                        </Uploader>
+                            <Uploader 
+                            multiple 
+                            className='uploader'
+                            listType="picture" 
+                            onChange={() => setNotUpload([])} 
+                            fileList={notUpload}
+                            
+                            action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
+                            >
+                                <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
+                                    <AttachmentIcon />
+                                </button>
+                            </Uploader>
                             <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
                         </div>
                     </div>
