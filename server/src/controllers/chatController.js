@@ -267,14 +267,6 @@ class chatController {
         }
     }
 
-    async uploadChatPfp(req, res, next) {
-        
-        req.fileCheckResult 
-        ? res.status(200).json({img: req.newFileName})
-        : res.status(400).json({message: "File type error"});
-
-    }
-
 }
 
 export default new chatController()

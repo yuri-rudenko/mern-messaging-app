@@ -6,6 +6,8 @@ import Message from './Message';
 import { sendMessage } from '../http/messageAPI';
 import io from 'socket.io-client';
 import { useAsyncError } from 'react-router-dom';
+import { Uploader } from 'rsuite';
+import AttachmentIcon from '@rsuite/icons/Attachment';
 
 let scrollIterations = 0;
 
@@ -31,10 +33,10 @@ const Chat = observer(() => {
 
     const inputRef = useRef();
 
-    const [activeChat, setActiveChat] = useState({});
     const [inputValue, setInputValue] = useState("");
     const [loading, setLoading] = useState(true);
     const [socketConnected, setSocketConnected] = useState(false);
+    const [notUpload, setNotUpload] = useState([]);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -57,7 +59,6 @@ const Chat = observer(() => {
         setLoading(true);
         resetInputValue();
         if (chatContext.activeChat.users) {
-            setActiveChat();
             setTimeout(() => {
                 scrollToBottom();
                 setLoading(false);
@@ -139,7 +140,7 @@ const Chat = observer(() => {
     return (
         <div className='chat'>
 
-            {loading && chatContext.activeChat.users && <div/>}
+            {loading && socketConnected && chatContext.activeChat.users && <div/>}
 
             {chatContext.activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
                 {chatContext.activeChat.messages[0] 
@@ -150,7 +151,20 @@ const Chat = observer(() => {
                                 <Message user={user.user} message={message} key={message._id}></Message>
                             )}
                         </div>
-                        <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
+                        <div className="chat-bottom">
+                        <Uploader 
+                        multiple 
+                        listType="picture" 
+                        onChange={() => setNotUpload([])} 
+                        fileList={notUpload} 
+                        action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
+                        >
+                            <button>
+                                <AttachmentIcon />
+                            </button>
+                        </Uploader>
+                            <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
+                        </div>
                     </div>
                 ) 
                 : (

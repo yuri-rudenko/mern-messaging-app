@@ -64,7 +64,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
                             onChange={() => setNotUpload([])} 
                             fileList={notUpload} 
                             listType="picture" 
-                            action={process.env.REACT_APP_API_URL + '/api/chat/uploadPfp'}>
+                            action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}>
                                 <button style={error ? {border: "4px solid red"} : {border: "1px solid black"}}>
                                     {
                                         groupPfp.img ? <img style={{height: "100%", width: "100%"}} src={process.env.REACT_APP_API_URL + '/' + groupPfp.img}></img> 

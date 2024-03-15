@@ -15,7 +15,6 @@ const chatPfp = multer({storage: storage(),
 router.get('/', chatController.getAll);
 router.get('/:chatId', chatController.getOne);
 router.post('/', authMiddleware, chatController.create);
-router.post('/uploadPfp',chatPfp.single('file'), chatController.uploadChatPfp); // not update or change, used on creation
 router.put('/name', chatAdminMiddleware, chatController.changeName);
 router.put('/users/add/:chatId', chatAdminMiddleware, chatController.addUser);
 router.put('/users/remove/:chatId', chatAdminMiddleware, chatController.removeUser);
