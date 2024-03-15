@@ -162,7 +162,7 @@ const Chat = observer(() => {
                             action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
                             >
                                 <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
-                                    <AttachmentIcon />
+                                    <AttachmentIcon height={"20px"} width={"20px"}/>
                                 </button>
                             </Uploader>
                             <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
