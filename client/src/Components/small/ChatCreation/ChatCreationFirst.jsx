@@ -53,7 +53,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
         <div>
             <Modal size="xs" open={open} onExited={handleExit} onClose={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>Create new chat</Modal.Title>
+                    <Modal.Title style={{textAlign:"center"}}>Create new chat</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
 

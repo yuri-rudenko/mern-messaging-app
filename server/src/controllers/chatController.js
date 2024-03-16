@@ -104,8 +104,7 @@ class chatController {
     async addUser(req, res, next) {
 
         try {
-            const { tag } = req.body;
-            const id = req.params.chatId;
+            const { tag, id } = req.body;
     
             if (!id || !tag) {
                 throw new Error("Params error: Missing ID or tag");
@@ -145,8 +144,7 @@ class chatController {
     async removeUser(req, res, next) {
 
         try {
-            const { tag } = req.body;
-            const id = req.params.chatId;
+            const { tag, id } = req.body;
     
             if (!id || !tag) {
                 throw new Error("Params error: Missing ID or tag");

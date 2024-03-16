@@ -1,0 +1,41 @@
+.chat-settings-modal .settings-container .chat-information{
+    display: flex;
+    align-items: center;
+}
+.chat-settings-modal .settings-container .chat-information .left img {
+    height: 80px;
+    width: 80px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+.chat-settings-modal .settings-container .chat-information .right {
+    margin-left: 10px;
+}
+.chat-settings-modal .settings-container .chat-information .right .name {
+    font-size: 22px;
+}
+.chat-settings-modal .settings-container .chat-information .right .members-amount {
+    font-size: 14px;
+    color: rgb(112, 112, 112);
+}
+.chat-settings-modal .settings-container .chat-members {
+    margin-top: 10px;
+}
+.chat-settings-modal .settings-container .chat-members .members-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chat-settings-modal .settings-container .chat-members .members-header .left {
+    display: flex;
+    align-items: center;
+}
+.chat-settings-modal .settings-container .chat-members .members-header .left p {
+    margin-left: 10px;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.chat-settings-modal .settings-container .chat-members .members {
+    margin-top: 10px;
+}

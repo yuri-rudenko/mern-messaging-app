@@ -9,6 +9,7 @@ import io from 'socket.io-client';
 import { Uploader } from 'rsuite';
 import AttachmentIcon from '@rsuite/icons/Attachment';
 import MoreIcon from '@rsuite/icons/More';
+import ChatSettingsModal from './small/ChatSettings/ChatSettingsModal';
 
 let scrollIterations = 0;
 
@@ -38,6 +39,9 @@ const Chat = observer(() => {
     const [loading, setLoading] = useState(true);
     const [socketConnected, setSocketConnected] = useState(false);
     const [notUpload, setNotUpload] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -141,9 +145,11 @@ const Chat = observer(() => {
     return (
         <div className='chat'>
 
+        <ChatSettingsModal open={open} setOpen={setOpen}/>
+
             {loading && socketConnected && chatContext.activeChat.users && <div/>}
             
-            {chatContext.activeChat.name && 
+            {chatContext.activeChat.createdAt && 
             <div className="chat-header">
                 <div className="chat-header-left">
                     <div className="pfp">
@@ -155,7 +161,7 @@ const Chat = observer(() => {
                     </div>
                 </div>
                 <div className="chat-header-right">
-                    <MoreIcon height="40px" width="40px"/>
+                    <MoreIcon height="40px" width="40px" onClick={handleOpen}/>
                 </div>
             </div>
             }
@@ -209,7 +215,7 @@ const Chat = observer(() => {
                 )}
                 </div>
             
-            : <p>Choose your chat</p>}
+            : <p style={{textAlign:"center"}}>Choose your chat</p>}
             
         </div>
     );

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Button, Uploader } from 'rsuite';
-import CameraRetroIcon from '@rsuite/icons/legacy/CameraRetro';
+import { Modal, Button } from 'rsuite';
 import { createChat, deleteImage } from '../../../http/chatAPI';
 import { Context } from '../../..';
 import { observer } from 'mobx-react-lite';
 import { getUsersInChats } from '../../../http/userAPI';
 import './modalStyles.css';
+import UserSmall from '../UserSmall/userSmall';
 
 const ChatCreationSecond = observer(() => {
 
@@ -64,7 +64,7 @@ const ChatCreationSecond = observer(() => {
     return (
         <Modal size="xs" className='second-modal' open={app.secondChatCreationOpened} onClose={handleClose} onExited={handleExit}>
             <Modal.Header>
-                <Modal.Title>Choose users</Modal.Title>
+                <Modal.Title style={{textAlign:"center"}}>Choose users</Modal.Title>
                 </Modal.Header>
                 <div className="search-users">
                         <input placeholder='Find users' type="text" onChange={(e) => filterUsers(e.target.value)}/>
@@ -82,11 +82,7 @@ const ChatCreationSecond = observer(() => {
 
                         return (
                             <div onClick={changeSelection} key={user._id} className={found ? "add-user-container selected-user" : "add-user-container"}>
-                                <img src={process.env.REACT_APP_API_URL + '/' + user.image} alt=""/>
-                                <div className="right">
-                                    <p className='name'>{user.name}</p>
-                                    <p className='tag'>@{user.tag}</p>
-                                </div>
+                                <UserSmall user={user}/>
                             </div>
                         )})
                     : <></>
