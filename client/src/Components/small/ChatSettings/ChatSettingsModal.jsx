@@ -8,10 +8,10 @@ import PeoplesIcon from '@rsuite/icons/Peoples';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import UserSmall from '../UserSmall/userSmall';
 
-const ChatSettingsModal = ({open, setOpen}) => {
+const ChatSettingsModal = observer(({open, setOpen}) => {
 
-    const {chat} = useContext(Context);
-
+    const {chat, app} = useContext(Context);
+    
     const handleExit = () => {
 
     }
@@ -45,7 +45,7 @@ const ChatSettingsModal = ({open, setOpen}) => {
                                 <PeoplesIcon height="20px" width="20px"/>
                                 <p>{chat.activeChat.users.length} Members</p>
                             </div>
-                            <AddOutlineIcon height="24px" width="24px"/>
+                            <AddOutlineIcon onClick={() => app.setAddMembersListModalOpened(true)} className='add-users-icon' height="24px" width="24px"/>
                         </div>
                         <div className="members">
                             {chat.activeChat.users.map(user => (
@@ -61,6 +61,6 @@ const ChatSettingsModal = ({open, setOpen}) => {
             </Modal.Footer>
         </Modal>
     );
-}
+})
 
 export default ChatSettingsModal;

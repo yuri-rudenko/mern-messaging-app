@@ -34,6 +34,9 @@
 .second-modal .rs-modal-body {
     margin-top: auto;
 }
+.second-modal .add-user-container .user-small {
+    cursor: pointer;
+}
 .second-modal .selected-user {
     background-color: lightblue;
 }

@@ -59,9 +59,30 @@ class UserController {
                 ];
             }
     
-            const users = await User.find(query).find({ tag: { $ne: req.user.tag } });
+            const users = await User.find(query).find({ tag: { $ne: req.user.tag } }).limit(20);
     
             res.status(200).json(users);
+            
+        } catch (error) {
+
+            res.status(400).json(error.message);
+        }
+    }
+
+    async getAllNotInChat(req, res, next) {
+        try {
+
+            const { chatId } = req.params; 
+            
+            const chat = await Chat.findById(chatId);
+
+            if(!chat.users) throw new Error("Chat not found or doesn't have any users");
+
+            const chatUserIds = chat.users;
+
+            const usersNotInChat = await User.find({ _id: { $nin: chatUserIds } });
+    
+            res.status(200).json(usersNotInChat);
             
         } catch (error) {
 

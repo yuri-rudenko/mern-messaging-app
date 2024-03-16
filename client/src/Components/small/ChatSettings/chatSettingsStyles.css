@@ -35,6 +35,14 @@
     font-size: 18px;
     margin-top: 2px;
 }
+.chat-settings-modal .settings-container .chat-members .members-header .add-users-icon {
+    cursor: pointer;
+    transition: rotate 1s;
+    margin-right: 5px;
+}
+.chat-settings-modal .settings-container .chat-members .members-header .add-users-icon:hover {
+    rotate: 270deg;
+}
 
 .chat-settings-modal .settings-container .chat-members .members {
     margin-top: 10px;

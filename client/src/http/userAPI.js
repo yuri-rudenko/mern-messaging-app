@@ -53,5 +53,14 @@ export const getUsersInChats = async (userId) => {
     } catch (error) {
         return(error.response);
     }
+}
 
+export const getUsersNotInChat = async (chatId) => {
+    try {
+        if(!chatId) return [];
+        const {data} = await $authHost.get('/api/user/usersNotInChat/' + chatId);
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
 }

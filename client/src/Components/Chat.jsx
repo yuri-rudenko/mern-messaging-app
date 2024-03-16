@@ -10,6 +10,7 @@ import { Uploader } from 'rsuite';
 import AttachmentIcon from '@rsuite/icons/Attachment';
 import MoreIcon from '@rsuite/icons/More';
 import ChatSettingsModal from './small/ChatSettings/ChatSettingsModal';
+import AddUsersToChatModal from './small/ChatSettings/AddUsersToChatModal';
 
 let scrollIterations = 0;
 
@@ -146,6 +147,7 @@ const Chat = observer(() => {
         <div className='chat'>
 
         <ChatSettingsModal open={open} setOpen={setOpen}/>
+        <AddUsersToChatModal/>
 
             {loading && socketConnected && chatContext.activeChat.users && <div/>}
             
