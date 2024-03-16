@@ -32,7 +32,7 @@ const ChatSchema = new mongoose.Schema({
 const MessageSchema = new mongoose.Schema({
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Message must have an author']},
     type: {type: String, enum: ['Text', 'Image', 'File']},
-    file: {type: String},
+    files: [{type: Object}],
     chatId: {type: mongoose.Schema.Types.ObjectId, ref: 'Chat'},
     text: {type: String},
     readBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

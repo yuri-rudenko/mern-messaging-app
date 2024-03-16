@@ -1,0 +1,42 @@
+.chat .chat-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    margin-bottom: 5px;
+}
+.chat .chat-header .chat-header-left {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chat .chat-header .chat-header-left .pfp {
+    height: 50px;
+    width: 50px;
+}
+.chat .chat-header .chat-header-left .pfp img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+.chat .chat-header .chat-header-left .pfp img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+.chat .chat-header .chat-header-left .text {
+    margin-left: 10px;
+}
+.chat .chat-header .chat-header-left .text p {
+    text-align: left;
+}
+.chat .chat-header .chat-header-left .text .name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.chat .chat-header .chat-header-left .text .online {
+    font-size: 0.9rem;
+}

@@ -4,8 +4,10 @@
     width: 80%;
     min-width: 250px;
 }
+
+
 .chat .main-chat {
-    height: 100%;
+    height: calc(100% - 65px); /*60px - size of header + its margin*/
 }
 .message-container {
     display: flex;

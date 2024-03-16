@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Context } from '..';
 import '../Pages/styles/chat.css'
+import '../Pages/styles/chat-header.css'
 import { observer } from 'mobx-react-lite';
 import Message from './Message';
 import { sendMessage } from '../http/messageAPI';
 import io from 'socket.io-client';
-import { useAsyncError } from 'react-router-dom';
 import { Uploader } from 'rsuite';
 import AttachmentIcon from '@rsuite/icons/Attachment';
+import MoreIcon from '@rsuite/icons/More';
 
 let scrollIterations = 0;
 
@@ -141,6 +142,23 @@ const Chat = observer(() => {
         <div className='chat'>
 
             {loading && socketConnected && chatContext.activeChat.users && <div/>}
+            
+            {chatContext.activeChat.name && 
+            <div className="chat-header">
+                <div className="chat-header-left">
+                    <div className="pfp">
+                        <img src={process.env.REACT_APP_API_URL + '/' + chatContext.activeChat.displayPicture} alt="Chat image"/>
+                    </div>
+                    <div className="text">
+                        <p className="name">{chatContext.activeChat.name}</p>
+                        <p className='online'>Online 7m ago</p>
+                    </div>
+                </div>
+                <div className="chat-header-right">
+                    <MoreIcon height="40px" width="40px"/>
+                </div>
+            </div>
+            }
 
             {chatContext.activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
                 {chatContext.activeChat.messages[0] 
@@ -158,7 +176,6 @@ const Chat = observer(() => {
                             listType="picture" 
                             onChange={() => setNotUpload([])} 
                             fileList={notUpload}
-                            
                             action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
                             >
                                 <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
@@ -172,7 +189,22 @@ const Chat = observer(() => {
                 : (
                     <div className="messages">
                     <p>Write your first message!</p>
-                    <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
+                    <div className="chat-bottom">
+                        <Uploader 
+                        multiple 
+                        className='uploader'
+                        listType="picture" 
+                        onChange={() => setNotUpload([])} 
+                        fileList={notUpload}
+                        
+                        action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
+                        >
+                            <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
+                                <AttachmentIcon height={"20px"} width={"20px"}/>
+                            </button>
+                        </Uploader>
+                        <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
+                        </div>
                     </div>
                 )}
                 </div>
