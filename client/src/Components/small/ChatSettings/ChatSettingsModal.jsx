@@ -11,6 +11,10 @@ import UserSmall from '../UserSmall/userSmall';
 const ChatSettingsModal = observer(({open, setOpen}) => {
 
     const {chat, app} = useContext(Context);
+
+    useEffect(() => {
+        chat.setMessageAutoFocus(!open);
+    }, [open])
     
     const handleExit = () => {
 

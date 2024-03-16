@@ -82,7 +82,7 @@ class UserController {
 
             const usersNotInChat = await User.find({ _id: { $nin: chatUserIds } });
     
-            res.status(200).json(usersNotInChat);
+            res.status(200).json({users: usersNotInChat});
             
         } catch (error) {
 

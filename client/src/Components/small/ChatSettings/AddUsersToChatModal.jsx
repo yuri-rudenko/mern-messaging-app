@@ -19,10 +19,15 @@ const AddUsersToChatModal = observer(() => {
     const [activeSubmit, setActiveSubmit] = useState(true);
 
     useEffect(() => {
+        chat.setMessageAutoFocus(!app.addMembersListModalOpened);
+    }, [app.addMembersListModalOpened])
+
+    useEffect(() => {
 
         const getUsersData = async () => {
             const data = await getUsersNotInChat(chat.activeChat._id);
             setConstUsers(data.users);
+            console.log(data.users);
             setUsers(data.users);
         };
 
@@ -38,20 +43,43 @@ const AddUsersToChatModal = observer(() => {
         app.setAddMembersListModalOpened(false);
     }
 
+    const filterUsers = (value) => {
+        if(!value) {
+            setUsers(constUsers);
+            return;
+        }
+        setUsers(constUsers.filter(client => client.name.toLowerCase().includes(value.toLowerCase()) || client.tag.toLowerCase().includes(value.toLowerCase())));
+    }
+
 
     return (
         chat.activeChat.createdAt &&
-        <Modal size="xs" className='chat-settings-modal' open={app.addMembersListModalOpened} onClose={handleClose} onExited={handleExit}>
+        <Modal size="xs" className='add-users' open={app.addMembersListModalOpened} onClose={handleClose} onExited={handleExit}>
             <Modal.Header>
                 <Modal.Title>Add Users</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
+                <div className="add-users-container">
 
+                    <input onChange={(e) => filterUsers(e.target.value)} type='text' placeholder='Search users'></input>
+
+                    <div className="users-container">
+                    {users && users.map(user => (
+                        <UserSmall key={user._id} user={user}/>
+                    ))}
+
+                    </div>
+                </div>
             </Modal.Body>
 
             <Modal.Footer>
-                   
+                <Button onClick={handleClose} size="lg" appearance="primary">
+                    Submit
+                </Button>
+                <Button onClick={handleClose} size="lg" appearance="ghost">
+                    Cancel
+                </Button>
             </Modal.Footer>
         </Modal>
     );
