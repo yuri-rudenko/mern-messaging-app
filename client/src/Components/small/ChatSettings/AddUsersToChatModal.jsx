@@ -7,11 +7,11 @@ import './chatSettingsStyles.css';
 import PeoplesIcon from '@rsuite/icons/Peoples';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import UserSmall from '../UserSmall/userSmall';
+import { addUsers } from '../../../http/chatAPI';
 
 const AddUsersToChatModal = observer(() => {
 
     const {chat, app} = useContext(Context);
-    const userContext = useContext(Context).user;
 
     const [users, setUsers] = useState([]);
     const [constUsers, setConstUsers] = useState([]);
@@ -36,11 +36,15 @@ const AddUsersToChatModal = observer(() => {
     }, [chat.activeChat])
 
     const handleExit = () => {
-
+        setSelectedUsers([]);
     }
 
     const handleClose = () => {
         app.setAddMembersListModalOpened(false);
+    }
+
+    const toggleAddUsers = () => {
+        addUsers(selectedUsers, chat.activeChat._id);
     }
 
     const filterUsers = (value) => {
@@ -65,16 +69,29 @@ const AddUsersToChatModal = observer(() => {
                     <input onChange={(e) => filterUsers(e.target.value)} type='text' placeholder='Search users'></input>
 
                     <div className="users-container">
-                    {users && users.map(user => (
-                        <UserSmall key={user._id} user={user}/>
-                    ))}
+                    {users && users.map(user => {
+
+                        const found = selectedUsers.find(selected => selected._id === user._id);
+
+                        const changeSelection = () => {
+                            found ? setSelectedUsers(selectedUsers.filter(selected => selected._id !== user._id))
+                            : setSelectedUsers([...selectedUsers, user]);
+                                
+                        }
+                        
+                        return (
+                            <div style={{cursor: "pointer"}} onClick={changeSelection} key={user._id} className={found ? "add-user-container selected-user" : "add-user-container"}>
+                                <UserSmall user={user}/>
+                            </div>
+                        )
+                    })}
 
                     </div>
                 </div>
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={handleClose} size="lg" appearance="primary">
+                <Button onClick={toggleAddUsers} size="lg" appearance="primary">
                     Submit
                 </Button>
                 <Button onClick={handleClose} size="lg" appearance="ghost">

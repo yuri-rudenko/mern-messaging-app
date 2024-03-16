@@ -29,3 +29,12 @@ export const createChat = async (name, image, users, isGroup) => {
         return(error.response);
     }
 }
+
+export const addUsers = async (users, chatId) => {
+    try {
+        const {data} = await $authHost.put('/api/chat/users/add?chatId=' + chatId, { users, chatId });
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
+}

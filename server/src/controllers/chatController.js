@@ -68,8 +68,6 @@ class chatController {
 
             const {name, users, image, isGroup} = req.body;
 
-            console.log(name, users, image, isGroup);
-
             users.forEach(tag => {
                 if(tag === req.user.tag) throw new Error("One of users you are adding is you");
             })
@@ -104,45 +102,45 @@ class chatController {
     async addUsers(req, res, next) {
 
         try {
-
-            const { tags, id } = req.body;
+            const { users, chatId } = req.body;
         
-            if (!id || !tags || !Array.isArray(tags) || tags.length === 0) {
-                throw new Error("Params error: Missing ID or tags");
+            if (!chatId || !users || !Array.isArray(users)) {
+                throw new Error("Params error: Missing ID or users array");
             }
         
-            const userIds = await tagsToIds(tags);
+            const userIds = users.map(user => user._id);
         
-            const checkedChat = await Chat.findById(id);
+            const checkedChat = await Chat.findById(chatId);
             if (!checkedChat) {
                 throw new Error("Chat not found");
             }
         
-            const existingUserIds = checkedChat.users.map(user => user.toString());
-        
-            const newUsers = userIds.filter(userId => !existingUserIds.includes(userId.toString()));
-        
-            if (newUsers.length === 0) {
-                return res.status(400).json("All users are already in the chat");
+            const userInChat = checkedChat.users.some(userId => userIds.includes(userId));
+            if (userInChat) {
+                return res.status(400).json(`One or more users are already in the chat`);
             }
         
-            const chat = await Chat.findByIdAndUpdate(id, {
-                $push: { users: { $each: newUsers } }
+            const chat = await Chat.findByIdAndUpdate(chatId, {
+                $push: { users: { $each: userIds } }
             });
         
-            const usersUpdatePromises = newUsers.map(userId => {
-                return User.findByIdAndUpdate(userId, {
+            const updateUserPromises = users.map(user =>
+                User.findByIdAndUpdate(user._id, {
                     $push: { chats: chat._id }
-                });
-            });
+                })
+            );
+            await Promise.all(updateUserPromises);
         
-            await Promise.all(usersUpdatePromises);
+            if (!chat) {
+                throw new Error("Chat update failed");
+            }
         
             res.status(200).json({ message: `Users added to chat ${chat.name}` });
         
         } catch (error) {
             res.status(400).json(error.message);
         }
+        
     }
 
     async removeUser(req, res, next) {

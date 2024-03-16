@@ -30,23 +30,19 @@ const start = async () => {
             }
         });
         io.on('connection', (socket) => {
-            console.log("user connected");
 
             socket.on('setup', (userData) => {
                 socket.join(userData._id);
-                console.log(userData._id);
                 socket.emit('connected');
             });
             socket.on('join chat', (room) => {
                 socket.join(room);
-                console.log('User Joined room ' + room.name);
             });
             socket.on('new message', async (newMessageRecieved) => {
                 let chat = newMessageRecieved.chat;
                 if(!chat.users) return console.log("Chat doesn't have any users");
                 chat.users.forEach(user => {
                     
-                    console.log(user);
                     if(user._id === newMessageRecieved.sender._id) return;
 
                     socket.in(user._id).emit("message recieved", newMessageRecieved);

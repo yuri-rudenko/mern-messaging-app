@@ -56,3 +56,7 @@
     margin: 10px 0px;
     width: 100%;
 }
+
+.add-users .add-users-container .users-container .selected-user {
+    background-color: rgb(172, 109, 109);
+}
