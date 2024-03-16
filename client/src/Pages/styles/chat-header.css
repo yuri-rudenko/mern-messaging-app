@@ -30,9 +30,6 @@
 .chat .chat-header .chat-header-left .text {
     margin-left: 10px;
 }
-.chat .chat-header .chat-header-left .text p {
-    text-align: left;
-}
 .chat .chat-header .chat-header-left .text .name {
     font-size: 1.2rem;
     font-weight: bold;

@@ -25,7 +25,6 @@
     background-color: rgb(236, 223, 204);
     font-size: 20px;
     padding: 8px;
-    text-align: left;
     border-radius: 5px;
     border: 2px solid rgb(139, 113, 75);
 }
@@ -34,7 +33,6 @@
 }
 .login .container form .login-error{
     color: rgb(182, 44, 44);
-    text-align: left;
     margin-top: 0px;
 }
 .login .container form .submit{

@@ -62,9 +62,6 @@
     height: 40px;
     border-radius: 50%;
 }
-.messages .message .content * {
-    text-align: left;
-}
 .messages .message .content .message-author {
     margin-bottom: 2px;
     font-size: 13px;
