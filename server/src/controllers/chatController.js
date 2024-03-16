@@ -101,42 +101,46 @@ class chatController {
         }
     }
     
-    async addUser(req, res, next) {
+    async addUsers(req, res, next) {
 
         try {
-            const { tag, id } = req.body;
-    
-            if (!id || !tag) {
-                throw new Error("Params error: Missing ID or tag");
+
+            const { tags, id } = req.body;
+        
+            if (!id || !tags || !Array.isArray(tags) || tags.length === 0) {
+                throw new Error("Params error: Missing ID or tags");
             }
-
-            const userId = await tagsToIds([tag])
-
+        
+            const userIds = await tagsToIds(tags);
+        
             const checkedChat = await Chat.findById(id);
             if (!checkedChat) {
                 throw new Error("Chat not found");
             }
         
-            if (checkedChat.users.includes(...userId)) {
-                return res.status(400).json(`User ${tag} is already in the chat`);
+            const existingUserIds = checkedChat.users.map(user => user.toString());
+        
+            const newUsers = userIds.filter(userId => !existingUserIds.includes(userId.toString()));
+        
+            if (newUsers.length === 0) {
+                return res.status(400).json("All users are already in the chat");
             }
         
-            
             const chat = await Chat.findByIdAndUpdate(id, {
-                $push: { users: userId }
+                $push: { users: { $each: newUsers } }
             });
-
-            const user = await User.findByIdAndUpdate(userId[0], {
-                $push: { chats: chat._id }
+        
+            const usersUpdatePromises = newUsers.map(userId => {
+                return User.findByIdAndUpdate(userId, {
+                    $push: { chats: chat._id }
+                });
             });
-
-            if(!chat || !user) return res.status(400).json({ error: `Chat or user didn't add` });
-    
-            res.status(200).json({ message: `User ${tag} added to chat ${chat.name}` });
-
-        }
-
-        catch (error) {
+        
+            await Promise.all(usersUpdatePromises);
+        
+            res.status(200).json({ message: `Users added to chat ${chat.name}` });
+        
+        } catch (error) {
             res.status(400).json(error.message);
         }
     }
@@ -144,7 +148,7 @@ class chatController {
     async removeUser(req, res, next) {
 
         try {
-            const { tag, id } = req.body;
+            const { tag, } = req.body;
     
             if (!id || !tag) {
                 throw new Error("Params error: Missing ID or tag");
