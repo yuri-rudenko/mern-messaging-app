@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Button } from 'rsuite';
+import { Modal, Button, useToaster } from 'rsuite';
 import { Context } from '../../..';
 import { observer } from 'mobx-react-lite';
 import { getUsersInChats, getUsersNotInChat } from '../../../http/userAPI';
@@ -8,10 +8,13 @@ import PeoplesIcon from '@rsuite/icons/Peoples';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import UserSmall from '../UserSmall/userSmall';
 import { addUsers } from '../../../http/chatAPI';
+import NotificationModal from '../Notifications/Notification';
 
-const AddUsersToChatModal = observer(() => {
+const AddUsersToChatModal = observer(({setOpenFirst}) => {
 
     const {chat, app} = useContext(Context);
+
+    const toaster = useToaster()
 
     const [users, setUsers] = useState([]);
     const [constUsers, setConstUsers] = useState([]);
@@ -40,11 +43,22 @@ const AddUsersToChatModal = observer(() => {
     }
 
     const handleClose = () => {
+        setOpenFirst(false);
         app.setAddMembersListModalOpened(false);
     }
 
-    const toggleAddUsers = () => {
-        addUsers(selectedUsers, chat.activeChat._id);
+    const toggleAddUsers = async () => {
+        const data = await addUsers(selectedUsers, chat.activeChat._id);
+        if(data) {
+            handleClose();
+            toaster.push(<NotificationModal 
+                text={
+                    selectedUsers.length > 1 ? "Users has been added to the chat" : "User have been added to the chat"
+                }
+                type="success"
+            />)
+
+        }
     }
 
     const filterUsers = (value) => {

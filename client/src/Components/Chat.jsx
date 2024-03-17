@@ -147,7 +147,7 @@ const Chat = observer(() => {
         <div className='chat'>
 
         <ChatSettingsModal open={open} setOpen={setOpen}/>
-        <AddUsersToChatModal/>
+        <AddUsersToChatModal setOpenFirst={setOpen}/>
 
             {loading && socketConnected && chatContext.activeChat.users && <div/>}
             
