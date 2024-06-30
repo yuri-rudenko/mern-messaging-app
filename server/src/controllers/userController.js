@@ -153,6 +153,8 @@ class UserController {
 
             const userData = { ...user._doc };
             delete userData.password;
+            
+            console.log('fine');
 
             res.status(200).json({...userData, token: generateJWT(user._id, user.tag)})
 

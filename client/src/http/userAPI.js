@@ -24,6 +24,7 @@ export const login = async (values) => {
 
 export const check = async () => {
     try {
+        console.log('Check')
         if(!localStorage.getItem('token')) return {message: "Not Authorised"};
         const {data} = await $authHost.get('/api/user/auth');
         localStorage.setItem('token', data.token);

@@ -23,6 +23,7 @@ const Login = () => {
         const fetchData = async () => {
 
             const token = await check();
+            console.log(token)
             if(token && token.message !== "Not Authorised") navigate('/');
 
         };
@@ -63,6 +64,10 @@ const Login = () => {
                         {errors?.login && <p className='login-error'>{errors?.login?.message}</p>}
                         <input placeholder='Enter password' type="password" style={errors?.password && {borderColor: "rgb(182, 44, 44)"}} {...register("password", { required: { value: true, message: 'Enter password' }, minLength: { value: 3, message: 'Password must be at least 3 characters' }, maxLength: { value: 16, message: 'Password must not exceed 16 characters' } })} name="password" />
                         {errors?.password && <p className='login-error'>{errors?.password?.message}</p>}
+                        <div className='change-link'>
+                            <p>Don't have an account?</p>
+                            <p className='goto-link' onClick={() => navigate("/registration")}>Register</p>
+                        </div>
                     </>
                 ) : (
                     <>
@@ -86,7 +91,10 @@ const Login = () => {
 
                         <input placeholder='Enter password' type="password" style={errors?.password && {borderColor: "rgb(182, 44, 44)"}} {...register("password", { required: { value: true, message: 'Enter password' }, minLength: { value: 6, message: 'Password must be at least 6 characters' }, maxLength: { value: 16, message: 'Password must not exceed 16 characters' } })} name="password" />
                         {errors?.password && <p className='login-error'>{errors?.password?.message}</p>}
-                        
+                        <div className='change-link'>
+                            <p>Already have an account?</p>
+                            <p className='goto-link' onClick={() => navigate("/login")}>Log in</p>
+                        </div>
                     </>
                 )}
                     {data?.status === 400 ? <p className='login-error' style={{fontSize: '18px', fontWeight: "bold"}}>{data.data}</p> : <></>}

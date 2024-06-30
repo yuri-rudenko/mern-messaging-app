@@ -17,7 +17,6 @@ const Main = observer(() => {
     useEffect(() => {
 
         if(!user.isAuth || !user) navigate('/login');
-
         
     }, []);
 

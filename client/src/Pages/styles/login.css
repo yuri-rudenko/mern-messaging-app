@@ -11,7 +11,7 @@
     border-radius: 10px;
     background-color: rgb(236, 223, 204);
 }
-.login .container form{
+.login .container form{ 
     display: flex;
     flex-direction: column;
 }
@@ -38,7 +38,8 @@
 .login .container form .submit{
     width: 140px;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
+    margin-left: 0px;
     background-color: burlywood;
     border: 2px solid rgb(139, 113, 75);
     border-radius: 5px;
@@ -50,4 +51,17 @@
 .login .container form .submit:active{
     position: relative;
     top: 2px;
+}
+.login .container .change-link {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0px;
+    color: rgb(88, 88, 88);
+}
+.login .container .change-link * {
+    margin: 0px 3px 0px 0px;
+}
+.login .container .change-link .goto-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
