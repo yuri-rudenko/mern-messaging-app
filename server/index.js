@@ -13,9 +13,20 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('static/uploads'))
-app.use('/default', express.static('static/default'))
+app.use(express.static('static/uploads'));
+app.use('/default', express.static('static/default'));
 app.use('/api', router);
+app.use((err, req, res, next) => {
+    console.error(err);
+
+    if (err.code === 'INVALID_FILE_TYPE') {
+        return res.status(400).json({ message: err.message });
+    }
+
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error'
+    });
+});
 
 const start = async () => {
     try {

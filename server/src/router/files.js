@@ -11,12 +11,19 @@ const router = new Router();
 
 const image = multer({storage: storage(), 
     fileFilter: function(req, file, cb) {
-    checkFileTypeMiddleware(req, file, cb);
-}})
+        checkFileTypeMiddleware(req, file, cb);
+    }
+})
 
 const file = multer({storage: storage()})
 
-router.post('/uploadImage', image.single('file'), fileController.uploadImage);
+router.post('/uploadImage', image.array('file'), async (req, res, next) => {
+    try {
+        await fileController.uploadImage(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
 router.post('/uploadFile', file.single('file'), fileController.uploadImage);
 router.delete('/deleteImage', fileController.deleteImage);
 

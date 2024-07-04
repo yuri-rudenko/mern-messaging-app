@@ -1,18 +1,22 @@
 import path from "path";
 
-export default function(req, file, cb){
+export default function(req, file, cb) {
+
+    console.log(file, 333);
     
     const filetypes = /jpeg|jpg|png/;
-    
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    
     const mimetype = filetypes.test(file.mimetype);
-  
-    if(mimetype && extname){
+
+    if (mimetype && extname) {
+
         req.fileCheckResult = true;
         return cb(null, true);
+
     } else {
         req.fileCheckResult = false;
-        return cb(null, false);
+        const error = new Error('Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
+        error.code = 'INVALID_FILE_TYPE';
+        return cb(error);
     }
 }

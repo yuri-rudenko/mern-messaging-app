@@ -22,11 +22,25 @@ class fileController {
     }
 
     async uploadImage(req, res, next) {
-        
-        req.fileCheckResult 
-        ? res.status(200).json({img: req.newFileName})
-        : res.status(400).json({message: "File type error"});
-
+        try {
+           
+            if (!req.files || req.files.length === 0) {
+                return res.status(400).json({ message: "No files were uploaded." });
+            }
+    
+            const fileNames = req.files.length === 1 
+                ? req.files[0].filename 
+                : req.files.map(file => file.filename);
+    
+            if (req.fileCheckResult) {
+                res.status(200).json(fileNames);
+            } else {
+                res.status(400).json({ message: "File type error" });
+            }
+        } catch (error) {
+            
+            res.status(500).json({ message: "Internal server error", error: error.message });
+        }
     }
 
 }
