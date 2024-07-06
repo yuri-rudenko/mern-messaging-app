@@ -11,6 +11,7 @@ import AttachmentIcon from '@rsuite/icons/Attachment';
 import MoreIcon from '@rsuite/icons/More';
 import ChatSettingsModal from './small/ChatSettings/ChatSettingsModal';
 import AddUsersToChatModal from './small/ChatSettings/AddUsersToChatModal';
+import ChatBottom from './small/ChatBottom/ChatBottom';
 
 let scrollIterations = 0;
 
@@ -39,7 +40,6 @@ const Chat = observer(() => {
     const [inputValue, setInputValue] = useState("");
     const [loading, setLoading] = useState(true);
     const [socketConnected, setSocketConnected] = useState(false);
-    const [notUpload, setNotUpload] = useState([]);
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -177,42 +177,15 @@ const Chat = observer(() => {
                                 <Message user={user.user} message={message} key={message._id}></Message>
                             )}
                         </div>
-                        <div className="chat-bottom">
-                            <Uploader 
-                            multiple 
-                            className='uploader'
-                            listType="picture" 
-                            onChange={() => setNotUpload([])} 
-                            fileList={notUpload}
-                            action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
-                            >
-                                <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
-                                    <AttachmentIcon height={"20px"} width={"20px"}/>
-                                </button>
-                            </Uploader>
-                            <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
-                        </div>
+                        <ChatBottom inputValue={inputValue} handleInputChange={handleInputChange} inputRef={inputRef}/>
                     </div>
                 ) 
                 : (
                     <div className="messages">
-                    <p>Write your first message!</p>
-                    <div className="chat-bottom">
-                        <Uploader 
-                        multiple 
-                        className='uploader'
-                        listType="picture" 
-                        onChange={() => setNotUpload([])} 
-                        fileList={notUpload}
-                        
-                        action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}
-                        >
-                            <button style={{height:"50px", width:"50px", borderRadius:"10px 0px 0px 10px"}}>
-                                <AttachmentIcon height={"20px"} width={"20px"}/>
-                            </button>
-                        </Uploader>
-                        <input value={inputValue} onChange={handleInputChange} ref={inputRef} autoFocus className='write-message' placeholder='Write a message...'></input>
-                        </div>
+
+                        <p>Write your first message!</p>
+                        <ChatBottom inputValue={inputValue} handleInputChange={handleInputChange} inputRef={inputRef}/>
+
                     </div>
                 )}
                 </div>

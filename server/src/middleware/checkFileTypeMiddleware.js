@@ -1,8 +1,6 @@
 import path from "path";
 
 export default function(req, file, cb) {
-
-    console.log(file, 333);
     
     const filetypes = /jpeg|jpg|png/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());

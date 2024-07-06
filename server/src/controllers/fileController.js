@@ -33,6 +33,7 @@ class fileController {
                 : req.files.map(file => file.filename);
     
             if (req.fileCheckResult) {
+                console.log(fileNames)
                 res.status(200).json(fileNames);
             } else {
                 res.status(400).json({ message: "File type error" });

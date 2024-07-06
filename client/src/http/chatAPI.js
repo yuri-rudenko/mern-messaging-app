@@ -21,6 +21,16 @@ export const deleteImage = async (image) => {
     }
 }
 
+export const uploadImages = async (images) => {
+    try {
+        console.log(images)
+        const {data} = await $authHost.post('/api/files/uploadImage', {file: images});
+        return data;
+    } catch (error) {
+        return(error.response);
+    }
+}
+
 export const createChat = async (name, image, users, isGroup) => {
     try {
         const {data} = await $authHost.post('/api/chat', { name, users, image, isGroup });
