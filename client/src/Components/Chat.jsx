@@ -12,28 +12,43 @@ import MoreIcon from '@rsuite/icons/More';
 import ChatSettingsModal from './small/ChatSettings/ChatSettingsModal';
 import AddUsersToChatModal from './small/ChatSettings/AddUsersToChatModal';
 import ChatBottom from './small/ChatBottom/ChatBottom';
+import { useSendMessage } from '../functions/useSendMessage';
 
-let scrollIterations = 0;
+export function scrollToBottom() {
 
-function scrollToBottom() {
-    let messagesContainer = document.querySelector('.messages-container');
-    if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    } else {
-        if (scrollIterations < 10) {
-            setTimeout(scrollToBottom, 10);
-            scrollIterations++;
+    let scrollIterations = 0;
+
+    scrollLocal()
+
+    function scrollLocal() {
+
+        let messagesContainer = document.querySelector('.messages-container');
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } else {
+            if (scrollIterations < 10) {
+                setTimeout(scrollLocal, 10);
+                scrollIterations++;
+            }
         }
+        
     }
+
 }
 
 let socket, selectedChatCompare;
-socket = io(process.env.REACT_APP_API_URL);
+socket = io(process.env.REACT_APP_API_URL, {
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000, 
+    reconnectionDelayMax: 5000, 
+    timeout: 10000,
+});
 
 const Chat = observer(() => {
 
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
+    const sendMessageAndUpdate = useSendMessage();
 
     const inputRef = useRef();
 
@@ -75,7 +90,6 @@ const Chat = observer(() => {
     }, [chatContext.activeChat]);
 
 
-    // Socket.io live message addition
     useEffect(() => {
 
         const handleMessageReceived = (newMessageRecieved) => {
@@ -113,23 +127,12 @@ const Chat = observer(() => {
 
             if(inputValue.trim() !== "" && key.key ==="Enter") {
                 resetInputValue();
-                const {message} = await sendMessage({
+                sendMessageAndUpdate({
                     content: {
                         type: 'Text',
                         text: messageValue,
-                    },
-                    id: user.user._id,
-                    chatId: chatContext.activeChat._id
+                    }
                 })
-                socket.emit("new message", {message, chat: chatContext.activeChat, sender: user.user})
-                if(message) {
-                    chatContext.appendMessage(message);
-                    chatContext.setLatestMessage(message);
-                    chatContext.sortChats();
-                    setTimeout(() => {
-                        scrollToBottom();
-                    }, 10)
-                }
             }
             if(inputRef.current && chatContext.messageAutoFocus) {
                 inputRef.current.focus();

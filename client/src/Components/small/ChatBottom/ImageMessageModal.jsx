@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Modal } from 'rsuite';
 import './imageMessageModalStyle.css';
 import { deleteImage } from '../../../http/chatAPI';
+import { Context } from '../../..';
+import { sendMessage } from '../../../http/messageAPI';
 
 const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploadedPhotos}) => {
+
+    const { user } = useContext(Context);
+    const chatContext = useContext(Context).chat;
+
 
     function removeImage(name) {
 
@@ -17,6 +23,25 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
             deleteImage(photo);
         })
         setUploadedPhotos([]);
+    }
+
+    const sendFileMessage = async () => {
+
+        const images = uploadedPhotos.map(photo => ({
+            type: 'Image',
+            src: photo
+        }))
+        
+        const {message} = await sendMessage({
+            content: {
+                type: 'Image',
+                files: images
+            },
+            id: user.user._id,
+            chatId: chatContext.activeChat._id
+        })
+
+        console.log(message)
     }
 
     return (
@@ -40,8 +65,8 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleClose} appearance="primary">
-                        Ok
+                    <Button onClick={sendFileMessage} appearance="primary">
+                        Send
                     </Button>
                     <Button onClick={handleClose} appearance="subtle">
                         Cancel

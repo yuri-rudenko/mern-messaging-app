@@ -22,7 +22,8 @@ class messageController {
                 author: user._id,
                 type: content.type,
                 chatId: chatId,
-                text: content.text
+                text: content.text,
+                files: content.files
             });
 
             await message.populate("author");
