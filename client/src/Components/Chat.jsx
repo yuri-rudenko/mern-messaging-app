@@ -77,16 +77,58 @@ const Chat = observer(() => {
 
     // Loading of a chat
     useEffect(() => {
+        
         setLoading(true);
         resetInputValue();
-        if (chatContext.activeChat.users) {
-            setTimeout(() => {
+        const images = document.querySelectorAll('.messages-container img');
+        let imagesLoaded = 0;
+        let timeoutId;
+
+        const handleImageLoad = () => {
+            imagesLoaded += 1;
+            if (imagesLoaded === images.length) {
+                clearTimeout(timeoutId);
                 scrollToBottom();
                 setLoading(false);
-                
-            }, 10)
+            }
+        };
+
+        const timeoutFunction = () => {
+
+            images.forEach(image => {
+                image.removeEventListener('load', handleImageLoad);
+            });
+
+            scrollToBottom();
+            setLoading(false);
+        };
+
+        timeoutId = setTimeout(timeoutFunction, 100);
+
+        if (images.length === 0) {
+
+            clearTimeout(timeoutId);
+            scrollToBottom();
+            setLoading(false);
+
+        } else {
+            images.forEach(image => {
+                if (image.complete) {
+                    handleImageLoad(); 
+                } else {
+                    image.addEventListener('load', handleImageLoad);
+                }
+            });
         }
+
         socket.emit('join chat', chatContext.activeChat);
+
+        return () => {
+            clearTimeout(timeoutId);
+            images.forEach(image => {
+                image.removeEventListener('load', handleImageLoad);
+            });
+        };
     }, [chatContext.activeChat]);
 
 

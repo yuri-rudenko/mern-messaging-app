@@ -38,11 +38,13 @@ export const useSendMessage = () => {
         }
 
         try {
+
             const { message } = await sendMessage({
                 ...content,
                 id: user.user._id,
                 chatId: chatContext.activeChat._id
             });
+            
 
             if (message) {
                 socket.emit('new message', {
@@ -58,6 +60,8 @@ export const useSendMessage = () => {
                 setTimeout(() => {
                     scrollToBottom();
                 }, 10);
+                
+                return message;
             }
         } catch (error) {
             console.error('Failed to send message:', error);

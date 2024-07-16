@@ -1,27 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Modal } from 'rsuite';
 import './imageMessageModalStyle.css';
 import { deleteImage } from '../../../http/chatAPI';
 import { Context } from '../../..';
-import { sendMessage } from '../../../http/messageAPI';
+import { useSendMessage } from '../../../functions/useSendMessage';
 
 const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploadedPhotos}) => {
 
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
+    const sendMessageAndUpdate = useSendMessage();
 
+    const [sendButtonClicked, setSendButtonClicked] = useState(false);
 
     function removeImage(name) {
-
-        setUploadedPhotos((prevPhotos => prevPhotos.filter(photo => photo !== name)));
+        setUploadedPhotos(prevPhotos => prevPhotos.filter(photo => photo !== name));
         deleteImage(name);
-
     }
 
     function removeAllImages() {
         uploadedPhotos.forEach(photo => {
             deleteImage(photo);
-        })
+        });
         setUploadedPhotos([]);
     }
 
@@ -30,51 +30,62 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
         const images = uploadedPhotos.map(photo => ({
             type: 'Image',
             src: photo
-        }))
-        
-        const {message} = await sendMessage({
+        }));
+
+        const message = await sendMessageAndUpdate({
             content: {
                 type: 'Image',
                 files: images
             },
-            id: user.user._id,
-            chatId: chatContext.activeChat._id
-        })
+        });
 
-        console.log(message)
-    }
+        setSendButtonClicked(true);
+        setUploadedPhotos([]);
+        handleClose();
+    };
+
+    const handleModalClose = () => {
+        handleClose();
+        if (!sendButtonClicked) {
+            removeAllImages();
+        }
+        setSendButtonClicked(false); 
+    };
 
     return (
         <div>
-            <Modal onExited={() => removeAllImages()} className='messageImage-modal' open={modalOpened} onClose={handleClose}>
+            <Modal
+                className='messageImage-modal'
+                open={modalOpened}
+                onClose={handleModalClose}
+                onExited={handleModalClose}
+            >
                 <Modal.Header>
                     <Modal.Title>Send pictures</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='modal-body'>
                     <div className="images">
-
-                        {uploadedPhotos[0] && uploadedPhotos.map(image => 
+                        {uploadedPhotos.length > 0 && uploadedPhotos.map(image =>
                             <div key={image} className="uploadable-image">
-                                <img src={process.env.REACT_APP_API_URL + '/' + image}></img>
+                                <img src={`${process.env.REACT_APP_API_URL}/${image}`} alt="uploaded" />
                                 <div className="cross">
                                     <p onClick={() => removeImage(image)}>x</p>
                                 </div>
                             </div>
                         )}
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={sendFileMessage} appearance="primary">
                         Send
                     </Button>
-                    <Button onClick={handleClose} appearance="subtle">
+                    <Button onClick={handleModalClose} appearance="subtle">
                         Cancel
                     </Button>
                 </Modal.Footer>
             </Modal>
         </div>
     );
-}
+};
 
 export default ImageMessageModal;
