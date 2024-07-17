@@ -13,28 +13,8 @@ import ChatSettingsModal from './small/ChatSettings/ChatSettingsModal';
 import AddUsersToChatModal from './small/ChatSettings/AddUsersToChatModal';
 import ChatBottom from './small/ChatBottom/ChatBottom';
 import { useSendMessage } from '../functions/useSendMessage';
-
-export function scrollToBottom() {
-
-    let scrollIterations = 0;
-
-    scrollLocal()
-
-    function scrollLocal() {
-
-        let messagesContainer = document.querySelector('.messages-container');
-        if (messagesContainer) {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        } else {
-            if (scrollIterations < 10) {
-                setTimeout(scrollLocal, 10);
-                scrollIterations++;
-            }
-        }
-        
-    }
-
-}
+import scrollToBottom from '../functions/scrollToBottom';
+import handleImagesAndScroll from '../functions/handleImagesAndScroll';
 
 let socket, selectedChatCompare;
 socket = io(process.env.REACT_APP_API_URL, {
@@ -77,58 +57,10 @@ const Chat = observer(() => {
 
     // Loading of a chat
     useEffect(() => {
-        
-        setLoading(true);
+        const cleanup = handleImagesAndScroll(setLoading);
         resetInputValue();
-        const images = document.querySelectorAll('.messages-container img');
-        let imagesLoaded = 0;
-        let timeoutId;
-
-        const handleImageLoad = () => {
-            imagesLoaded += 1;
-            if (imagesLoaded === images.length) {
-                clearTimeout(timeoutId);
-                scrollToBottom();
-                setLoading(false);
-            }
-        };
-
-        const timeoutFunction = () => {
-
-            images.forEach(image => {
-                image.removeEventListener('load', handleImageLoad);
-            });
-
-            scrollToBottom();
-            setLoading(false);
-        };
-
-        timeoutId = setTimeout(timeoutFunction, 100);
-
-        if (images.length === 0) {
-
-            clearTimeout(timeoutId);
-            scrollToBottom();
-            setLoading(false);
-
-        } else {
-            images.forEach(image => {
-                if (image.complete) {
-                    handleImageLoad(); 
-                } else {
-                    image.addEventListener('load', handleImageLoad);
-                }
-            });
-        }
-
         socket.emit('join chat', chatContext.activeChat);
-
-        return () => {
-            clearTimeout(timeoutId);
-            images.forEach(image => {
-                image.removeEventListener('load', handleImageLoad);
-            });
-        };
+        return cleanup;
     }, [chatContext.activeChat]);
 
 
@@ -141,10 +73,21 @@ const Chat = observer(() => {
             }
             else {
                 chatContext.appendMessage(newMessageRecieved.message);
+                if(newMessageRecieved.message.type === "Image") {
 
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 10)
+                    setTimeout(() => {
+                        handleImagesAndScroll();
+                    }, 10)  
+                }
+
+                else {
+
+                    setTimeout(() => {
+                        scrollToBottom();
+                    }, 10)
+
+                }
+
             }
 
             chatContext.setLatestMessage(newMessageRecieved.message);

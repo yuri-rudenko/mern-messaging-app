@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "..";
 import { sendMessage } from "../http/messageAPI";
-import { scrollToBottom } from "../Components/Chat";
 import { io } from "socket.io-client";
+import scrollToBottom from "./scrollToBottom";
 
 export const useSendMessage = () => {
     const { user } = useContext(Context);
