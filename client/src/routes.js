@@ -1,7 +1,7 @@
 import Login from "./Pages/Login"
 import Main from "./Pages/Main"
 import Profile from "./Components/Profile"
-
+// test
 export const authRoutes = [
     {
         path: '/',
