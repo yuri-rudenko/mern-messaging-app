@@ -1,10 +1,12 @@
 import { makeAutoObservable } from 'mobx';
 
 export default class ChatStore {
+    
     constructor() {
         this._chats = [];
         this._activeChat = {};
         this._messageAutoFocus = true;
+        this._chatIsLoading = false;
         makeAutoObservable(this);
     }
 
@@ -50,6 +52,10 @@ export default class ChatStore {
         this._messageAutoFocus = bool;
     }
 
+    setChatIsLoading(bool) {
+        this._chatIsLoading = bool;
+    }
+
     get chats() {
         return this._chats;
     }
@@ -60,5 +66,9 @@ export default class ChatStore {
 
     get activeChat() {
         return this._activeChat;
+    }
+
+    get chatIsLoading() {
+        return this._chatIsLoading;
     }
 }
