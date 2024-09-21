@@ -15,6 +15,7 @@ import ChatBottom from './small/ChatBottom/ChatBottom';
 import { useSendMessage } from '../functions/useSendMessage';
 import scrollToBottom from '../functions/scrollToBottom';
 import handleImagesAndScroll from '../functions/handleImagesAndScroll';
+import Loader from './small/Loader/Loader';
 
 let socket, selectedChatCompare;
 socket = io(process.env.REACT_APP_API_URL, {
@@ -33,7 +34,10 @@ const Chat = observer(() => {
     const inputRef = useRef();
 
     const [inputValue, setInputValue] = useState("");
-    const [loading, setLoading] = useState(true);
+    const loading = chatContext.chatIsLoading;
+    const wrapSetLoading = (value) => {
+        chatContext.setChatIsLoading(value);
+    };
     const [socketConnected, setSocketConnected] = useState(false);
 
     const [open, setOpen] = useState(false);
@@ -57,7 +61,7 @@ const Chat = observer(() => {
 
     // Loading of a chat
     useEffect(() => {
-        const cleanup = handleImagesAndScroll(setLoading);
+        const cleanup = handleImagesAndScroll(wrapSetLoading);
         resetInputValue();
         socket.emit('join chat', chatContext.activeChat);
         return cleanup;
@@ -131,13 +135,13 @@ const Chat = observer(() => {
         };
     });
 
+    // if(!loading) return <Loader/>
+
     return (
         <div className='chat'>
 
         <ChatSettingsModal open={open} setOpen={setOpen}/>
         <AddUsersToChatModal setOpenFirst={setOpen}/>
-
-            {loading && socketConnected && chatContext.activeChat.users && <div/>}
             
             {chatContext.activeChat.createdAt && 
             <div className="chat-header">

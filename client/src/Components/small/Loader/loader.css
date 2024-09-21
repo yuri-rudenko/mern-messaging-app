@@ -1,3 +1,10 @@
+.loader-parent-relative {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .lds-facebook {
   display: inline-block;
   width: 80px;
