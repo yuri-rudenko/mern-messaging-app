@@ -24,7 +24,7 @@ const Login = () => {
 
             const token = await check();
             console.log(token)
-            if(token && token.message !== "Not Authorised") navigate('/');
+            if(token && token.data.message !== "Not authorised") navigate('/');
 
         };
     

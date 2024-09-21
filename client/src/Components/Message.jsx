@@ -1,4 +1,5 @@
 import React from 'react';
+import '../Pages/styles/messages.css'
 
 const Message = ({message, user}) => {
     const author = message.author;
@@ -27,10 +28,10 @@ const Message = ({message, user}) => {
                 </div>
                 <div className="content">
                     <p className='message-author'>{author.name}</p>
-                    <div className='message-images container'>
+                    <div className={'message-images container message-images-' + message.files.length}>
                         {message.files && message.files.map(file => (
 
-                        <img width="400px" src={process.env.REACT_APP_API_URL + '/'+ file.src} key={file.src}></img>
+                        <img className={'chat-message-image chat-message-image-' + message.files.length} width="400px" src={process.env.REACT_APP_API_URL + '/'+ file.src} key={file.src}></img>
                         
                         ))}
                     </div>
