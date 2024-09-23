@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Modal } from 'rsuite';
 import './imageMessageModalStyle.css';
 import { deleteImage } from '../../../http/chatAPI';
@@ -10,6 +10,12 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
     const sendMessageAndUpdate = useSendMessage();
+
+    useEffect(() => {
+        chatContext.setMessageAutoFocus(!modalOpened);
+    }, [modalOpened])
+
+    const [inputValue, setInputValue] = useState(chatContext.messageInput);
 
     const [sendButtonClicked, setSendButtonClicked] = useState(false);
 
@@ -57,7 +63,7 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
             <Modal
                 className='messageImage-modal'
                 open={modalOpened}
-                onClose={handleModalClose}
+                onClose={handleClose}
                 onExited={handleModalClose}
             >
                 <Modal.Header>
@@ -75,11 +81,12 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
                         )}
                     </div>
                 </Modal.Body>
+                <input value={inputValue} onChange={e => setInputValue(e.target.value)} type="text" className='input-chat-name'/>
                 <Modal.Footer>
                     <Button onClick={sendFileMessage} appearance="primary">
-                        Send
+                        Send    
                     </Button>
-                    <Button onClick={handleModalClose} appearance="subtle">
+                    <Button onClick={handleClose} appearance="subtle">
                         Cancel
                     </Button>
                 </Modal.Footer>

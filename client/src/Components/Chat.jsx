@@ -33,7 +33,6 @@ const Chat = observer(() => {
 
     const inputRef = useRef();
 
-    const [inputValue, setInputValue] = useState("");
     const loading = chatContext.chatIsLoading;
     const wrapSetLoading = (value) => {
         chatContext.setChatIsLoading(value);
@@ -44,10 +43,7 @@ const Chat = observer(() => {
     const handleOpen = () => setOpen(true);
 
     const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-    const resetInputValue = () => {
-        setInputValue("");
+        chatContext.setMessageInput(e.target.value);
     };
 
     // Socket connection
@@ -62,8 +58,9 @@ const Chat = observer(() => {
     // Loading of a chat
     useEffect(() => {
         const cleanup = handleImagesAndScroll(wrapSetLoading);
-        resetInputValue();
+        chatContext.resetMessageInput();
         socket.emit('join chat', chatContext.activeChat);
+        console.log(loading)
         return cleanup;
     }, [chatContext.activeChat]);
 
@@ -112,10 +109,10 @@ const Chat = observer(() => {
 
         const handleKeyDown = async (key) => {
 
-            const messageValue = inputValue;
+            const messageValue = chatContext.messageInput;
 
-            if(inputValue.trim() !== "" && key.key ==="Enter") {
-                resetInputValue();
+            if(chatContext.messageInput.trim() !== "" && key.key ==="Enter") {
+                chatContext.resetMessageInput()
                 sendMessageAndUpdate({
                     content: {
                         type: 'Text',
@@ -135,7 +132,7 @@ const Chat = observer(() => {
         };
     });
 
-    // if(!loading) return <Loader/>
+    if(loading) return <Loader/>
 
     return (
         <div className='chat'>
@@ -169,14 +166,14 @@ const Chat = observer(() => {
                                 <Message user={user.user} message={message} key={message._id}></Message>
                             )}
                         </div>
-                        <ChatBottom inputValue={inputValue} handleInputChange={handleInputChange} inputRef={inputRef}/>
+                        <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef}/>
                     </div>
                 ) 
                 : (
                     <div className="messages">
 
                         <p>Write your first message!</p>
-                        <ChatBottom inputValue={inputValue} handleInputChange={handleInputChange} inputRef={inputRef}/>
+                        <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef}/>
 
                     </div>
                 )}

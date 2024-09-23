@@ -33,7 +33,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
 
     const [error, setError] = useState(false);
 
-    const onUploadError = () => {
+    const onUploadError = (error) => {
         setGroupPfp({});
         setError(true);
     }
@@ -45,7 +45,8 @@ const ChatCreationFirst = ({open, setOpen}) => {
     }
 
     const onUploadSuccess = (image) => {
-        setGroupPfp(image);
+        console.log(image);
+        setGroupPfp({img: image});
         setError(false);
     }
 

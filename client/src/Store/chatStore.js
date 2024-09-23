@@ -7,6 +7,7 @@ export default class ChatStore {
         this._activeChat = {};
         this._messageAutoFocus = true;
         this._chatIsLoading = false;
+        this._messageInput = "";
         makeAutoObservable(this);
     }
 
@@ -20,6 +21,14 @@ export default class ChatStore {
 
     setActiveChat(chat) {
         this._activeChat = chat;
+    }
+
+    setMessageInput(value) {
+        this._messageInput = value;
+    }
+
+    resetMessageInput() {
+        this._messageInput = "";
     }
 
     appendMessage(message) {
@@ -70,5 +79,9 @@ export default class ChatStore {
 
     get chatIsLoading() {
         return this._chatIsLoading;
+    }
+
+    get messageInput() {
+        return this._messageInput;
     }
 }
