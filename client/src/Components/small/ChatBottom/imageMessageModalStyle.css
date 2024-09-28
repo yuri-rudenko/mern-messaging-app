@@ -38,3 +38,11 @@
     height: 26px;
     width: 8px;
 }
+.messageImage-modal .input-chat-name {
+    width: 100%;
+    font-size: 20px;
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    margin: 5px 0px;
+}

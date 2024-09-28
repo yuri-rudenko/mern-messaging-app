@@ -31,10 +31,11 @@ const Message = ({message, user}) => {
                     <div className={'message-images container message-images-' + message.files.length}>
                         {message.files && message.files.map(file => (
 
-                        <img className={'chat-message-image chat-message-image-' + message.files.length} width="400px" src={process.env.REACT_APP_API_URL + '/'+ file.src} key={file.src}></img>
+                        <img className={'chat-message-image chat-message-image-' + message.files.length} src={process.env.REACT_APP_API_URL + '/'+ file.src} key={file.src}></img>
                         
                         ))}
                     </div>
+                    {message.text && <div className='message-text chat-message-image-text'>{message.text}</div>}
                 </div>
             </div>
 

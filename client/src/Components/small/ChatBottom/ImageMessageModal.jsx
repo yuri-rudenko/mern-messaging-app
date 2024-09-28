@@ -10,12 +10,12 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
     const sendMessageAndUpdate = useSendMessage();
+    const [inputValue, setInputValue] = useState(chatContext.messageInput);
 
     useEffect(() => {
         chatContext.setMessageAutoFocus(!modalOpened);
+        setInputValue(chatContext.messageInput);
     }, [modalOpened])
-
-    const [inputValue, setInputValue] = useState(chatContext.messageInput);
 
     const [sendButtonClicked, setSendButtonClicked] = useState(false);
 
@@ -38,12 +38,23 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
             src: photo
         }));
 
-        const message = await sendMessageAndUpdate({
-            content: {
-                type: 'Image',
-                files: images
-            },
-        });
+        if (!inputValue.trim()) {
+            const message = await sendMessageAndUpdate({
+                content: {
+                    type: 'Image',
+                    files: images
+                },
+            });
+        } else {
+            const message = await sendMessageAndUpdate({
+                content: {
+                    type: 'Image',
+                    files: images,
+                    text: inputValue.trim()
+                },
+            });
+            console.log(message);
+        }
 
         setSendButtonClicked(true);
         setUploadedPhotos([]);
@@ -81,7 +92,7 @@ const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploade
                         )}
                     </div>
                 </Modal.Body>
-                <input value={inputValue} onChange={e => setInputValue(e.target.value)} type="text" className='input-chat-name'/>
+                <input placeholder='Message...' value={inputValue} onChange={e => setInputValue(e.target.value)} type="text" className='input-chat-name'/>
                 <Modal.Footer>
                     <Button onClick={sendFileMessage} appearance="primary">
                         Send    

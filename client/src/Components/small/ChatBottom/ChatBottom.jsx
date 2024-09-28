@@ -16,6 +16,7 @@ const ChatBottom = observer(({inputValue, handleInputChange, inputRef}) => {
     const handleOpen = () => setModalOpened(true);
     const handleClose = () => setModalOpened(false);
 
+
     return (
         <div>
             <div className="chat-bottom">
