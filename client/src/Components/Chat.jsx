@@ -27,7 +27,7 @@ socket = io(process.env.REACT_APP_API_URL, {
 
 const Chat = observer(() => {
 
-    const { user } = useContext(Context);
+    const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
     const sendMessageAndUpdate = useSendMessage();
 
@@ -61,6 +61,7 @@ const Chat = observer(() => {
         chatContext.resetMessageInput();
         socket.emit('join chat', chatContext.activeChat);
         console.log(loading)
+        app.resetReplyingTo();
         return cleanup;
     }, [chatContext.activeChat]);
 

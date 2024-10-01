@@ -37,11 +37,12 @@ const MessageSchema = new mongoose.Schema({
     text: {type: String},
     readBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     responseTo: {type: mongoose.Schema.Types.ObjectId, ref: 'Message'},
+    edited: {type: Boolean, default: false, required: true}
 }, { timestamps: true })
 
 const User = mongoose.model('User', UserSchema);
 const Chat = mongoose.model('Chat', ChatSchema);
-const Message = mongoose.model('Message',MessageSchema);
+const Message = mongoose.model('Message',MessageSchema)
 
 export {
     User,

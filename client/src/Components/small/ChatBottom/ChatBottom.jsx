@@ -4,6 +4,7 @@ import { Button, Modal, Placeholder, Uploader } from 'rsuite';
 import AttachmentIcon from '@rsuite/icons/Attachment';
 import ImageMessageModal from './ImageMessageModal';
 import { Context } from '../../..';
+import ReplyingMessage from './ReplyingMessage';
 
 const ChatBottom = observer(({inputValue, handleInputChange, inputRef}) => {
 
@@ -19,6 +20,7 @@ const ChatBottom = observer(({inputValue, handleInputChange, inputRef}) => {
 
     return (
         <div>
+            <ReplyingMessage/>
             <div className="chat-bottom">
                 <Uploader 
                 multiple 

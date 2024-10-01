@@ -1,0 +1,22 @@
+.replying-message {
+    display: flex;
+    width: 100%;
+    padding-top: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.replying-message img {
+    cursor: pointer;
+}
+
+.replying-message .replyingTo {
+    max-width: 100%;
+}
+
+.replying-message .replyingTo-text {
+    max-width: 95%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden
+}

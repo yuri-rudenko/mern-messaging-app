@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
 import '../Pages/styles/messages.css'
+import { Popover, Whisper } from 'rsuite';
+import MessageModal from './small/MessageModal/MessageModal';
+import { Context } from '..';
 
 const Message = ({message, user}) => {
+
+    const { app } = useContext(Context);
+
+    function handleMessageEvents(eventKey, message) {
+        switch(eventKey) {
+            case 1:
+                app.setReplyingTo(message);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+    }
+
     const author = message.author;
+
+    const ref = useRef();
+    function handleSelectMenu(eventKey, event) {
+        handleMessageEvents(eventKey, message)
+        ref.current.close();
+    }
     
     if (message.type == "Text") return (
+
         <div className={author._id === user._id ? "message-container you-user flex-end" : "message-container other-user "}>
+
+            <Whisper
+                placement="top" 
+                trigger="contextMenu" 
+                speaker={<MessageModal onSelect={handleSelectMenu}/>}
+                ref={ref}
+            >
 
             <div className='message'>
                 <div className="author-image">
@@ -17,7 +51,10 @@ const Message = ({message, user}) => {
                 </div>
             </div>
 
+            </Whisper>
+
         </div>
+
     );
     if (message.type == "Image") return (
         <div className={author._id === user._id ? "message-container you-user flex-end" : "message-container other-user "}>

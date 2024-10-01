@@ -6,6 +6,7 @@ export default class AppStore {
         this._creatingChatPicture = {};
         this._secondChatCreationOpened = false;
         this._addMembersListModalOpened = false;
+        this._replyingTo = {};
         makeAutoObservable(this);
     }
 
@@ -25,6 +26,14 @@ export default class AppStore {
         this._addMembersListModalOpened = bool;
     }
 
+    setReplyingTo(message) {
+        this._replyingTo = message;
+    }
+
+    resetReplyingTo() {
+        this._replyingTo = {};
+    }
+
     get creatingChatName() {
         return this._creatingChatName;
     }
@@ -39,5 +48,9 @@ export default class AppStore {
 
     get addMembersListModalOpened() {
         return this._addMembersListModalOpened;
+    }
+    
+    get replyingTo() {
+        return this._replyingTo;
     }
 }
