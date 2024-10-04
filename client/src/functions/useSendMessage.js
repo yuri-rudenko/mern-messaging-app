@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import scrollToBottom from "./scrollToBottom";
 
 export const useSendMessage = () => {
-    const { user } = useContext(Context);
+    const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
 
     const socketRef = useRef(null);
@@ -39,28 +39,32 @@ export const useSendMessage = () => {
 
         try {
 
-            const { message } = await sendMessage({
+            const messagePayload = {
                 ...content,
                 id: user.user._id,
-                chatId: chatContext.activeChat._id
-            });
-            
-
+                chatId: chatContext.activeChat._id,
+            };
+        
+            if (app.replyingTo?._id) {
+                messagePayload.responseTo = app.replyingTo._id;
+            }
+        
+            const { message } = await sendMessage(messagePayload);
+        
             if (message) {
                 socket.emit('new message', {
                     message,
                     chat: chatContext.activeChat,
                     sender: user.user
                 });
-
+        
                 chatContext.appendMessage(message);
                 chatContext.setLatestMessage(message);
                 chatContext.sortChats();
-
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 10);
-                
+                console.log(message.responseTo)
+        
+                setTimeout(scrollToBottom, 10); // Use direct reference to the function
+        
                 return message;
             }
         } catch (error) {

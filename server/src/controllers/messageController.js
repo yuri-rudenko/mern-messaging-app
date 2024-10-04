@@ -7,7 +7,7 @@ class messageController {
 
         try {
 
-            const {content, id, chatId} = req.body;
+            const {content, id, chatId, responseTo} = req.body;
 
             const chat = await Chat.findById(chatId);
             const user = await User.findById(id);
@@ -18,15 +18,19 @@ class messageController {
 
             if(id !== req.user.id) throw new Error("Authorization error");
 
+            console.log(responseTo)
+
             const message = await Message.create({
                 author: user._id,
                 type: content.type,
                 chatId: chatId,
                 text: content.text,
-                files: content.files
+                files: content.files, 
+                responseTo,
             });
 
-            await message.populate("author");
+            await message.populate("author responseTo");;
+            await message.populate("responseTo.author");
 
             if(message) await Chat.findByIdAndUpdate(chatId, {
                 $push: { messages: message._id },

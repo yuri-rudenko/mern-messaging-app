@@ -27,10 +27,13 @@
     border-radius: 0px 10px 10px 0px;
 }
 .messages .message {
-    display: flex;
-    padding: 5px 10px;
     border-radius: 20px;
     max-width: 80vh;
+    padding: 5px 10px;
+}
+.messages .message .message-data {
+    max-width: 80vh;
+    display: flex;
 }
 .messages .other-user .message {
     background-color: rgb(252, 252, 166);
@@ -72,6 +75,28 @@
 
 .messages .message .content .chat-message-image-text {
     margin-top: 5px;
+}
+
+.messages .message .message-responseTo-body {
+    max-width: 80vh;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 3px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+}
+
+.messages .message .message-responseTo-body div {
+    font-size: 14px;
+}
+
+.messages .message .message-responseTo-body .response-text {
+    max-width: 100%;
+    max-height: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
 }
 
 
