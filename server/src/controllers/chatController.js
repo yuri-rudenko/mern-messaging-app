@@ -24,10 +24,19 @@ class chatController {
             })
             .populate({
                 path: 'messages',
-                populate: {
-                    path: 'author',
-                    select: '-password'
-                }
+                populate: [
+                    {
+                        path: 'author',
+                        select: '-password'
+                    },
+                    {
+                        path: 'responseTo',
+                        populate: {
+                            path: 'author',
+                            select: '-password'
+                        }
+                    }
+                ]
             })
             
             if(!chat) throw new Error("Chat doesn't exist");

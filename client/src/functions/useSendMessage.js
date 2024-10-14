@@ -61,9 +61,10 @@ export const useSendMessage = () => {
                 chatContext.appendMessage(message);
                 chatContext.setLatestMessage(message);
                 chatContext.sortChats();
-                console.log(message.responseTo)
+
+                app.resetReplyingTo();
         
-                setTimeout(scrollToBottom, 10); // Use direct reference to the function
+                setTimeout(scrollToBottom, 10);
         
                 return message;
             }
