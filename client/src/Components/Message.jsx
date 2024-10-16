@@ -43,10 +43,21 @@ const Message = ({ message, user }) => {
                 <div className='message'>
                 {message?.responseTo?._id && 
                     <div className='message-responseTo-body'>
-                        <div className="response-author">{message.responseTo.author.name}</div>
-                        <div className="response-content">
-                            <div className="response-image"></div>
-                            <div className="response-text">{message.responseTo.text}</div>
+                        {message?.responseTo?.type == "Image" &&
+                            <div className="message-responseTo-image">
+                                 
+                                <img src={process.env.REACT_APP_API_URL + '/'+ message.responseTo.files[0].src}></img>
+                                
+                            </div>
+                        }
+                        <div className="message-responseTo-right">
+
+                            <div className="response-author">{message.responseTo.author.name}</div>
+                            <div className="response-content">
+                                <div className="response-image"></div>
+                                <div className="response-text">{message.responseTo.text}</div>
+                            </div>
+
                         </div>
                     </div>
                 }

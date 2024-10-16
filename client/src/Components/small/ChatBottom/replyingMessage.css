@@ -14,9 +14,25 @@
     max-width: 100%;
 }
 
+.replying-message .replyingTo .replyingTo-message-content {
+    margin: 5px 0px;
+    display: flex;
+    align-items: end;
+}
+
 .replying-message .replyingTo-text {
     max-width: 95%;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden
+    overflow: hidden;
+    font-size: 16px;
+}
+
+.replying-message .replyingTo-image {
+    object-fit: cover; 
+    object-position: center;
+    cursor: pointer;
+    max-width: 50px;
+    max-height: 50px;
+    width: 100%;
 }
