@@ -3,6 +3,7 @@ import '../Pages/styles/messages.css';
 import { Popover, Whisper } from 'rsuite';
 import MessageModal from './small/MessageModal/MessageModal';
 import { Context } from '..';
+import MessageImages from './small/MessageImages/MessageImages';
 
 const Message = ({ message, user }) => {
 
@@ -45,9 +46,9 @@ const Message = ({ message, user }) => {
                     <div className='message-responseTo-body'>
                         {message?.responseTo?.type == "Image" &&
                             <div className="message-responseTo-image">
-                                 
+
                                 <img src={process.env.REACT_APP_API_URL + '/'+ message.responseTo.files[0].src}></img>
-                                
+
                             </div>
                         }
                         <div className="message-responseTo-right">
@@ -72,19 +73,7 @@ const Message = ({ message, user }) => {
                             )}
 
                             {message.type === "Image" && (
-                                <>
-                                    <div className={'message-images container message-images-' + message.files.length}>
-                                        {message.files && message.files.map(file => (
-                                            <img
-                                                className={'chat-message-image chat-message-image-' + message.files.length}
-                                                src={process.env.REACT_APP_API_URL + '/' + file.src}
-                                                key={file.src}
-                                                alt="message content"
-                                            />
-                                        ))}
-                                    </div>
-                                    {message.text && <div className='message-text chat-message-image-text'>{message.text}</div>}
-                                </>
+                                <MessageImages message={message}/>
                             )}
                         </div>
                     </div>
