@@ -5,9 +5,9 @@ import { deleteImage } from '../../../http/chatAPI';
 import { Context } from '../../..';
 import './modalStyles.css'
 
-const ChatCreationFirst = ({open, setOpen}) => {
+const ChatCreationFirst = ({ open, setOpen }) => {
 
-    const {app, chat} = useContext(Context);
+    const { app, chat } = useContext(Context);
 
     useEffect(() => {
         chat.setMessageAutoFocus(!open);
@@ -15,17 +15,17 @@ const ChatCreationFirst = ({open, setOpen}) => {
 
     const handleClose = () => {
         setOpen(false);
-        if(groupPfp.img) deleteImage(groupPfp.img);
+        if (groupPfp.img) deleteImage(groupPfp.img);
     }
 
     const handleCloseNext = () => {
-        if(!groupName) return;
+        if (!groupName) return;
         setOpen(false);
         app.setCreatingChatName(groupName);
         app.setCreatingChatPicture(groupPfp);
         app.setSecondChatCreationOpened(true);
-    } 
-    
+    }
+
     const [notUpload, setNotUpload] = useState([]);
 
     const [groupPfp, setGroupPfp] = useState({});
@@ -46,7 +46,7 @@ const ChatCreationFirst = ({open, setOpen}) => {
 
     const onUploadSuccess = (image) => {
         console.log(image);
-        setGroupPfp({img: image});
+        setGroupPfp({ img: image });
         setError(false);
     }
 
@@ -54,38 +54,38 @@ const ChatCreationFirst = ({open, setOpen}) => {
         <div>
             <Modal size="sm" open={open} onExited={handleExit} onClose={handleClose}>
                 <Modal.Header>
-                    <Modal.Title style={{textAlign:"center"}}>Create new chat</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Title style={{ textAlign: "center" }}>Create new chat</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
 
-                        <div className="modal-choose-container">
-                            <Uploader 
-                            onError={onUploadError} 
-                            onSuccess={onUploadSuccess} 
-                            onChange={() => setNotUpload([])} 
-                            fileList={notUpload} 
-                            listType="picture" 
+                    <div className="modal-choose-container">
+                        <Uploader
+                            onError={onUploadError}
+                            onSuccess={onUploadSuccess}
+                            onChange={() => setNotUpload([])}
+                            fileList={notUpload}
+                            listType="picture"
                             action={process.env.REACT_APP_API_URL + '/api/files/uploadImage'}>
-                                <button style={error ? {border: "4px solid red"} : {border: "1px solid black"}}>
-                                    {
-                                        groupPfp.img ? <img style={{height: "100%", width: "100%"}} src={process.env.REACT_APP_API_URL + '/' + groupPfp.img}></img> 
-                                        :  <CameraRetroIcon />
-                                    }
-                                </button>
-                            </Uploader>
-                            <div className="right">
-                                <p>Enter name of the chat</p>
-                                <input value={groupName} onChange={e => setGroupName(e.target.value)} type="text" className='input-chat-name'/>
-                            </div>
+                            <button style={error ? { border: "4px solid red" } : { border: "1px solid black" }}>
+                                {
+                                    groupPfp.img ? <img style={{ height: "100%", width: "100%" }} src={process.env.REACT_APP_API_URL + '/' + groupPfp.img}></img>
+                                        : <CameraRetroIcon />
+                                }
+                            </button>
+                        </Uploader>
+                        <div className="right">
+                            <p>Enter name of the chat</p>
+                            <input value={groupName} onChange={e => setGroupName(e.target.value)} type="text" className='input-chat-name' />
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={handleCloseNext} size="lg" appearance="primary">
-                            Next
-                        </Button>
-                        <Button onClick={handleClose} size="lg" appearance="ghost">
-                            Cancel
-                        </Button>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleCloseNext} size="lg" appearance="primary">
+                        Next
+                    </Button>
+                    <Button onClick={handleClose} size="lg" appearance="ghost">
+                        Cancel
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

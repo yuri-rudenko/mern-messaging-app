@@ -50,7 +50,7 @@ class UserController {
 
         try {
 
-            const { queryParam } = req.params;
+            const { queryParam } = req.query;
             const query = {};
             if (queryParam) {
                 query.$or = [
@@ -59,12 +59,13 @@ class UserController {
                 ];
             }
 
-            const users = await User.find(query).find({ tag: { $ne: req.user.tag } }).limit(20).select('-phone -email -password');
+            const users = await User.find(query)
+                .find({ tag: { $ne: req.user.tag } })
+                .limit(20)
+                .select('-phone -email -password');
 
             res.status(200).json(users);
-
         } catch (error) {
-
             res.status(400).json(error.message);
         }
     }
