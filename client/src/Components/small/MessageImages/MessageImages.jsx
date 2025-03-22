@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ImgsViewer from 'react-images-viewer';
+import { Context } from '../../..';
 
 const MessageImages = ({ message }) => {
+
     const [viewerOpened, setViewerOpened] = useState(false);
     const [currImg, setCurrImg] = useState(0);
+    
+
+    const { chat } = useContext(Context);
+
+    useEffect(() => {
+        chat.setMessageAutoFocus(!viewerOpened);
+    }, [viewerOpened])
 
     return (
         <div>

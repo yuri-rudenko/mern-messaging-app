@@ -59,6 +59,7 @@ const AddUsersToChatModal = observer(({setOpenFirst}) => {
             />)
 
         }
+        setSelectedUsers([]);
     }
 
     const filterUsers = (value) => {

@@ -16,34 +16,34 @@ class chatController {
 
         try {
 
-            const {chatId} = req.params;
+            const { chatId } = req.params;
 
             const chat = await Chat.findById(chatId).populate({
                 path: 'users',
                 select: '-password'
             })
-            .populate({
-                path: 'messages',
-                populate: [
-                    {
-                        path: 'author',
-                        select: '-password'
-                    },
-                    {
-                        path: 'responseTo',
-                        populate: {
+                .populate({
+                    path: 'messages',
+                    populate: [
+                        {
                             path: 'author',
                             select: '-password'
+                        },
+                        {
+                            path: 'responseTo',
+                            populate: {
+                                path: 'author',
+                                select: '-password'
+                            }
                         }
-                    }
-                ]
-            })
-            
-            if(!chat) throw new Error("Chat doesn't exist");
+                    ]
+                })
 
-            return res.status(200).json({chat});
-            
-        } 
+            if (!chat) throw new Error("Chat doesn't exist");
+
+            return res.status(200).json({ chat });
+
+        }
 
         catch (error) {
             res.status(400).json(error.message);
@@ -53,19 +53,19 @@ class chatController {
     async getAll(req, res, next) {
         try {
             const { name } = req.query;
-    
+
             const query = {};
             if (name) {
                 query.name = { $regex: name, $options: "i" };
             }
-    
+
             const chats = await Chat.find(query)
-            .populate("latestMessage")
-            .populate("latestMessage.author")
-            .sort({ "latestMessage.createdAt": -1 });
-    
+                .populate("latestMessage")
+                .populate("latestMessage.author")
+                .sort({ "latestMessage.createdAt": -1 });
+
             res.status(200).json(chats);
-            
+
         } catch (error) {
             res.status(400).json(error.message);
         }
@@ -75,20 +75,22 @@ class chatController {
 
         try {
 
-            const {name, users, image, isGroup} = req.body;
+            const { name, users, image, isGroup } = req.body;
+
+            console.log(users);
 
             users.forEach(tag => {
-                if(tag === req.user.tag) throw new Error("One of users you are adding is you");
+                if (tag === req.user.tag) throw new Error("One of users you are adding is you");
             })
 
-            users.push(req.user.tag);
+            if (!name || !users) throw new Error("Params error");
 
-            if(!name || !users) throw new Error("Params error");
- 
-            const ids = await tagsToIds(users);
-            
+            const ids = users.map(user => user._id);
+
+            ids.push(req.user.id);
+
             const chat = await Chat.create({
-                name, users: ids, groupAdmin: req.user.id, isGroup, displayPicture: image 
+                name, users: ids, groupAdmin: req.user.id, isGroup, displayPicture: image
             })
 
             ids.forEach(async (id) => {
@@ -99,64 +101,67 @@ class chatController {
 
             const populatedChat = await Chat.findById(chat._id).populate('users');
 
-            res.status(200).json({data: populatedChat});
-            
-        } 
+            res.status(200).json({ data: populatedChat });
+
+        }
 
         catch (error) {
             res.status(400).json(error.message);
         }
     }
-    
+
     async addUsers(req, res, next) {
 
         try {
             const { users, chatId } = req.body;
-        
+
             if (!chatId || !users || !Array.isArray(users)) {
                 throw new Error("Params error: Missing ID or users array");
             }
-        
+
             const userIds = users.map(user => user._id);
-        
-            const checkedChat = await Chat.findById(chatId);
+
+            const checkedChat = await Chat.findById(chatId).populate("users");
             if (!checkedChat) {
                 throw new Error("Chat not found");
             }
-        
-            const userInChat = checkedChat.users.some(userId => userIds.includes(userId));
+
+            const userInChat = checkedChat.users.some(userObj =>
+                userIds.some(id => id.toString() === userObj._id.toString())
+            );
+
             if (userInChat) {
                 return res.status(400).json(`One or more users are already in the chat`);
             }
-        
+
             const chat = await Chat.findByIdAndUpdate(chatId, {
                 $push: { users: { $each: userIds } }
             });
-        
+
             const updateUserPromises = users.map(user =>
                 User.findByIdAndUpdate(user._id, {
                     $push: { chats: chat._id }
                 })
             );
             await Promise.all(updateUserPromises);
-        
+
             if (!chat) {
                 throw new Error("Chat update failed");
             }
-        
+
             res.status(200).json({ message: `Users added to chat ${chat.name}` });
-        
+
         } catch (error) {
             res.status(400).json(error.message);
         }
-        
+
     }
 
     async removeUser(req, res, next) {
 
         try {
             const { tag, } = req.body;
-    
+
             if (!id || !tag) {
                 throw new Error("Params error: Missing ID or tag");
             }
@@ -167,12 +172,12 @@ class chatController {
             if (!checkedChat) {
                 throw new Error("Chat not found");
             }
-        
+
             if (!checkedChat.users.includes(...userId)) {
                 throw new Error(`User ${tag} is already not in the chat`);
             }
-        
-            
+
+
             const chat = await Chat.findByIdAndUpdate(id, {
                 $pullAll: { users: userId }
             }, { new: true });
@@ -180,8 +185,8 @@ class chatController {
             const user = await User.findByIdAndUpdate(userId[0], {
                 $pull: { chats: chat._id }
             });
-    
-            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}`});
+
+            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}` });
 
         }
 
@@ -194,7 +199,7 @@ class chatController {
 
         try {
             const { id, chatId } = req.body;
-    
+
             if (!id || !chatId) {
                 throw new Error("Params error: Missing ID or Chat");
             }
@@ -205,11 +210,11 @@ class chatController {
             if (!checkedChat) {
                 throw new Error("Chat not found");
             }
-        
+
             if (!checkedChat.users.includes(...id)) {
                 throw new Error(`You are already not in the chat`);
             }
-        
+
             const chat = await Chat.findByIdAndUpdate(id, {
                 $pullAll: { users: userId }
             }, { new: true });
@@ -217,8 +222,8 @@ class chatController {
             const user = await User.findByIdAndUpdate(userId[0], {
                 $pull: { chats: chat._id }
             });
-    
-            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}`});
+
+            res.status(200).json({ message: `User ${tag} has been removed from chat ${chat.name}` });
 
         }
 
@@ -232,11 +237,11 @@ class chatController {
         try {
             const { name } = req.body;
             const id = req.params.chatId;
-    
+
             if (!id || !name) {
                 throw new Error("Params error");
             }
-        
+
             const chat = await Chat.findByIdAndUpdate(id, {
                 $set: { name: name }
             }, { new: true });
@@ -244,8 +249,8 @@ class chatController {
             if (!chat) {
                 throw new Error("Chat not found");
             }
-    
-            res.status(200).json({chat});
+
+            res.status(200).json({ chat });
 
         }
 
@@ -257,22 +262,22 @@ class chatController {
     async delete(req, res, next) {
 
         try {
-            
-            const {chatId} = req.params;
+
+            const { chatId } = req.params;
 
             const chat = await Chat.findByIdAndDelete(chatId);
 
-            if(!chat) {
+            if (!chat) {
                 return res.status(400).json("Chat doesn't exist");
             }
 
             return res.status(201).json(chat)
-        } 
+        }
 
         catch (error) {
 
             res.status(400).json(error.message)
-            
+
         }
     }
 
