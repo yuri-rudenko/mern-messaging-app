@@ -6,38 +6,55 @@ import { Context } from ".";
 import { check, getUser } from "./http/userAPI";
 import Loader from "./Components/small/Loader/Loader";
 
+const setChatNames = function (chats, user) {
+
+  const newChats = chats.map(chat => {
+
+    if (!chat.isGroup) {
+      const foundUser = chat?.users.find(u => u._id !== user._id);
+      return { ...chat, name: foundUser.name, displayPicture: foundUser.image }
+    }
+
+    return chat;
+
+  })
+
+  return newChats;
+
+}
+
 const App = observer(() => {
 
-  const {user, chat} = useContext(Context);
+  const { user, chat } = useContext(Context);
 
   useEffect(() => {
 
     user.setLoading(true)
 
     check().then(async data => {
-      if(data) {
+      if (data) {
         let foundUser;
-        if(data.id) foundUser = await getUser(data.tag);
-        if(foundUser) {
+        if (data.id) foundUser = await getUser(data.tag);
+        if (foundUser) {
           user.setUser(foundUser);
           user.setIsAuth(true);
-          chat.setChats(foundUser.chats);
+          chat.setChats(setChatNames(foundUser.chats, foundUser));
         }
       }
     })
-    .finally(() => user.setLoading(false))
+      .finally(() => user.setLoading(false))
 
   }, [])
 
 
   return (user.loading ?
-      <Loader absolute={true}/>
+    <Loader absolute={true} />
     :
-      <div className="App">
-          <BrowserRouter>
-              <AppRouter/>
-          </BrowserRouter>
-      </div>)
+    <div className="App">
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </div>)
 });
 
 export default App;

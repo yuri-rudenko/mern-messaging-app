@@ -40,6 +40,15 @@ export const createChat = async (name, image, users, isGroup) => {
     }
 }
 
+export const checkAndCreateChat = async (name, image, users, isGroup) => {
+    try {
+        const {chatExists, data} = await $authHost.post('/api/chat', { name, users, image, isGroup });
+        return {chatExists, data};
+    } catch (error) {
+        return(error.response);
+    }
+}
+
 export const addUsers = async (users, chatId) => {
     try {
         const {data} = await $authHost.put('/api/chat/users/add?chatId=' + chatId, { users, chatId });

@@ -10,6 +10,7 @@ async function tagsToIds(tags) {
     }
     return ids;
 }
+
 class chatController {
 
     async getOne(req, res, next) {
@@ -78,6 +79,23 @@ class chatController {
             const { name, users, image, isGroup } = req.body;
 
             console.log(users);
+
+            if (!isGroup) {
+
+                const userIds = users.map(user => user._id);
+
+                const foundSingleChat = await Chat.findOne({
+                    isGroup: false,
+                    users: { $all: userIds, $size: 2 }
+                });
+
+
+                if (foundSingleChat) {
+                    res.status(200).json({ chatExists: true, data: foundSingleChat })
+                    return;
+                }
+
+            }
 
             users.forEach(tag => {
                 if (tag === req.user.tag) throw new Error("One of users you are adding is you");

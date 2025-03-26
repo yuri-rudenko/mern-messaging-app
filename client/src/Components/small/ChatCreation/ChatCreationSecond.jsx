@@ -49,6 +49,7 @@ const ChatCreationSecond = observer(() => {
         if(data) {
             console.log(data);
             chat.appendChat(data);
+            chat.setActiveChat(data);
             app.setSecondChatCreationOpened(false);
         }
     }

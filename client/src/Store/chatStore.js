@@ -20,6 +20,7 @@ export default class ChatStore {
     }
 
     setActiveChat(chat) {
+        console.log(chat);
         this._activeChat = chat;
     }
 

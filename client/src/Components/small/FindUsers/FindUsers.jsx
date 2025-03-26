@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Modal } from 'rsuite';
 import { Context } from '../../..';
 import { getAllUsers } from '../../../http/userAPI';
+import UserSmall from '../UserSmall/userSmall';
+import { createChat } from '../../../http/chatAPI';
 
-const FindUserChats = ({ open, setOpen }) => {
+const FindUsers = ({ open, setOpen }) => {
 
     const { app, chat, user } = useContext(Context);
 
-    const [chats, setChats] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         chat.setMessageAutoFocus(!open);
@@ -22,12 +24,21 @@ const FindUserChats = ({ open, setOpen }) => {
     }
 
     const findUsers = async (name) => {
-        if(!name || name === ' ') {
-            setChats([]);
+        if (!name || name === ' ') {
+            setUsers([]);
             return;
         }
         const foundUsers = await getAllUsers(name);
-        setChats(foundUsers);
+        setUsers(foundUsers);
+    }
+
+    const toggleChatCreation = async (filteredUser) => {
+        const {data, chatExists} = await createChat("isNotGroup", undefined, [filteredUser], false);
+        if(!chatExists) {
+            chat.appendChat(data);
+        }
+        chat.setActiveChat(data);
+        setOpen(false);
     }
 
     return (
@@ -43,7 +54,7 @@ const FindUserChats = ({ open, setOpen }) => {
                         <input placeholder='Find users' type="text" onChange={(e) => findUsers(e.target.value)} />
                     </div>
                     {
-                        chats.map(chat => <div>{chat.name}</div>)
+                        users.map(filteredUser => <div key={filteredUser._id} onClick={() => toggleChatCreation(filteredUser)}><UserSmall user={filteredUser} /></div>)
                     }
 
                 </Modal.Body>
@@ -53,4 +64,4 @@ const FindUserChats = ({ open, setOpen }) => {
     );
 }
 
-export default FindUserChats;
+export default FindUsers;

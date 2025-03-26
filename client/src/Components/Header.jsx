@@ -7,7 +7,7 @@ import menuIcon from '../images/menu.svg';
 import { useNavigate } from 'react-router-dom';
 import ChatCreationFirst from './small/ChatCreation/ChatCreationFirst';
 import ChatCreationSecond from './small/ChatCreation/ChatCreationSecond';
-import FindUserChats from './small/FindUsersChats/FindUserChats';
+import FindUsers from './small/FindUsers/FindUsers';
 
 
 const Header = observer(() => {
@@ -73,7 +73,7 @@ const Header = observer(() => {
             </div>
             <ChatCreationFirst open={open} setOpen={setOpen} />
             <ChatCreationSecond />
-            <FindUserChats open={openFind} setOpen={setOpenFind} />
+            <FindUsers open={openFind} setOpen={setOpenFind} />
         </>
     );
 })
