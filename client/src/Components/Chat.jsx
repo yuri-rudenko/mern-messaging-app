@@ -25,7 +25,7 @@ const Chat = observer(() => {
 
     const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
-    const sendMessageAndUpdate = useSendMessage();
+    const sendMessageAndUpdate = useSendMessage(socket);
 
     const inputRef = useRef();
 

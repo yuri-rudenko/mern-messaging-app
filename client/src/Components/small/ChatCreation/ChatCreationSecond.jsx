@@ -6,10 +6,15 @@ import { observer } from 'mobx-react-lite';
 import { getUsersInChats } from '../../../http/userAPI';
 import './modalStyles.css';
 import UserSmall from '../UserSmall/userSmall';
+import { SocketContext } from '../../../App';
+import { useAddToChat } from '../../../functions/useAddToChat';
 
 const ChatCreationSecond = observer(() => {
 
-    const {app, chat} = useContext(Context);
+    const socket = useContext(SocketContext);
+    const addToChatAndUpdate = useAddToChat(socket);
+
+    const { app, chat } = useContext(Context);
     const userContext = useContext(Context).user;
 
     useEffect(() => {
@@ -42,20 +47,21 @@ const ChatCreationSecond = observer(() => {
     }
 
     const toggleChatCreation = async () => {
-        if(selectedUsers.length <= 0) return;
+        if (selectedUsers.length <= 0) return;
         setActiveSubmit(false);
-        const {data} = await createChat(app.creatingChatName, app.creatingChatPicture.img, selectedUsers, true);
+        const { data } = await createChat(app.creatingChatName, app.creatingChatPicture.img, selectedUsers, true);
         setActiveSubmit(true);
-        if(data) {
+        if (data) {
             console.log(data);
             chat.appendChat(data);
             chat.setActiveChat(data);
+            addToChatAndUpdate(data, selectedUsers)
             app.setSecondChatCreationOpened(false);
         }
     }
 
     const filterUsers = (value) => {
-        if(!value) {
+        if (!value) {
             setUsers(constUsers);
             return;
         }
@@ -65,37 +71,38 @@ const ChatCreationSecond = observer(() => {
     return (
         <Modal size="xs" className='second-modal' open={app.secondChatCreationOpened} onClose={handleClose} onExited={handleExit}>
             <Modal.Header>
-                <Modal.Title style={{textAlign:"center"}}>Choose users</Modal.Title>
-                </Modal.Header>
-                <div className="search-users">
-                        <input placeholder='Find users' type="text" onChange={(e) => filterUsers(e.target.value)}/>
-                </div>
-                <Modal.Body style={{maxHeight: "500px"}}>
-                    { users[0] ? users.map(user => {
+                <Modal.Title style={{ textAlign: "center" }}>Choose users</Modal.Title>
+            </Modal.Header>
+            <div className="search-users">
+                <input placeholder='Find users' type="text" onChange={(e) => filterUsers(e.target.value)} />
+            </div>
+            <Modal.Body style={{ maxHeight: "500px" }}>
+                {users[0] ? users.map(user => {
 
-                        const found = selectedUsers.find(selected => selected._id === user._id);
+                    const found = selectedUsers.find(selected => selected._id === user._id);
 
-                        const changeSelection = () => {
-                            found ? setSelectedUsers(selectedUsers.filter(selected => selected._id !== user._id))
+                    const changeSelection = () => {
+                        found ? setSelectedUsers(selectedUsers.filter(selected => selected._id !== user._id))
                             : setSelectedUsers([...selectedUsers, user]);
-                            
-                        }
 
-                        return (
-                            <div onClick={changeSelection} key={user._id} className={found ? "add-user-container selected-user" : "add-user-container"}>
-                                <UserSmall user={user}/>
-                            </div>
-                        )})
-                    : <></>
                     }
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button loading={!activeSubmit} onClick={toggleChatCreation} size="lg" appearance="primary">
-                        Submit
-                    </Button>
-                    <Button onClick={handleClose} size="lg" appearance="ghost">
-                        Cancel
-                    </Button>
+
+                    return (
+                        <div onClick={changeSelection} key={user._id} className={found ? "add-user-container selected-user" : "add-user-container"}>
+                            <UserSmall user={user} />
+                        </div>
+                    )
+                })
+                    : <></>
+                }
+            </Modal.Body>
+            <Modal.Footer>
+                <Button loading={!activeSubmit} onClick={toggleChatCreation} size="lg" appearance="primary">
+                    Submit
+                </Button>
+                <Button onClick={handleClose} size="lg" appearance="ghost">
+                    Cancel
+                </Button>
             </Modal.Footer>
         </Modal>
     );

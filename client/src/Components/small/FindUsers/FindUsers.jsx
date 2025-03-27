@@ -3,11 +3,16 @@ import { Modal } from 'rsuite';
 import { Context } from '../../..';
 import { getAllUsers } from '../../../http/userAPI';
 import UserSmall from '../UserSmall/userSmall';
-import { createChat } from '../../../http/chatAPI';
+import { checkAndCreateChat, createChat } from '../../../http/chatAPI';
+import { useAddToChat } from '../../../functions/useAddToChat';
+import { SocketContext, setChatNames } from '../../../App';
 
 const FindUsers = ({ open, setOpen }) => {
 
     const { app, chat, user } = useContext(Context);
+    const socket = useContext(SocketContext);
+
+    const addToChatAndUpdate = useAddToChat(socket);
 
     const [users, setUsers] = useState([]);
 
@@ -33,9 +38,12 @@ const FindUsers = ({ open, setOpen }) => {
     }
 
     const toggleChatCreation = async (filteredUser) => {
-        const {data, chatExists} = await createChat("isNotGroup", undefined, [filteredUser], false);
+        const {data, chatExists} = await checkAndCreateChat("isNotGroup", undefined, [filteredUser], false);
+
+        console.log(data, chatExists, "CHECK HERE");
         if(!chatExists) {
-            chat.appendChat(data);
+            chat.appendChat(setChatNames([data], user.user)[0]);
+            addToChatAndUpdate(data, [filteredUser])
         }
         chat.setActiveChat(data);
         setOpen(false);

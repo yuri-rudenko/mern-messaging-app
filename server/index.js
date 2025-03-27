@@ -62,11 +62,15 @@ const start = async () => {
                     socket.in(user._id).emit("message recieved", newMessageRecieved);
                 })
             })
-            socket.on("added to chat", (chat, usersToAdd) => {
+            socket.on("add to chat", ({chat, usersToAdd}) => {
+
+                console.log("added to chat called");
+                console.log(chat, usersToAdd.map(user => user.name));
 
                 const userIds = usersToAdd.map(user => user._id);
 
                 userIds.forEach(id => {
+                    console.log();
                     socket.in(id).emit("added to chat", chat);
                 })
 

@@ -78,17 +78,16 @@ class chatController {
 
             const { name, users, image, isGroup } = req.body;
 
-            console.log(users);
-
             if (!isGroup) {
 
                 const userIds = users.map(user => user._id);
+
+                userIds.push(req.user.id)
 
                 const foundSingleChat = await Chat.findOne({
                     isGroup: false,
                     users: { $all: userIds, $size: 2 }
                 });
-
 
                 if (foundSingleChat) {
                     res.status(200).json({ chatExists: true, data: foundSingleChat })

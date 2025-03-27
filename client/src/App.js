@@ -17,7 +17,7 @@ socket = io(process.env.REACT_APP_API_URL, {
 
 export const SocketContext = createContext();
 
-const setChatNames = function (chats, user) {
+export const setChatNames = function (chats, user) {
 
   const newChats = chats.map(chat => {
 
@@ -61,6 +61,24 @@ const App = observer(() => {
     };
 
   }, [])
+
+  useEffect(() => {
+
+    const handleAddedToChat = (addingChat) => {
+
+      if (!addingChat._id) return;
+
+      chat.appendChat(addingChat);
+
+    }
+
+    socket.on("added to chat", handleAddedToChat);
+
+    return () => {
+      socket.removeAllListeners("added to chat");
+    };
+
+  }, []);
 
 
   return (user.loading ?

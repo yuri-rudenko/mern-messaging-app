@@ -17,6 +17,7 @@ export default class ChatStore {
     }
 
     appendChat(chat) {
+        console.log(chat, "APPENDCHAT");
         this._chats.unshift(chat);
     }
 
