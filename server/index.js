@@ -29,17 +29,19 @@ app.use((err, req, res, next) => {
 });
 
 const start = async () => {
+
     try {
-        
+
         const server = app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
         await mongoose.connect(process.env.MONGODB_URI);
-        
+
         const io = new Server(server, {
             cors: {
                 origin: process.env.CLIENT,
                 methods: ["GET", "POST", "PUT", "DELETE"]
             }
         });
+
         io.on('connection', (socket) => {
 
             socket.on('setup', (userData) => {
@@ -50,20 +52,30 @@ const start = async () => {
                 socket.join(room);
             });
             socket.on('new message', async (newMessageRecieved) => {
+
                 let chat = newMessageRecieved.chat;
-                if(!chat.users) return console.log("Chat doesn't have any users");
+                if (!chat.users) return console.log("Chat doesn't have any users");
                 chat.users.forEach(user => {
-                    
-                    if(user._id === newMessageRecieved.sender._id) return;
+
+                    if (user._id === newMessageRecieved.sender._id) return;
 
                     socket.in(user._id).emit("message recieved", newMessageRecieved);
                 })
             })
+            socket.on("added to chat", (chat, usersToAdd) => {
+
+                const userIds = usersToAdd.map(user => user._id);
+
+                userIds.forEach(id => {
+                    socket.in(id).emit("added to chat", chat);
+                })
+
+            })
         })
 
-    } 
+    }
 
-    catch (error) { 
+    catch (error) {
         console.log(error);
     }
 };

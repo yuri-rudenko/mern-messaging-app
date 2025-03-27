@@ -1,10 +1,21 @@
 import { BrowserRouter, useNavigate } from "react-router-dom";
 import AppRouter from "./Components/AppRouter";
 import { observer } from "mobx-react-lite";
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Context } from ".";
 import { check, getUser } from "./http/userAPI";
 import Loader from "./Components/small/Loader/Loader";
+import { io } from "socket.io-client";
+
+let socket;
+socket = io(process.env.REACT_APP_API_URL, {
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  timeout: 10000,
+});
+
+export const SocketContext = createContext();
 
 const setChatNames = function (chats, user) {
 
@@ -39,10 +50,15 @@ const App = observer(() => {
           user.setUser(foundUser);
           user.setIsAuth(true);
           chat.setChats(setChatNames(foundUser.chats, foundUser));
+          socket.emit("setup", user.user);
         }
       }
     })
       .finally(() => user.setLoading(false))
+
+    return () => {
+      socket.removeAllListeners("message recieved");
+    };
 
   }, [])
 
@@ -51,9 +67,11 @@ const App = observer(() => {
     <Loader absolute={true} />
     :
     <div className="App">
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
+      <SocketContext.Provider value={socket}>
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
+      </SocketContext.Provider>
     </div>)
 });
 

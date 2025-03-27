@@ -16,16 +16,12 @@ import { useSendMessage } from '../functions/useSendMessage';
 import scrollToBottom from '../functions/scrollToBottom';
 import handleImagesAndScroll from '../functions/handleImagesAndScroll';
 import Loader from './small/Loader/Loader';
+import { SocketContext } from '../App';
 
-let socket, selectedChatCompare;
-socket = io(process.env.REACT_APP_API_URL, {
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000, 
-    reconnectionDelayMax: 5000, 
-    timeout: 10000,
-});
 
 const Chat = observer(() => {
+
+    const socket = useContext(SocketContext);
 
     const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
@@ -46,21 +42,12 @@ const Chat = observer(() => {
         chatContext.setMessageInput(e.target.value);
     };
 
-    // Socket connection
-    useEffect(() => {
-        socket.emit("setup", user.user);
-        socket.on('connection', () => {
-            setSocketConnected(true);
-        })
-    }, []);
-
 
     // Loading of a chat
     useEffect(() => {
         const cleanup = handleImagesAndScroll(wrapSetLoading);
         chatContext.resetMessageInput();
         socket.emit('join chat', chatContext.activeChat);
-        console.log(loading)
         app.resetReplyingTo();
         return cleanup;
     }, [chatContext.activeChat]);
@@ -70,16 +57,16 @@ const Chat = observer(() => {
 
         const handleMessageReceived = (newMessageRecieved) => {
 
-            if(!chatContext.activeChat._id || chatContext.activeChat._id !== newMessageRecieved.chat._id) {
+            if (!chatContext.activeChat._id || chatContext.activeChat._id !== newMessageRecieved.chat._id) {
                 // Error
             }
             else {
                 chatContext.appendMessage(newMessageRecieved.message);
-                if(newMessageRecieved.message.type === "Image") {
+                if (newMessageRecieved.message.type === "Image") {
 
                     setTimeout(() => {
                         handleImagesAndScroll();
-                    }, 10)  
+                    }, 10)
                 }
 
                 else {
@@ -101,7 +88,7 @@ const Chat = observer(() => {
         return () => {
             socket.removeAllListeners("message recieved");
         };
-        
+
     }, []);
 
 
@@ -112,7 +99,7 @@ const Chat = observer(() => {
 
             const messageValue = chatContext.messageInput;
 
-            if(chatContext.messageInput.trim() !== "" && key.key ==="Enter") {
+            if (chatContext.messageInput.trim() !== "" && key.key === "Enter") {
                 chatContext.resetMessageInput()
                 sendMessageAndUpdate({
                     content: {
@@ -121,7 +108,7 @@ const Chat = observer(() => {
                     }
                 })
             }
-            if(inputRef.current && chatContext.messageAutoFocus) {
+            if (inputRef.current && chatContext.messageAutoFocus) {
                 inputRef.current.focus();
             }
         };
@@ -133,55 +120,55 @@ const Chat = observer(() => {
         };
     });
 
-    if(loading) return <Loader/>
+    if (loading) return <Loader />
 
     return (
         <div className='chat'>
 
-        <ChatSettingsModal open={open} setOpen={setOpen}/>
-        <AddUsersToChatModal setOpenFirst={setOpen}/>
-            
-            {chatContext.activeChat.createdAt && 
-            <div className="chat-header">
-                <div className="chat-header-left">
-                    <div className="pfp">
-                        <img src={process.env.REACT_APP_API_URL + '/' + chatContext.activeChat.displayPicture} alt="Chat image"/>
+            <ChatSettingsModal open={open} setOpen={setOpen} />
+            <AddUsersToChatModal setOpenFirst={setOpen} />
+
+            {chatContext.activeChat.createdAt &&
+                <div className="chat-header">
+                    <div className="chat-header-left">
+                        <div className="pfp">
+                            <img src={process.env.REACT_APP_API_URL + '/' + chatContext.activeChat.displayPicture} alt="Chat image" />
+                        </div>
+                        <div className="text">
+                            <p className="name">{chatContext.activeChat.name}</p>
+                            <p className='online'>Online 7m ago</p>
+                        </div>
                     </div>
-                    <div className="text">
-                        <p className="name">{chatContext.activeChat.name}</p>
-                        <p className='online'>Online 7m ago</p>
+                    <div className="chat-header-right">
+                        <MoreIcon height="40px" width="40px" onClick={handleOpen} />
                     </div>
                 </div>
-                <div className="chat-header-right">
-                    <MoreIcon height="40px" width="40px" onClick={handleOpen}/>
-                </div>
-            </div>
             }
 
-            {chatContext.activeChat.users ? <div className={loading? "main-chat hidden": "main-chat"}>
-                {chatContext.activeChat.messages[0] 
-                ? (
-                    <div className="messages">
-                        <div className='messages-container'>
-                            {chatContext.activeChat.messages.map(message =>
-                                <Message user={user.user} message={message} key={message._id}></Message>
-                            )}
+            {chatContext.activeChat.users ? <div className={loading ? "main-chat hidden" : "main-chat"}>
+                {chatContext.activeChat.messages[0]
+                    ? (
+                        <div className="messages">
+                            <div className='messages-container'>
+                                {chatContext.activeChat.messages.map(message =>
+                                    <Message user={user.user} message={message} key={message._id}></Message>
+                                )}
+                            </div>
+                            <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef} />
                         </div>
-                        <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef}/>
-                    </div>
-                ) 
-                : (
-                    <div className="messages">
+                    )
+                    : (
+                        <div className="messages">
 
-                        <p>Write your first message!</p>
-                        <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef}/>
+                            <p>Write your first message!</p>
+                            <ChatBottom handleInputChange={handleInputChange} inputRef={inputRef} />
 
-                    </div>
-                )}
-                </div>
-            
-            : <p style={{textAlign:"center"}}>Choose your chat</p>}
-            
+                        </div>
+                    )}
+            </div>
+
+                : <p style={{ textAlign: "center" }}>Choose your chat</p>}
+
         </div>
     );
 })
