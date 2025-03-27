@@ -1,4 +1,4 @@
-import { Chat, User } from "../models/models.js";
+import { Chat, Message, User } from "../models/models.js";
 
 async function tagsToIds(tags) {
     const ids = [];

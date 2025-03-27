@@ -13,14 +13,14 @@ export default class ChatStore {
 
     setChats(chats) {
         this._chats = chats;
+        this.sortChats();
     }
 
     appendChat(chat) {
-        this._chats.push(chat);
+        this._chats.unshift(chat);
     }
 
     setActiveChat(chat) {
-        console.log(chat);
         this._activeChat = chat;
     }
 
@@ -51,8 +51,8 @@ export default class ChatStore {
     sortChats() {
         
         this._chats.sort((a,b) => {
-            const createdAtA = a.latestMessage ? new Date(a.latestMessage.createdAt) : new Date(0);
-            const createdAtB = b.latestMessage ? new Date(b.latestMessage.createdAt) : new Date(0);
+            const createdAtA = a.latestMessage ? new Date(a.latestMessage.createdAt) : new Date(a.createdAt);
+            const createdAtB = b.latestMessage ? new Date(b.latestMessage.createdAt) : new Date(b.createdAt);
             return createdAtB - createdAtA;
         })
         
