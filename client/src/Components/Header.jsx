@@ -66,7 +66,7 @@ const Header = observer(() => {
                 <Dropdown trigger="click" renderToggle={renderButton}>
                     <Dropdown.Item style={{ fontSize: "18px" }}>Profile</Dropdown.Item>
                     <Dropdown.Item style={{ fontSize: "18px", minWidth: "150px" }}>Friends</Dropdown.Item>
-                    <Dropdown.Separator />
+                    <Dropdown.Separator/>
                     <Dropdown.Item onClick={logout} style={{ fontSize: "18px", color: "Red" }}>Log off</Dropdown.Item>
                 </Dropdown>
 

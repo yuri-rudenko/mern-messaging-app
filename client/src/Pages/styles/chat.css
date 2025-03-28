@@ -5,19 +5,20 @@
     min-width: 250px;
 }
 
-
 .chat .main-chat {
     height: calc(100% - 65px); /*60px - size of header + its margin*/
 }
+
 .message-container {
     display: flex;
     margin-bottom: 10px;
     max-width: 100%;
+    margin-right: 4px;
+    margin-top: 4px;
 }
 .flex-end {
     justify-content: end;
 }
-
 
 .chat .hidden {
     visibility: hidden;

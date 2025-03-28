@@ -27,20 +27,28 @@
     border-radius: 0px 10px 10px 0px;
 }
 .messages .message {
-    border-radius: 20px;
     max-width: 80vh;
     padding: 5px 10px;
+    border: 1px solid black;
+    box-shadow: 4px 4px black;
 }
 .messages .message .message-data {
     max-width: 80vh;
     display: flex;
 }
-.messages .other-user .message {
-    background-color: rgb(252, 252, 166);
-}
+
 .messages .you-user .message {
-    background-color: rgb(166, 252, 173);
+    background-color: #EDCFAA;
+    border-radius: 20px 20px 0px 20px;
 }
+.messages .you-user .message * {
+    background-color: #EDCFAA;
+}
+
+.messages .other-user .message {
+    border-radius: 0px 20px 20px 20px;
+}
+
 .messages .message .author-image img {
     margin-right: 10px;
     height: 40px;
@@ -81,12 +89,11 @@
     display: flex;
     align-items: center;
     max-width: 80vh;
-    background-color: rgba(255, 255, 255, 0.6);
     padding: 3px;
     border-radius: 10px;
     margin-bottom: 5px;
-    border-left: 2px solid black;
-    border-top: 2px solid black;
+    border: 1px solid black;
+    box-shadow: 2px 2px black;
 }
 
 .messages .message .message-responseTo-body .message-responseTo-image {
@@ -104,15 +111,19 @@
 }
 
 .messages .message .message-responseTo-body div {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .messages .message .message-responseTo-body .response-text {
     max-width: 100%;
-    max-height: 14px;
+    max-height: 16px;
     text-overflow: ellipsis;
     overflow: hidden;
     word-break: break-all;
+}
+
+.messages .message .message-responseTo-body .response-author {
+    font-weight: bold;
 }
 
 
