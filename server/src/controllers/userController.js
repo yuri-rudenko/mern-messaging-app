@@ -159,7 +159,12 @@ class UserController {
                 phone
             });
 
-            const userData = { ...user._doc };
+            const foundUser = await User.findById(user._id).populate("chats friends blockedUsers");
+            await user.populate("chats.latestMessage");
+            await user.populate("chats.latestMessage.author");
+            await user.populate("chats.users");
+
+            const userData = { ...foundUser._doc };
             delete userData.password;
 
             console.log('fine');
@@ -201,6 +206,7 @@ class UserController {
 
             await user.populate("chats.latestMessage");
             await user.populate("chats.latestMessage.author");
+            await user.populate("chats.users");
 
             const userData = { ...user._doc };
             delete userData.password;

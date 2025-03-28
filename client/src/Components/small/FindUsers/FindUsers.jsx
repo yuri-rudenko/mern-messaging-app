@@ -5,7 +5,8 @@ import { getAllUsers } from '../../../http/userAPI';
 import UserSmall from '../UserSmall/userSmall';
 import { checkAndCreateChat, createChat } from '../../../http/chatAPI';
 import { useAddToChat } from '../../../functions/useAddToChat';
-import { SocketContext, setChatNames } from '../../../App';
+import { SocketContext } from '../../../App';
+import setChatNames from '../../../functions/setChatNames';
 
 const FindUsers = ({ open, setOpen }) => {
 

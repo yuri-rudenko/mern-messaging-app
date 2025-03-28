@@ -6,6 +6,7 @@ import { Context } from ".";
 import { check, getUser } from "./http/userAPI";
 import Loader from "./Components/small/Loader/Loader";
 import { io } from "socket.io-client";
+import setChatNames from "./functions/setChatNames";
 
 let socket;
 socket = io(process.env.REACT_APP_API_URL, {
@@ -16,23 +17,6 @@ socket = io(process.env.REACT_APP_API_URL, {
 });
 
 export const SocketContext = createContext();
-
-export const setChatNames = function (chats, user) {
-
-  const newChats = chats.map(chat => {
-
-    if (!chat.isGroup) {
-      const foundUser = chat?.users.find(u => u._id !== user._id);
-      return { ...chat, name: foundUser.name, displayPicture: foundUser.image }
-    }
-
-    return chat;
-
-  })
-
-  return newChats;
-
-}
 
 const App = observer(() => {
 

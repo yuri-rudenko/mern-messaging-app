@@ -5,6 +5,7 @@ import { check, login, registration } from '../http/userAPI.js';
 import {useNavigate} from 'react-router-dom';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
+import setChatNames from '../functions/setChatNames';
 
 const Login = () => {
 
@@ -23,12 +24,12 @@ const Login = () => {
         const fetchData = async () => {
 
             const token = await check();
-            console.log(token)
             if(token && token.data && token.data.message !== "Not authorised") navigate('/');
 
         };
     
         fetchData();
+
     }, []);
 
     const onSubmit = async values => {
@@ -43,7 +44,7 @@ const Login = () => {
 
         if(newData){
             user.setUser(newData);
-            chat.setChats(newData.chats);
+            chat.setChats(setChatNames(newData.chats, newData));
             user.setIsAuth(true);
             navigate('/');
         }
