@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 export default class ChatStore {
-    
+
     constructor() {
         this._chats = [];
         this._activeChat = {};
@@ -33,30 +33,42 @@ export default class ChatStore {
         this._messageInput = "";
     }
 
-    appendMessage(message) {
-        this._activeChat.messages.push(message);
+    appendMessage(messages) {
+        if (Array.isArray(messages)) {
+            this._activeChat.messages.push(...messages);
+        } else {
+            this._activeChat.messages.push(messages);
+        }
     }
-    
+
+    unshiftMessage(messages) {
+        if (Array.isArray(messages)) {
+            this._activeChat.messages.unshift(...messages);
+        } else {
+            this._activeChat.messages.unshift(messages);
+        }
+    }
+
     setLatestMessage(message) {
-        if(this._activeChat?._id === message.chatId) {
+        if (this._activeChat?._id === message.chatId) {
             this._activeChat.latestMessage = message;
         }
 
         this._chats.forEach(chat => {
-            if(chat._id === message.chatId) {
+            if (chat._id === message.chatId) {
                 chat.latestMessage = message;
             }
         })
     }
 
     sortChats() {
-        
-        this._chats.sort((a,b) => {
+
+        this._chats.sort((a, b) => {
             const createdAtA = a.latestMessage ? new Date(a.latestMessage.createdAt) : new Date(a.createdAt);
             const createdAtB = b.latestMessage ? new Date(b.latestMessage.createdAt) : new Date(b.createdAt);
             return createdAtB - createdAtA;
         })
-        
+
     }
 
     setMessageAutoFocus(bool) {

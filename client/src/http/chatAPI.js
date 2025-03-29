@@ -1,9 +1,9 @@
 import { $authHost, $host } from "./indexAPI.js";
 import { jwtDecode } from "jwt-decode";
 
-export const getChat = async (chatId) => {
+export const getChat = async (chatId, page = 1) => {
     try {
-        const {data} = await $host.get('/api/chat/' + chatId);
+        const {data} = await $host.get('/api/chat/' + chatId + `?page=${page}&limit=50`);
         return data;
     } catch (error) {
         return(error.response);

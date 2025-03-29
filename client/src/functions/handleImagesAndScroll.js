@@ -24,7 +24,7 @@ export default function handleImagesAndScroll(setLoading) {
         if(setLoading) setLoading(false);
     };
 
-    timeoutId = setTimeout(timeoutFunction, 10000);
+    timeoutId = setTimeout(timeoutFunction, 5000);
 
     if (images.length === 0) {
         clearTimeout(timeoutId);

@@ -14,42 +14,39 @@ async function tagsToIds(tags) {
 class chatController {
 
     async getOne(req, res, next) {
-
         try {
-
             const { chatId } = req.params;
+            const { page = 1, limit = 50 } = req.query;
 
-            const chat = await Chat.findById(chatId).populate({
-                path: 'users',
-                select: '-password'
-            })
-                .populate({
-                    path: 'messages',
-                    populate: [
-                        {
-                            path: 'author',
-                            select: '-password'
-                        },
-                        {
-                            path: 'responseTo',
-                            populate: {
-                                path: 'author',
-                                select: '-password'
-                            }
-                        }
-                    ]
-                })
+            console.log(page);
+
+            const chat = await Chat.findById(chatId)
+                .populate({ path: 'users', select: '-password' });
 
             if (!chat) throw new Error("Chat doesn't exist");
 
+            const messages = await Message.find({ chatId })
+                .sort({ createdAt: -1 }) 
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .populate([
+                    { path: 'author', select: '-password' },
+                    { path: 'responseTo', populate: { path: 'author', select: '-password' } }
+                ]);
+
+            const totalMessages = await Message.countDocuments({ chatId });
+            const hasMore = (page * limit) < totalMessages;
+
+            chat._doc.messages = messages;
+            chat._doc.hasMore = hasMore;
+
             return res.status(200).json({ chat });
 
-        }
-
-        catch (error) {
+        } catch (error) {
             res.status(400).json(error.message);
         }
     }
+
 
     async getAll(req, res, next) {
         try {

@@ -17,6 +17,7 @@ import scrollToBottom from '../functions/scrollToBottom';
 import handleImagesAndScroll from '../functions/handleImagesAndScroll';
 import Loader from './small/Loader/Loader';
 import { SocketContext } from '../App';
+import { getChat } from '../http/chatAPI';
 
 
 const Chat = observer(() => {
@@ -26,6 +27,36 @@ const Chat = observer(() => {
     const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
     const sendMessageAndUpdate = useSendMessage(socket);
+
+    const [page, setPage] = useState(2);
+    const [hasMore, setHasMore] = useState(true);
+    const messagesRef = useRef(null);
+
+    const handleScroll = async () => {
+        if (!hasMore || !messagesRef.current) return;
+
+        const messageContainer = messagesRef.current;
+        const previousHeight = messageContainer.scrollHeight;
+
+        if (messagesRef.current.scrollTop === 0) {
+            const { chat } = await getChat(chatContext.activeChat._id, page);
+
+            console.log(chat.messages);
+
+            if (!chat.messages.length) {
+                setHasMore(false);
+                return;
+            }
+
+            chatContext.unshiftMessage(chat.messages);
+            setHasMore(chat.hasMore);
+            setPage(prev => prev + 1);
+
+            setTimeout(() => {
+                messageContainer.scrollTop = messageContainer.scrollHeight - previousHeight;
+            }, 0);
+        }
+    };
 
     const inputRef = useRef();
 
@@ -42,16 +73,15 @@ const Chat = observer(() => {
         chatContext.setMessageInput(e.target.value);
     };
 
-
-    // Loading of a chat
     useEffect(() => {
         const cleanup = handleImagesAndScroll(wrapSetLoading);
         chatContext.resetMessageInput();
         socket.emit('join chat', chatContext.activeChat);
         app.resetReplyingTo();
+        setPage(2);
+        setHasMore(true);
         return cleanup;
     }, [chatContext.activeChat]);
-
 
     useEffect(() => {
 
@@ -149,7 +179,7 @@ const Chat = observer(() => {
                 {chatContext.activeChat.messages[0]
                     ? (
                         <div className="messages">
-                            <div className='messages-container'>
+                            <div className='messages-container' ref={messagesRef} onScroll={handleScroll}>
                                 {chatContext.activeChat.messages.map(message =>
                                     <Message user={user.user} message={message} key={message._id}></Message>
                                 )}

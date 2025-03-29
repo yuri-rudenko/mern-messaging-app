@@ -189,7 +189,6 @@ class UserController {
 
             login = login.toLowerCase();
 
-
             let user;
 
             user = await User.findOne({ tag: login }).populate("chats friends blockedUsers");
