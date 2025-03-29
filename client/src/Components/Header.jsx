@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatCreationFirst from './small/ChatCreation/ChatCreationFirst';
 import ChatCreationSecond from './small/ChatCreation/ChatCreationSecond';
 import FindUsers from './small/FindUsers/FindUsers';
+import Profile from './small/Profile/Profile';
 
 
 const Header = observer(() => {
@@ -16,6 +17,7 @@ const Header = observer(() => {
 
     const [open, setOpen] = useState(false);
     const [openFind, setOpenFind] = useState(false);
+    const [openProfile, setOpenProfile] = useState(false);
     const handleOpen = () => setOpen(true);
 
     const navigate = useNavigate();
@@ -57,14 +59,14 @@ const Header = observer(() => {
             <div className='header'>
                 <div className="left">
                     <Dropdown trigger="click" renderToggle={menuButton}>
-                        <Dropdown.Item style={{ fontSize: "20px", color: "#00d2ff" }}>Profile</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setOpenProfile(true)} style={{ fontSize: "20px", color: "#00d2ff" }}>Profile</Dropdown.Item>
                         <Dropdown.Item onClick={handleOpen} style={{ fontSize: "20px" }}>Create chat</Dropdown.Item>
                         <Dropdown.Item onClick={() => setOpenFind(true)} style={{ fontSize: "20px", minWidth: "200px" }}>Find chat/user</Dropdown.Item>
                     </Dropdown>
                     <h1>Message.app</h1>
                 </div>
                 <Dropdown trigger="click" renderToggle={renderButton}>
-                    <Dropdown.Item style={{ fontSize: "18px" }}>Profile</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setOpenProfile(true)} style={{ fontSize: "18px" }}>Profile</Dropdown.Item>
                     <Dropdown.Item style={{ fontSize: "18px", minWidth: "150px" }}>Friends</Dropdown.Item>
                     <Dropdown.Separator/>
                     <Dropdown.Item onClick={logout} style={{ fontSize: "18px", color: "Red" }}>Log off</Dropdown.Item>
@@ -74,6 +76,7 @@ const Header = observer(() => {
             <ChatCreationFirst open={open} setOpen={setOpen} />
             <ChatCreationSecond />
             <FindUsers open={openFind} setOpen={setOpenFind} />
+            <Profile open={openProfile} setOpen={setOpenProfile} />
         </>
     );
 })

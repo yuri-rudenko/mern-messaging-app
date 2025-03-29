@@ -14,11 +14,11 @@ async function tagsToIds(tags) {
 class chatController {
 
     async getOne(req, res, next) {
+
         try {
+            
             const { chatId } = req.params;
             const { page = 1, limit = 50 } = req.query;
-
-            console.log(page);
 
             const chat = await Chat.findById(chatId)
                 .populate({ path: 'users', select: '-password' });

@@ -226,7 +226,7 @@ class UserController {
 
         try {
 
-            const { email, name, tag, phone } = req.body;
+            const { email, name, tag, phone, image } = req.body;
             const userTag = req.params.tag;
             const userId = req.user.id;
 
@@ -241,6 +241,7 @@ class UserController {
             if (name) updateFields.name = name;
             if (tag) updateFields.tag = tag;
             if (phone) updateFields.phone = phone;
+            if (image) updateFields.image = image;
 
             const updatedUser = await User.findByIdAndUpdate(userId, { $set: updateFields }, { new: true });
 
@@ -254,6 +255,7 @@ class UserController {
                 email: updatedUser.email,
                 tag: updatedUser.tag,
                 phone: updatedUser.phone,
+                image: updatedUser.image,
                 token: generateJWT(updatedUser._id, updatedUser.tag),
             })
 

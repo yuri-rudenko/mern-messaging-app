@@ -23,6 +23,13 @@
 .rs-dropdown-item-divider {
     background-color: black;
 }
+.rs-toast-container {
+    background-color: transparent;
+}
+
+.rs-btn-primary * {
+    background: transparent;
+}
 
 .header {
     padding: 10px 50px;
@@ -176,4 +183,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.search-users input {
+    font-size: 20px;
+    padding: 5px 10px ;
+    border-radius: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    margin: 10px 0px;
+    width: 100%;
 }
