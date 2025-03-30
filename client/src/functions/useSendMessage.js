@@ -8,8 +8,8 @@ export const useSendMessage = (socket) => {
     const { user, app } = useContext(Context);
     const chatContext = useContext(Context).chat;
 
-
     const sendMessageAndUpdate = async (content) => {
+
         if (!socket) {
             console.error('Socket not initialized');
             return;

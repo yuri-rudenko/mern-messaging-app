@@ -4,12 +4,14 @@ import './imageMessageModalStyle.css';
 import { deleteImage } from '../../../http/chatAPI';
 import { Context } from '../../..';
 import { useSendMessage } from '../../../functions/useSendMessage';
+import { SocketContext } from '../../../App';
 
 const ImageMessageModal = ({modalOpened, handleClose, uploadedPhotos, setUploadedPhotos}) => {
 
+    const socket = useContext(SocketContext);
     const { user } = useContext(Context);
     const chatContext = useContext(Context).chat;
-    const sendMessageAndUpdate = useSendMessage();
+    const sendMessageAndUpdate = useSendMessage(socket);
     const [inputValue, setInputValue] = useState(chatContext.messageInput);
 
     useEffect(() => {

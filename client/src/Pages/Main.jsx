@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 import './styles/main.css';
+import './styles/rs.css';
 
 const Main = observer(() => {
 
