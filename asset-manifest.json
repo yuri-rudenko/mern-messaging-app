@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/mern-messaging-app/static/css/main.b629ac35.css",
-    "main.js": "/mern-messaging-app/static/js/main.5211e9b4.js",
+    "main.js": "/mern-messaging-app/static/js/main.a8ccd1db.js",
     "static/media/cross.svg": "/mern-messaging-app/static/media/cross.359021e54952399ba141cb48fb1ca831.svg",
     "index.html": "/mern-messaging-app/index.html",
     "static/media/menu.svg": "/mern-messaging-app/static/media/menu.22a05970d93e0f98250a9ec63d516662.svg",
     "main.b629ac35.css.map": "/mern-messaging-app/static/css/main.b629ac35.css.map",
-    "main.5211e9b4.js.map": "/mern-messaging-app/static/js/main.5211e9b4.js.map"
+    "main.a8ccd1db.js.map": "/mern-messaging-app/static/js/main.a8ccd1db.js.map"
   },
   "entrypoints": [
     "static/css/main.b629ac35.css",
-    "static/js/main.5211e9b4.js"
+    "static/js/main.a8ccd1db.js"
   ]
 }
