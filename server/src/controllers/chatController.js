@@ -16,7 +16,7 @@ class chatController {
     async getOne(req, res, next) {
 
         try {
-            
+
             const { chatId } = req.params;
             const { page = 1, limit = 50 } = req.query;
 
@@ -26,7 +26,7 @@ class chatController {
             if (!chat) throw new Error("Chat doesn't exist");
 
             const messages = await Message.find({ chatId })
-                .sort({ createdAt: -1 }) 
+                .sort({ createdAt: -1 })
                 .skip((page - 1) * limit)
                 .limit(limit)
                 .populate([
@@ -37,7 +37,7 @@ class chatController {
             const totalMessages = await Message.countDocuments({ chatId });
             const hasMore = (page * limit) < totalMessages;
 
-            chat._doc.messages = messages;
+            chat._doc.messages = messages.reverse();
             chat._doc.hasMore = hasMore;
 
             return res.status(200).json({ chat });

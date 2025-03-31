@@ -2,13 +2,29 @@
     font-family: "Inter";
     src: '../../images/Inter_24pt-Regular.ttf';
 }
-
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+input {
+    text-align: start;
+    background-color: #EDE0D0
+}
+body, #root {
+    height: 100vh;
+}
+.App, .main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.App * {
     background-color: #EDE0D0;
     scrollbar-color: #EDCFAA #EDE0D0;
     font-family: 'Inter';
 }
-
 
 .header {
     padding: 10px 50px;
