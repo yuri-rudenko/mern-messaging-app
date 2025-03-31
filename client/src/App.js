@@ -70,7 +70,7 @@ const App = observer(() => {
     :
     <div className="App">
       <SocketContext.Provider value={socket}>
-        <BrowserRouter>
+        <BrowserRouter basename="/mern-messaging-app">
           <AppRouter />
         </BrowserRouter>
       </SocketContext.Provider>
