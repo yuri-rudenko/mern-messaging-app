@@ -4,14 +4,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/style.css">
-  <title>Messaging App</title>
+  <title>Redirecting...</title>
+  <script>
+    let path = window.location.pathname.replace('/mern-messaging-app', '');
+    window.location.replace('/mern-messaging-app' + path);
+  </script>
 </head>
 
 <body>
-
-  <div id="root"></div>
-
+  <p>If you are not redirected, <a href="/mern-messaging-app/">click here</a>.</p>
 </body>
 
 </html>
