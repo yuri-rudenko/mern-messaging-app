@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Redirecting...</title>
   <script>
-    let path = window.location.pathname.replace('/mern-messaging-app', '');
+    var path = window.location.pathname.replace(/^\/mern-messaging-app/, '');
+    console.log(path);
     window.location.replace('/mern-messaging-app' + path);
   </script>
 </head>
