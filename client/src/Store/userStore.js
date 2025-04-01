@@ -6,6 +6,7 @@ export default class UserStore {
         this._isAuth = false;
         this._user = {};
         this._loading = true;
+        this._loginError = false;
         makeAutoObservable(this, {}, {deep: true});
     }
 
@@ -21,6 +22,10 @@ export default class UserStore {
         this._loading = bool;
     }
 
+    setLoginError(bool) {
+        this._loginError = bool;
+    }
+
     get isAuth() {
         return this._isAuth;
     }
@@ -31,5 +36,9 @@ export default class UserStore {
 
     get loading() {
         return this._loading;
+    }
+
+    get loginError() {
+        return this._loginError;
     }
 }

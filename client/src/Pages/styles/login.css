@@ -1,3 +1,6 @@
+.App {
+    background-color: #EDE0D0
+}
 .login .container {
     display: flex;
     flex-direction: column;
@@ -64,4 +67,17 @@
 .login .container .change-link .goto-link:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.login .error-notification {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    width: auto;
+    box-shadow: 4px 4px black;
+    border: 1px solid black;
+}
+.login .error-notification * {
+    background: #EDCFAA;
 }

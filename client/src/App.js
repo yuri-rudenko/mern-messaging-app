@@ -24,7 +24,7 @@ const App = observer(() => {
 
   useEffect(() => {
 
-    user.setLoading(true)
+    user.setLoading(true);
 
     check().then(async data => {
       if (data) {

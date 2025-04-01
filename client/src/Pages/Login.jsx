@@ -6,8 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 import setChatNames from '../functions/setChatNames';
+import { Notification } from 'rsuite';
 
-const Login = () => {
+const Login = observer(() => {
 
     const { user, chat } = useContext(Context);
 
@@ -16,7 +17,7 @@ const Login = () => {
     const location = useLocation();
     const isLogin = location.pathname === '/login';
 
-    let [data, setData] = useState({})
+    let [data, setData] = useState({});
 
     const navigate = useNavigate()
 
@@ -34,20 +35,30 @@ const Login = () => {
     }, []);
 
     const onSubmit = async values => {
+        user.setLoading(true);
         let newData;
-        if (isLogin) {
-            newData = await login(values);
-        } else {
-            newData = await registration(values);
-        }
+        try {
+            if (isLogin) {
+                newData = await login(values);
+            } else {
+                newData = await registration(values);
+            }
 
-        setData(newData);
+            user.setLoading(false);
+            setData(newData);
 
-        if (newData) {
-            user.setUser(newData);
-            chat.setChats(setChatNames(newData.chats, newData));
-            user.setIsAuth(true);
-            navigate('/');
+            if (newData === undefined) {
+                user.setLoginError(true);
+            }
+
+            if (newData?._id) {
+                user.setUser(newData);
+                chat.setChats(setChatNames(newData.chats, newData));
+                user.setIsAuth(true);
+                navigate('/');
+            }
+        } catch (e) {
+            user.setLoginError(true);
         }
     };
 
@@ -105,8 +116,9 @@ const Login = () => {
                     </div>
                 </form>
             </div>
+            <Notification className='error-notification' onClose={() => user.setLoginError(false)} type="error" header="Something went wrong with the server" closable style={{ display: user.loginError ? 'inline-block' : 'none' }}>Server might work slow. Please try again later</Notification>
         </div>
     );
-}
+})
 
 export default Login;
